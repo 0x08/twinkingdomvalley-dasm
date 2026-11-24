@@ -221,8 +221,10 @@ int process_input(){
   return parse_and_process(line,i);
 }
 
+#define MAXMATCHES 10
+
 int parse_and_process(char *line, int len){
-  UCHAR matches[10];
+  UCHAR matches[MAXMATCHES];
   int i;
   int nmatches=0;
   for(i=0;i<len-1;i++){//$230D loop
@@ -230,16 +232,18 @@ int parse_and_process(char *line, int len){
       process_output("The * commands are not implemented yet.\n");
       return EMPTY;
     }
-    char word[100];
+    char word[MAXWORD];
     int j=0;
     while(line[i]>='a' && line[i]<='z' && i<len-1){//$231E
-      word[j++]=line[i++];
+      if(j<MAXWORD-1)//Letters beyond the buffer are dropped
+        word[j++]=line[i];
+      i++;
     }
     word[j]='\0';
-    matches[nmatches]=get_match(word);
-    //printf("Match result for %s: %02x\n",word,matches[nmatches]);
-    if(matches[nmatches]!=NOMATCH && nmatches<10)
-      nmatches++;
+    UCHAR m=get_match(word);
+    //printf("Match result for %s: %02x\n",word,m);
+    if(m!=NOMATCH && nmatches<MAXMATCHES)
+      matches[nmatches++]=m;
   }
   return process(matches, nmatches);
 }
