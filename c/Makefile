@@ -1,21 +1,28 @@
-playtkv : playtkv.o libtkv.o
-	gcc -o playtkv playtkv.o libtkv.o -lm
+CFLAGS =
 
-readtkv : readtkv.o libtkv.o
-	gcc -o readtkv readtkv.o libtkv.o -lm
+playtkv : playtkv.o libtkv.o pictures.o m6502.o
+	gcc -o playtkv playtkv.o libtkv.o pictures.o m6502.o -lm
 
-readtkv.o : readtkv.c libtkv.h
-	gcc -c readtkv.c
+readtkv : readtkv.o libtkv.o pictures.o m6502.o
+	gcc -o readtkv readtkv.o libtkv.o pictures.o m6502.o -lm
 
-playtkv.o : playtkv.c libtkv.h
-	gcc -c playtkv.c
-	
+readtkv.o : readtkv.c libtkv.h pictures.h
+	gcc $(CFLAGS) -c readtkv.c
+
+playtkv.o : playtkv.c libtkv.h pictures.h
+	gcc $(CFLAGS) -c playtkv.c
+
 libtkv.o : libtkv.c libtkv.h
-	gcc -c libtkv.c
-	
+	gcc $(CFLAGS) -c libtkv.c
+
+pictures.o : pictures.c pictures.h m6502.h
+	gcc $(CFLAGS) -O2 -c pictures.c
+
+m6502.o : m6502.c m6502.h
+	gcc $(CFLAGS) -O2 -c m6502.c
+
 clean :
-	rm readtkv playtkv readtkv.o playtkv.o libtkv.o
-	
+	rm -f readtkv playtkv *.o
+
 dotests: readtkv
 	./readtkv dotests
-	

@@ -1,4 +1,5 @@
 #include "libtkv.h"
+#include "pictures.h"
 
 /* To do
  */
@@ -19,11 +20,14 @@ void describenpcclass(char *scode);
 void describenpc(char *scode);
 
 void dotests();
+void drawpicture(int argc, char *argv[]);
 
 int main(int argc, char *argv[]) {
   init_tkv();
   if(argc>1){
-    if(strstr(argv[1],"words")!=NULL){
+    if(strcmp(argv[1],"picture")==0 && argc>2){
+      drawpicture(argc,argv);
+    } else if(strstr(argv[1],"words")!=NULL){
       convertcodes2words(argc,argv);
     } else if(strstr(argv[1],"command")!=NULL){
       describecommand(argv[2]);
@@ -308,4 +312,22 @@ int processline(char *line, int found){
   } else {  //Still more to do so return found for use in next call
     return found;
   }
+}
+//picture XX [file.png]: draws picture XX (hex, as in the $1F00 table) by
+//running the game's drawing code. Writes a PNG if a file is given,
+//otherwise prints it to the terminal.
+void drawpicture(int argc, char *argv[]){
+  struct picture *p=malloc(sizeof(struct picture));
+  const char *s=argv[2];
+  if(s[0]=='$')
+    s++;
+  unsigned char n=strtol(s,NULL,16);
+  if(render_picture(ctkv,n,p,PICTURE_MAXSTEPS)<0)
+    fprintf(stderr,"Picture %02x didn't finish drawing.\n",n);
+  if(argc>3){
+    if(write_png(argv[3],p,2)<0)
+      perror(argv[3]);
+  } else
+    print_picture(p,80);
+  free(p);
 }
