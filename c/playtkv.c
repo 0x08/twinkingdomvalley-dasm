@@ -120,11 +120,15 @@ int use_lamp(UCHAR action);
 int use_key(UCHAR action, UCHAR *matches, int nmatches);
 void use_key_on_doors(struct exit *e);
 int player_has_key(char *doortext);
-int drop(UCHAR *matches, int nmatches);
+int drop(UCHAR verb, UCHAR *matches, int nmatches);
 int take(UCHAR *matches, int nmatches);
 int inventory(UCHAR character_id);
-struct object * match_object(UCHAR location_id,UCHAR *matches, int nmatches);
-int count_matched_words(char *desc, UCHAR *matches, int nmatches);
+int print_carried(UCHAR loc, int holdall_follows);
+int yes_no();
+void fill_holdall();
+void empty_holdall();
+int fill(UCHAR verb, UCHAR *matches, int nmatches);
+int pour(UCHAR verb, UCHAR *matches, int nmatches);
 int move(UCHAR dir, UCHAR dirindex);
 
 char * create_copy_string(char *from);
@@ -454,13 +458,15 @@ void free_action(UCHAR code){
 int noncombat_action(UCHAR code, UCHAR *matches, int nmatches){
   //printf("noncombat_action: %02x.\n",code);
   switch(code){ //code is 0x11 to 0x24
-    case 0x11: return drop(matches,nmatches); //DROP
+    case 0x11: return drop(code,matches,nmatches); //DROP
     case 0x12: case 0x13: return take(matches,nmatches); //TAKE,GET
     case 0x14: case 0x15: case 0x16: return use_key(LOCK,matches,nmatches); //LOCK,SHUT,CLOSE
     case 0x17: case 0x18: return use_key(UNLOCK,matches,nmatches); //OPEN,UNLOCK
     case 0x19: case 0x1a: return use_lamp(LIGHT); //LIGHT,ON
     case 0x1b:            return use_lamp(DARK);  //OFF    
-    case 0x1c: case 0x1d: case 0x1e: case 0x1f: case 0x20: //GIVE,FILL,POUR,EMPTY,ASK
+    case 0x1d: return fill(code,matches,nmatches); //FILL
+    case 0x1e: case 0x1f: return pour(code,matches,nmatches); //POUR,EMPTY
+    case 0x1c: case 0x20: //GIVE,ASK
       process_output("Not implemented yet.\n"); return EMPTY;
     case 0x21:            process_output("You wait here.\n"); return CONTINUE; //WAIT
     case 0x22: case 0x23: case 0x24: //WAVE,SWIM,DRINK
@@ -581,90 +587,142 @@ int player_has_key(char *doortext){
   return 0;//Player doesn't have key
 }
 
-int inventory(UCHAR character_id){
-  int id;
-  int nitems=0;
-  if(character_id==0)
-    process_output("You have ");
-  else
-    process_output(" is here with ");
-  //NOTE: Holdall not implemented yet.
-  for(id=1;id<getnumberofobjects();id++){
+//Lists what is at loc: the following objects, or nothing. With
+//holdall_follows set, says nothing when there are none. See $164C.
+//Returns the number of objects listed.
+int print_carried(UCHAR loc, int holdall_follows){
+  int id,nitems=0;
+  for(id=getnumberofobjects()-1;id>0;id--){
     struct object *obj=get_object(id);
-    if(obj->location_id==(CARRIED+character_id)){
-      char line[1000];
-      if(nitems==0)
+    if(obj->location_id==loc){
+      if(nitems++==0)
         process_output("the following\n");
-      sprintf(line,"  %c%s\n",toupper(obj->description[0]),obj->description+1); //First letter caps
+      char line[MAXLINE];
+      snprintf(line,sizeof(line),"  %s\n",obj->description);
+      line[2]=toupper(line[2]);
       process_output(line);
-      nitems++;
     }
   }
-  if(nitems==0)
+  if(nitems==0 && !holdall_follows)
     process_output("nothing.\n");
-  
+  return nitems;
+}
+
+//INVENTORY ($162F) for the player, or what a character here has ($0C5E)
+int inventory(UCHAR character_id){
+  UCHAR loc=CARRIED+character_id;
+  int hasholdall = get_object(0)->location_id==loc;
+  process_output(character_id==0 ? "You have " : " is here with ");
+  int n=print_carried(loc,hasholdall);
+  if(hasholdall){//$163F
+    process_output(n ? "A holdall containing " : "a holdall containing ");
+    print_carried(0xFF,0);
+  }
   return EMPTY;
 }
 
-struct object * match_object(UCHAR location_id,UCHAR *matches, int nmatches){
+//TAKE and GET, see $1548
+int take(UCHAR *matches, int nmatches){
   UCHAR id;
-  int best_count=0;
-  struct object *best_object=NULL;
-  for(id=0;id<getnumberofobjects();id++){
-    struct object *o = get_object(id);
-    if(o->location_id==location_id){
-      //printf("Object is here: %s.\n",o->description);
-      int count=count_matched_words(o->description,matches,nmatches);
-      if(count>best_count){
-	best_count=count;
-	best_object=o;
-      }
+  UCHAR here=get_player_location_id();
+  if(match_object_words(here,matches,nmatches,&id)==0){
+    process_output("Take what?");
+    if(read_command(matches,&nmatches)!=SUCCESS)
+      nmatches=0;
+    if(match_object_words(here,matches,nmatches,&id)==0){
+      process_output("I can't see any here.\n");
+      return EMPTY;
     }
   }
-  return best_object;
+  if(transfer(id,CARRIED,0xFF)){//$1597
+    process_output("You can't carry any more.\n");
+    return CONTINUE;
+  }
+  process_output("I have it now.\n");
+  return SUCCESS;
 }
 
-int drop(UCHAR *matches, int nmatches){
-  struct object *obj=match_object(CARRIED,matches,nmatches);
-  if(obj!=NULL){//Need to add in check on carried amount, see $156F
-    obj->location_id=get_player_location_id();; //Location is player's position
-    get_player()->amount_carried-=obj->size;
-    process_output("OK.\n");
-    return SUCCESS;
-  } else {//To do: In game it asks "Drop what?" and gives second chance for input, see just before $15D2
+//DROP, see $160F. Objects in a carried holdall can be dropped directly.
+int drop(UCHAR verb, UCHAR *matches, int nmatches){
+  UCHAR id;
+  if(ask_carried(CARRIED,verb,matches,&nmatches,&id)==0){
     process_output("You haven't got that.\n");
     return EMPTY;
   }
+  transfer(id,get_player_location_id(),0xFF);
+  process_output("OK.\n");
+  return SUCCESS;
 }
 
-int take(UCHAR *matches, int nmatches){
-  struct object *obj=match_object(get_player_location_id(),matches,nmatches);
-  if(obj!=NULL){//Need to add in check on carried amount, see $156F
-    struct character *player=get_player();
-    if(player->amount_carried+obj->size<player->max_carried){
-      get_player()->amount_carried+=obj->size;
-      obj->location_id=CARRIED; //Location is player's possession
-      process_output("I have it now.\n");
-      return SUCCESS;
-    } else {
-      process_output("You can't carry any more.\n");
-      return CONTINUE; //Check in original if turn is indeed missed in this case.
+//Reads a yes or no answer, see $1A3A
+int yes_no(){
+  int c;
+  process_output(" (yes / no) ?");
+  for(;;){
+    c=getchar();
+    if(c==EOF)
+      return 0;
+    if(c=='y' || c=='Y' || c=='n' || c=='N'){
+      int answer = c=='y' || c=='Y';
+      while(c!='\n' && c!=EOF)
+        c=getchar();
+      process_output("\n");
+      return answer;
     }
-  } else {//To do: In game it asks "Take what?" and gives second chance for input, see $15D2
-    process_output("I can't see any here.\n");
+  }
+}
+
+//FILL HOLDALL: offers each object carried, see $1A4E
+void fill_holdall(){
+  int id;
+  process_output("You have ");
+  print_carried(CARRIED,0);
+  for(id=getnumberofobjects()-1;id>0;id--){
+    struct object *obj=get_object(id);
+    if(obj->location_id!=CARRIED)
+      continue;
+    sentence("Put %s in",obj->description);
+    if(yes_no() && transfer(id,0xFF,0xFF))
+      sentence("You can't get %s in.\n",obj->description);
+  }
+}
+
+//EMPTY or POUR HOLDALL: everything in it falls out here, see $19D4
+void empty_holdall(){
+  int id;
+  process_output("OK.\n");
+  for(id=getnumberofobjects()-1;id>0;id--)
+    if(get_object(id)->location_id==0xFF)
+      get_object(id)->location_id=get_player_location_id();
+  holdallweight=0;
+}
+
+//FILL, see $1AAC
+int fill(UCHAR verb, UCHAR *matches, int nmatches){
+  UCHAR id;
+  if(ask_carried(CARRIED,verb,matches,&nmatches,&id)==0){
+    process_output("You haven't got that.\n");
     return EMPTY;
   }
+  if(id==0)
+    fill_holdall();
+  else
+    process_output("Not implemented yet.\n");
+  return SUCCESS;
 }
 
-int count_matched_words(char *desc, UCHAR *matches, int nmatches){
-  int i, count=0;
-  for(i=0;i<nmatches;i++){
-    char word[100];
-    getword(word,matches[i]);
-    if(strstr(desc,word)!=NULL)
-      count++;
+//POUR and EMPTY, see $19A2
+int pour(UCHAR verb, UCHAR *matches, int nmatches){
+  UCHAR id;
+  if(ask_carried(CARRIED,verb,matches,&nmatches,&id)==0){
+    process_output("You haven't got that.\n");
+    return EMPTY;
   }
-  return count;
+  if(id==0)
+    empty_holdall();
+  else
+    process_output("Not implemented yet.\n");
+  return SUCCESS;
 }
 
 //Returns the new player location code if move happened.
