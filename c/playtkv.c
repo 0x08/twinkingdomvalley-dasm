@@ -33,7 +33,14 @@
 #define HOSTILE 1
 
 #define LAMP 0x01
+#define JUG 0x09
 #define FLINT 0x0A
+//Codes the jug ($2589) can have
+#define JUG_EMPTY 0x0A
+#define JUG_WATER 0x0B
+#define JUG_OIL 0x0C
+#define JUG_GOLD 0x1B
+#define JUG_BEER 0x1C
 
 #define DARK 1
 #define LIGHT 0
@@ -129,6 +136,8 @@ void fill_holdall();
 void empty_holdall();
 int fill(UCHAR verb, UCHAR *matches, int nmatches);
 int pour(UCHAR verb, UCHAR *matches, int nmatches);
+int drink();
+int swim();
 int move(UCHAR dir, UCHAR dirindex);
 
 char * create_copy_string(char *from);
@@ -205,6 +214,8 @@ UCHAR prev13;   //$13: status of the acting character at the start of its turn
 UCHAR result10; //$10: non-zero if the character did something
 signed char staff27=2; //$27: the staff drops once this goes negative
 UCHAR holdallweight=0; //$27FA
+UCHAR thirst02=0x80; //$02: goes down each turn, faster in the desert; drinking resets it
+UCHAR magic00=0;     //$00: bit 7 set once the concealed doors are revealed
 #define BROKEN 0xC7 //Location of a broken weapon or a dead character
 #define FIRSTWEAPON 0x0A //Objects $0A-$22 can be used as weapons
 #define ENDWEAPON 0x23
@@ -215,6 +226,7 @@ UCHAR holdallweight=0; //$27FA
 #define FIRSTACTION 0x11 //$11-$24 cost a turn
 #define FIRSTFREE 0x25   //$25-$2E are carried out without a turn passing, see $0C8E
 #define FIRSTNOUN 0x2F   //$2F onwards are objects, characters and places
+int verb83; //$83: the first verb-like word of the last input, or -1
 
 int main(int argc, char *argv[]) {
   int i;
@@ -343,6 +355,21 @@ void update(){
     } else if(lampoil==0x14 && (lamp->location_id==CARRIED || lamp->location_id==get_player_location_id()))
       process_output("Your lamp flickers.\n");
   }
+  //$0FAE: thirst, faster in the desert ($20-$2F and $80-$84)
+  UCHAR here=get_player_location_id();
+  UCHAR rate = ( (here>=0x20 && here<0x30) || (here>=0x80 && here<0x85) ) ? 7 : 1;
+  if(rate<thirst02){
+    thirst02-=rate;
+    if(thirst02<0x28)
+      process_output("You are very dry.\n");
+  } else {
+    if(thirst02!=0){
+      thirst02=0;
+      process_output("You are ill with thirst.\n");
+    }
+    at1a=here;
+    damage(0,rate*4);
+  }
   //$0FFE: remember where the player has been
   loc1c=loc14;
   loc14=get_player_location_id();
@@ -362,13 +389,7 @@ int get_command(UCHAR *matches, int *nmatches){
       return QUIT;
     if(r==EMPTY)
       continue;
-    int i;
-    int verb=-1;
-    for(i=0;i<*nmatches;i++)//$2378: first verb-like word
-      if(matches[i]<FIRSTNOUN){
-        verb=matches[i];
-        break;
-      }
+    int verb=verb83;
     if(verb<0){
       process_output("I don't understand.\n");
       continue;
@@ -388,6 +409,7 @@ int read_command(UCHAR *matches, int *nmatches){
   int c,i=0;
 
   *nmatches=0;
+  verb83=-1;
   do {
     c=getchar();
     line[i++]=c;
@@ -418,7 +440,13 @@ int read_command(UCHAR *matches, int *nmatches){
       continue;
     UCHAR m=get_match(word);
     //printf("Match result for %s: %02x\n",word,m);
-    if(m!=NOMATCH && *nmatches<MAXMATCHES)
+    if(m==NOMATCH)
+      continue;
+    if(m<FIRSTNOUN && verb83<0)//$2378: the first verb-like word is the command
+      verb83=m;
+    if(m>=FIRSTCOMBAT && m<FIRSTNOUN)//$2384: verbs aren't matched against objects
+      m=0xFF;
+    if(*nmatches<MAXMATCHES)
       matches[(*nmatches)++]=m;
   }
   return SUCCESS;
@@ -469,8 +497,10 @@ int noncombat_action(UCHAR code, UCHAR *matches, int nmatches){
     case 0x1c: case 0x20: //GIVE,ASK
       process_output("Not implemented yet.\n"); return EMPTY;
     case 0x21:            process_output("You wait here.\n"); return CONTINUE; //WAIT
-    case 0x22: case 0x23: case 0x24: //WAVE,SWIM,DRINK
+    case 0x22: //WAVE
       process_output("Not implemented yet.\n"); return EMPTY;
+    case 0x23: return swim(); //SWIM
+    case 0x24: return drink(); //DRINK
   }
   fprintf(stderr,"This should never be printed.\n");
   return EMPTY; //Should never get here
@@ -697,17 +727,96 @@ void empty_holdall(){
   holdallweight=0;
 }
 
+//Is the player by water? See $1A16 and the table at $1A24.
+int at_water(){
+  int i;
+  for(i=0;i<0x0F;i++)
+    if(getbyte("1A24",i)==get_player_location_id())
+      return 1;
+  return 0;
+}
+
+//Is the water deep enough to swim in? See $1A08 and the table at $1A2F.
+int at_deep_water(){
+  int i;
+  for(i=0;i<4;i++)
+    if(getbyte("1A2F",i)==get_player_location_id())
+      return 1;
+  return 0;
+}
+
+//The jug's contents are gone and it weighs $0F less, see $192E
+void empty_jug(){
+  struct object *jug=get_object(JUG);
+  if(jug->location_id==CARRIED)
+    get_player()->amount_carried-=0x0F;
+  else
+    holdallweight-=0x0F;
+  set_object_code(jug,JUG_EMPTY);
+}
+
+//"You can't fill a brass key", see $1ABE
+void cant(UCHAR verb, UCHAR id){
+  sentence("You can't %s %s.\n",word_of(verb),get_object(id)->description);
+}
+
 //FILL, see $1AAC
 int fill(UCHAR verb, UCHAR *matches, int nmatches){
   UCHAR id;
+  UCHAR here=get_player_location_id();
   if(ask_carried(CARRIED,verb,matches,&nmatches,&id)==0){
     process_output("You haven't got that.\n");
     return EMPTY;
   }
-  if(id==0)
+  if(id==0){
     fill_holdall();
-  else
-    process_output("Not implemented yet.\n");
+  } else if(id==LAMP){//$1AD1
+    if(at_water())
+      process_output("Don't be silly!\n");
+    else if(here==0x3C || (player_has(JUG) && get_object(JUG)->code==JUG_OIL)){
+      if(here!=0x3C)
+        empty_jug();
+      lampoil=0xFF;
+      process_output("OK.\n");
+    } else
+      process_output("There is no oil here.\n");
+  } else if(id==JUG){//$1B1A
+    UCHAR code;
+    struct object *jug=get_object(JUG);
+    if(jug->code!=JUG_EMPTY){
+      process_output("It's already full.\n");
+      return SUCCESS;
+    }
+    if(at_water())
+      code=JUG_WATER;
+    else if(here==0xAE)
+      code=JUG_GOLD;
+    else if(here==0x3F || here==0x9D)
+      code=JUG_BEER;
+    else if(here==0x3C)
+      code=JUG_OIL;
+    else {
+      process_output("There is no liquid here.\n");
+      return SUCCESS;
+    }
+    if(jug->location_id==CARRIED){//$1588
+      int w=get_player()->amount_carried+0x0F;
+      if(w>0xFF || w>=get_player()->max_carried){
+        process_output("You can't carry any more.\n");
+        return SUCCESS;
+      }
+      get_player()->amount_carried=w;
+    } else {//In the holdall
+      if(holdallweight+0x0F>=0x64){
+        process_output("You can't carry any more.\n");
+        return SUCCESS;
+      }
+      holdallweight+=0x0F;
+    }
+    set_object_code(jug,code);
+    process_output("OK.\n");
+  } else
+    cant(0x1D,id);
   return SUCCESS;
 }
 
@@ -720,8 +829,81 @@ int pour(UCHAR verb, UCHAR *matches, int nmatches){
   }
   if(id==0)
     empty_holdall();
-  else
-    process_output("Not implemented yet.\n");
+  else if(id==LAMP)
+    process_output("Don't be silly!\n");
+  else if(id==JUG){
+    if(get_object(JUG)->code==JUG_EMPTY)
+      process_output("It's already empty.\n");
+    else {
+      process_output("The liquid drains away.\n");
+      empty_jug();
+    }
+  } else
+    cant(verb,id);
+  return SUCCESS;
+}
+
+//The strong beer at the inn or in the jug, see $18F7
+void drink_beer(){
+  process_output("The strong beer refreshes you.\n");
+  inflict(0,0x32,0x1F);
+  thirst02=0xFF;
+}
+
+//Seven locations gain a hidden exit, stored after their others, see $1973
+void reveal_concealed_doors(){
+  int i;
+  for(i=6;i>=0;i--){
+    UCHAR loc=getbyte("1A33",i);
+    ctkv[getlocationaddress(loc)+1]+=0x20;//One more exit
+    reload_location(loc);
+  }
+}
+
+//DRINK, see $1950
+int drink(){
+  UCHAR here=get_player_location_id();
+  struct object *jug=get_object(JUG);
+  if(at_water()){
+    thirst02=0xFF;
+    if(here==0x89 && (magic00&0x80)==0){//The magic pool
+      magic00=0xFF;
+      process_output("A strange magic reveals to you the secret of concealed doors.\n");
+      reveal_concealed_doors();
+    } else
+      process_output("The cool water refreshes you.\n");
+    return SUCCESS;
+  }
+  at1a=here;
+  if(here==0x3F || here==0x9D){
+    drink_beer();
+  } else if(!player_has(JUG)){
+    process_output("There is no water here.\n");
+  } else if(jug->code==JUG_BEER){
+    drink_beer();
+    empty_jug();
+  } else if(jug->code==JUG_WATER){
+    process_output("The cool water refreshes you.\n");
+    thirst02=0xFF;
+    empty_jug();
+  } else
+    process_output("There is no water here.\n");
+  return SUCCESS;
+}
+
+//SWIM, see $18B0
+int swim(){
+  if(!at_water())
+    process_output("There is no water here.\n");
+  else if(!at_deep_water())
+    process_output("The water is too shallow.\n");
+  else {
+    if(get_player_location_id()==0x89){//The magic pool heals
+      process_output("You feel strangely healthy.\n");
+      get_player()->strength=0xBE;
+    }
+    process_output("The water is cool.\n");
+  }
   return SUCCESS;
 }
 
