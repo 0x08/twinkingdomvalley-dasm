@@ -14,6 +14,7 @@
 #define DRAW 4
 
 #define NOMATCH 0xFF
+#define MAXMATCHES 10
 
 #define PASSABLE 1
 #define IMPASSABLE 0
@@ -75,6 +76,8 @@ struct object {
 struct character {
   char *description;
   UCHAR location_id;
+  UCHAR classcode; //Raw $2968 byte: bit 7 set means hostile to the player
+  UCHAR class;     //classcode&0x1F, indexes the $2800-$28E0 class tables
   UCHAR ishostile;
   UCHAR strength;
   UCHAR max_carried;
@@ -84,9 +87,12 @@ struct character {
 void init_game();
 
 void process_output(char *s);
-int process_input();
-int parse_and_process(char *line, int len);
-int process(UCHAR *matches, int nmatches);
+int read_command(UCHAR *matches, int *nmatches);
+int get_command(UCHAR *matches, int *nmatches);
+void free_action(UCHAR code);
+void player_move(UCHAR *matches, int nmatches);
+void turn_start();
+void turn_end();
 UCHAR get_match(UCHAR *word);
 void report_invalid_move(struct exit *e, UCHAR dirindex, UCHAR type);
 
@@ -145,6 +151,18 @@ UCHAR lampoil; //Stored in $27FB
 
 int debug=0; //Set by -d: show player location and lamp oil at each turn
 
+//Per-turn state, named after the original's memory locations
+#define MAXCHARS 0x26 //$0C1E clears $2AD0-$2AF5
+UCHAR status[MAXCHARS]; //$2AD0: bit 7 attacked, bit 6 moved after combat/player moving, bit 5 moved
+UCHAR loc14; //$14: player location at the start of this turn
+UCHAR loc1c; //$1C: player location at the start of the previous turn
+
+//Command codes, see the $3600 word table and $1EB1 dispatch table
+#define FIRSTCOMBAT 0x0E //HIT, CUT, THROW are $0E-$10
+#define FIRSTACTION 0x11 //$11-$24 cost a turn
+#define FIRSTFREE 0x25   //$25-$2E are carried out without a turn passing, see $0C8E
+#define FIRSTNOUN 0x2F   //$2F onwards are objects, characters and places
+
 int main(int argc, char *argv[]) {
   int i;
   if(argc>1 && strcmp(argv[1],"-d")==0){
@@ -168,26 +186,36 @@ int main(int argc, char *argv[]) {
     print_description(strtol(argv[1],NULL,16));
     return 0;
   }
-  
+
   set_player_location_id(1);
-  int input=LOOK;
-  do {
-    if(input==MOVED || input==LOOK) {
-      print_description(get_player_location_id());
+  print_description(get_player_location_id());
+  //Main game loop, see $1451
+  for(;;){
+    UCHAR matches[MAXMATCHES];
+    int nmatches;
+    turn_start();
+    int verb=get_command(matches,&nmatches);
+    if(verb==QUIT)
+      break;
+    if(verb<FIRSTCOMBAT){//A direction
+      if(status[0]&0x80){//Player attacked last turn so gets away first, $145D
+        player_move(matches,nmatches);
+        status[0]=0x40;
+        turn_end();
+      } else {//Characters here act before the player moves, $1474
+        turn_end();
+        player_move(matches,nmatches);
+      }
+      status[0]=0;
+    } else if(verb<FIRSTACTION){//Combat, see $147F
+      process_output("Naughty! You are a pacifist.\n");
+      turn_end();
+    } else {
+      noncombat_action(verb,matches,nmatches);
+      turn_end();
+      status[0]=0;
     }
-    if(input==MOVED || input==SUCCESS || input==CONTINUE) {//A new turn
-      //Turn separator: the original draws a line of magenta dashes, see $0C00
-      if(debug)
-        printf("          ---------------%02x,%02x\n",get_player()->location_id,lampoil);
-      else
-        printf("          ---------------\n");
-      update();
-      print_npc_info();
-    }
-    process_output("?");
-    input=process_input();
-    //printf("input: |%d|.\n");
-  } while(input!=QUIT);
+  }
 
   cleanup();
   return 0;
@@ -197,7 +225,36 @@ void init_game(){
   lampoil=0x80; //See code just after $1400
 }
 
+//Start of a turn: the first part of $0C00 with A=0
+void turn_start(){
+  int x;
+  //Turn separator: the original draws a line of magenta dashes
+  if(debug)
+    printf("          ---------------%02x,%02x\n",get_player()->location_id,lampoil);
+  else
+    printf("          ---------------\n");
+  update();
+  for(x=0;x<MAXCHARS;x++)//$0C1E: forget all but last turn's attacks
+    status[x]&=0x80;
+  print_npc_info();
+}
+
+//End of a turn: $0C00 with A=$80
+void turn_end(){
+}
+
+//Per-turn events, see $0F03
 void update(){
+  int x;
+  //$0F4A: every living character, the player included, recovers some health
+  for(x=getnumberofcharacters()-1;x>=0;x--){
+    struct character *c=get_npc(x);
+    if(c->strength==0)
+      continue;
+    UCHAR max=getbyte("2800",c->class);
+    UCHAR h=c->strength+getbyte("28C0",c->class);
+    c->strength = h>=max ? max : h;
+  }
   //See code around $0F86 for lamp stuff
   if(lampoil>0 && strstr(get_object(LAMP)->description,"unlit")==NULL){
     lampoil--;
@@ -206,38 +263,64 @@ void update(){
     else if(lampoil==0)
       process_output("Your lamp dies.\n");
   }
+  //$0FFE: remember where the player has been
+  loc1c=loc14;
+  loc14=get_player_location_id();
 }
 
 void process_output(char *s){
   printf("%s",s);
 }
 
-int process_input(){
+//Asks for input until a command that costs a turn is given, see $0C78
+//Returns the first verb-like command ($83) or QUIT
+int get_command(UCHAR *matches, int *nmatches){
+  for(;;){
+    process_output("?");
+    int r=read_command(matches,nmatches);
+    if(r==QUIT)
+      return QUIT;
+    if(r==EMPTY)
+      continue;
+    int i;
+    int verb=-1;
+    for(i=0;i<*nmatches;i++)//$2378: first verb-like word
+      if(matches[i]<FIRSTNOUN){
+        verb=matches[i];
+        break;
+      }
+    if(verb<0){
+      process_output("I don't understand.\n");
+      continue;
+    }
+    if(verb<FIRSTFREE)
+      return verb;
+    if(verb==0x25 || verb==0x26)//QUIT,END
+      return QUIT;
+    free_action(verb);
+  }
+}
+
+//Reads a line of input and converts its words to command codes, see $229F
+//Returns QUIT at end of input, EMPTY if there's nothing to act on
+int read_command(UCHAR *matches, int *nmatches){
   char line[MAXLINE];
   int c,i=0;
 
+  *nmatches=0;
   do {
     c=getchar();
     line[i++]=c;
   } while( i<MAXLINE && c!=EOF && c!='\n' );
   line[i-1]='\0';
+  int len=i;
 
-  //printf("|%s|\n",line);
   if(c==EOF && i==1){//End of input with nothing left to process
     process_output("\n");
     return QUIT;
   }
   if(i==1)
     return EMPTY;
-  return parse_and_process(line,i);
-}
-
-#define MAXMATCHES 10
-
-int parse_and_process(char *line, int len){
-  UCHAR matches[MAXMATCHES];
-  int i;
-  int nmatches=0;
   for(i=0;i<len-1;i++){//$230D loop
     if(line[i]=='*'){//$2310
       process_output("The * commands are not implemented yet.\n");
@@ -255,43 +338,46 @@ int parse_and_process(char *line, int len){
       continue;
     UCHAR m=get_match(word);
     //printf("Match result for %s: %02x\n",word,m);
-    if(m!=NOMATCH && nmatches<MAXMATCHES)
-      matches[nmatches++]=m;
+    if(m!=NOMATCH && *nmatches<MAXMATCHES)
+      matches[(*nmatches)++]=m;
   }
-  return process(matches, nmatches);
+  return SUCCESS;
 }
 
-int process(UCHAR *matches, int nmatches){
+//Combines the direction words given and tries to move, see $23C3
+void player_move(UCHAR *matches, int nmatches){
   //These dirbytes are in $23B5-C3
   //Correspond to: N  S  E  W  U  D  NE NW NE NW SE SW SE SW
   UCHAR dirbytes[]={0x20, 0x10, 0x08, 0x04, 0x02, 0x01,
     0x28, 0x24, 0x28, 0x24, 0x18, 0x14, 0x18, 0x14};
   int i;
   UCHAR dir=0;
-  for(i=0;i<nmatches;i++){//See $23CA
-    if(matches[i]<0x0E){//A direction
+  for(i=0;i<nmatches;i++)//See $23CA
+    if(matches[i]<FIRSTCOMBAT)
       dir=dir|dirbytes[matches[i]]; //Set bits for commanded direction
-    } else if(matches[i]>=0x0E && matches[i]<=0x10){
-      process_output("Naughty! You are a pacifist.\n");
-      return EMPTY;
-    } else if(matches[i]>=0x11 && matches[i]<=0x2E){
-      return noncombat_action(matches[i],matches,nmatches);
-    } else {
-      process_output("I don't understand.\n");
-      return EMPTY;
-    }
-
-  }
   for(i=0;i<0x0E;i++)   //Find index of commanded direction
     if(dir==dirbytes[i])
       break;
-  return move(dir,i);
+  if(move(dir,i)==MOVED)
+    print_description(get_player_location_id());
 }
 
-//Called with code between 0x11 and 0x2E
+//Commands $25-$2E don't use up a turn
+void free_action(UCHAR code){
+  switch(code){
+    case 0x27: case 0x28: print_description(get_player_location_id()); return; //LOOK,VIEW
+    case 0x29: case 0x2A: process_output("Apologies, graphics not implemented yet.\n"); return; //PICTURE,DRAW
+    case 0x2B: process_output("Not implemented yet.\n"); return; //SCORE
+    case 0x2C: inventory(0); return; //INVENTORY
+    case 0x2D: process_output("Not implemented yet.\n"); return; //OPTION
+    case 0x2E: process_output("Not implemented yet.\n"); return; //HELP
+  }
+}
+
+//Called with code between 0x11 and 0x24
 int noncombat_action(UCHAR code, UCHAR *matches, int nmatches){
   //printf("noncombat_action: %02x.\n",code);
-  switch(code){ //code is 0x11 to 0x2E
+  switch(code){ //code is 0x11 to 0x24
     case 0x11: return drop(matches,nmatches); //DROP
     case 0x12: case 0x13: return take(matches,nmatches); //TAKE,GET
     case 0x14: case 0x15: case 0x16: return use_key(LOCK,matches,nmatches); //LOCK,SHUT,CLOSE
@@ -303,13 +389,6 @@ int noncombat_action(UCHAR code, UCHAR *matches, int nmatches){
     case 0x21:            process_output("You wait here.\n"); return CONTINUE; //WAIT
     case 0x22: case 0x23: case 0x24: //WAVE,SWIM,DRINK
       process_output("Not implemented yet.\n"); return EMPTY;
-    case 0x25: case 0x26: return QUIT; //QUIT,END
-    case 0x27: case 0x28: return LOOK; //LOOK,VIEW
-    case 0x29: case 0x2A: process_output("Apologies, graphics not implemented yet.\n"); return DRAW; //PICTURE,DRAW
-    case 0x2B: process_output("Not implemented yet.\n"); return EMPTY; //SCORE
-    case 0x2C: return inventory(0);
-    case 0x2D: process_output("Not implemented yet.\n"); return EMPTY; //OPTION;
-    case 0x2E: process_output("Not implemented yet.\n"); return EMPTY; //HELP;
   }
   fprintf(stderr,"This should never be printed.\n");
   return EMPTY; //Should never get here
@@ -625,6 +704,8 @@ void load_character(struct character *c, UCHAR id){
   c->strength=getbyte("298E",id);
   printcharacterdescription(desc, class);
   c->description=create_copy_string(desc);
+  c->classcode=classcode;
+  c->class=class;
   c->ishostile=NONHOSTILE;
   if( (classcode&0x80) != 0 ){
     c->ishostile=HOSTILE;
@@ -850,10 +931,13 @@ void you_can_see(char *text, struct location dest){
   sprintf(text,"you can see %s",ss);
 }
 
+//Lists the characters with the player, see $0C37
 void print_npc_info(){
-  UCHAR id;
-  
-  for(id=1;id<getnumberofcharacters();id++){
+  int id;
+
+  if(is_dark(get_player_location_id())==DARK)//$0C4A
+    return;
+  for(id=getnumberofcharacters()-1;id>0;id--){
     struct character *npc = get_npc(id);
     if(npc->location_id==get_player()->location_id){
       char desc[MAXLINE];
