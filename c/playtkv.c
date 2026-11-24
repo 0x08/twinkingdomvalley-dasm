@@ -110,6 +110,7 @@ void weapon_lands(UCHAR objid, UCHAR flag);
 void inflict(UCHAR victim, UCHAR max, UCHAR rndmask);
 void damage(UCHAR victim, UCHAR amount);
 void print_score_and_strength();
+void player_attack(UCHAR verb, UCHAR *matches, int nmatches);
 UCHAR get_match(UCHAR *word);
 void report_invalid_move(struct exit *e, UCHAR dirindex, UCHAR type);
 
@@ -245,7 +246,7 @@ int main(int argc, char *argv[]) {
       }
       status[0]=0;
     } else if(verb<FIRSTACTION){//Combat, see $147F
-      process_output("Naughty! You are a pacifist.\n");
+      player_attack(verb,matches,nmatches);
       turn_end();
     } else {
       noncombat_action(verb,matches,nmatches);
@@ -1187,6 +1188,121 @@ void print_score_and_strength(){
   }
   sentence("Your score is %u.\n",score);
   sentence("Your strength is %u.\n",get_player()->strength);
+}
+
+//Counts how many of the given words match word code w, see $152F
+int count_word(UCHAR w, UCHAR *matches, int nmatches){
+  int i,n=0;
+  if(w==0)
+    return 0;
+  for(i=0;i<nmatches;i++)
+    if(matches[i]==w)
+      n++;
+  return n;
+}
+
+//Finds the character at loc best matching the words, see $1D9C.
+//Returns the number of matching words, 0 if none, with the character in *id.
+int match_character(UCHAR loc, UCHAR *matches, int nmatches, UCHAR *id){
+  int x,best=0;
+  for(x=getnumberofcharacters()-1;x>=0;x--){
+    struct character *c=get_npc(x);
+    if(c->location_id!=loc)
+      continue;
+    int n=count_word(getbyte("2820",c->class),matches,nmatches)
+         +count_word(getbyte("2840",c->class),matches,nmatches)
+         +count_word(getbyte("2860",c->class),matches,nmatches);
+    if(n>best){
+      best=n;
+      *id=x;
+    }
+  }
+  return best;
+}
+
+//Finds the object at loc best matching the words, see $14EF
+int match_object_words(UCHAR loc, UCHAR *matches, int nmatches, UCHAR *id){
+  int x,best=0;
+  for(x=getnumberofobjects()-1;x>=0;x--){
+    struct object *o=get_object(x);
+    if(o->location_id!=loc)
+      continue;
+    int n=count_word(getbyte("2750",o->code),matches,nmatches)
+         +count_word(getbyte("277A",o->code),matches,nmatches)
+         +count_word(getbyte("27A4",o->code),matches,nmatches)
+         +count_word(getbyte("27CE",o->code),matches,nmatches);
+    if(n>best){
+      best=n;
+      *id=x;
+    }
+  }
+  return best;
+}
+
+//An object the player carries, or has in a carried holdall, see $15A7
+int match_carried_object(UCHAR *matches, int nmatches, UCHAR *id){
+  UCHAR inholdall;
+  int n=match_object_words(CARRIED,matches,nmatches,id);
+  if(get_object(0)->location_id==CARRIED){
+    int m=match_object_words(0xFF,matches,nmatches,&inholdall);
+    if(m>n){
+      *id=inholdall;
+      n=m;
+    }
+  }
+  return n;
+}
+
+//Asks a question such as "Hit who" and reads the answer, see $229F
+void ask_again(UCHAR word, UCHAR *matches, int *nmatches){
+  char w[MAXWORD];
+  getword(w,word);
+  sentence("%s %s",w,"who");
+  process_output("?");
+  if(read_command(matches,nmatches)!=SUCCESS)
+    *nmatches=0;
+}
+
+//HIT, CUT or THROW, see $1DDA
+void player_attack(UCHAR verb, UCHAR *matches, int nmatches){
+  UCHAR victim=0, objid=0;
+  UCHAR ploc=get_player_location_id();
+  int found=match_character(ploc,matches,nmatches,&victim);
+  //$15D2: which weapon? Asks "With what?" or "Throw what?" once
+  if(match_carried_object(matches,nmatches,&objid)==0){
+    if(verb==0x10){
+      char w[MAXWORD];
+      getword(w,verb);
+      sentence("%s what",w);
+    } else
+      process_output("With what");
+    process_output("?");
+    if(read_command(matches,&nmatches)!=SUCCESS)
+      nmatches=0;
+    if(match_carried_object(matches,nmatches,&objid)==0){
+      process_output("You haven't got that.\n");
+      return;
+    }
+  }
+  //$1E17: at whom? Asks "Hit who?", "Cut who?" or "At who?" once
+  if(found==0)
+    found=match_character(ploc,matches,nmatches,&victim);
+  if(found==0){
+    ask_again(verb==0x10 ? 0x49 : verb,matches,&nmatches);
+    if(match_character(ploc,matches,nmatches,&victim)==0){
+      process_output("I can't see any here.\n");
+      return;
+    }
+  }
+  at1a=ploc;
+  if(weapon_too_weak(objid)){//$1E62
+    process_output("You are too weak.\n");
+    return;
+  }
+  if(verb==0x10)
+    throw_attack(objid,victim,0xFF);//$1D45
+  else
+    melee_attack(objid,victim,0xFF);//$1CCF
 }
 
 //Finds the healthiest character at at1a on the other side, see $0D8D
