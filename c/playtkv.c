@@ -287,7 +287,11 @@ int noncombat_action(UCHAR code, UCHAR *matches, int nmatches){
     case 0x17: case 0x18: return use_key(UNLOCK,matches,nmatches); //OPEN,UNLOCK
     case 0x19: case 0x1a: return use_lamp(LIGHT); //LIGHT,ON
     case 0x1b:            return use_lamp(DARK);  //OFF    
-    case 0x21:            process_output("You wait here.\n"); return CONTINUE; //PICTURE,DRAW    
+    case 0x1c: case 0x1d: case 0x1e: case 0x1f: case 0x20: //GIVE,FILL,POUR,EMPTY,ASK
+      process_output("Not implemented yet.\n"); return EMPTY;
+    case 0x21:            process_output("You wait here.\n"); return CONTINUE; //WAIT
+    case 0x22: case 0x23: case 0x24: //WAVE,SWIM,DRINK
+      process_output("Not implemented yet.\n"); return EMPTY;
     case 0x25: case 0x26: return QUIT; //QUIT,END
     case 0x27: case 0x28: return LOOK; //LOOK,VIEW
     case 0x29: case 0x2A: process_output("Apologies, graphics not implemented yet.\n"); return DRAW; //PICTURE,DRAW
