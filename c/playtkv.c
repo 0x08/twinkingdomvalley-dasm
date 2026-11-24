@@ -430,7 +430,7 @@ void free_action(UCHAR code){
   switch(code){
     case 0x27: case 0x28: print_description(get_player_location_id()); return; //LOOK,VIEW
     case 0x29: case 0x2A: process_output("Apologies, graphics not implemented yet.\n"); return; //PICTURE,DRAW
-    case 0x2B: process_output("Not implemented yet.\n"); return; //SCORE
+    case 0x2B: print_score_and_strength(); return; //SCORE, $12EE
     case 0x2C: inventory(0); return; //INVENTORY
     case 0x2D: process_output("Not implemented yet.\n"); return; //OPTION
     case 0x2E: process_output("Not implemented yet.\n"); return; //HELP
