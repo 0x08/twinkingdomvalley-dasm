@@ -3,6 +3,9 @@
 #include <setjmp.h>
 #include <errno.h>
 #include "libtkv.h"
+#include "pictures.h"
+#include <unistd.h>
+#include <sys/ioctl.h>
 
 #define NLOCATIONS 0xB1 //Locations $00-$B0, see the tables at $2A00 and $2B00
 #define MAXLINE 1000
@@ -160,6 +163,8 @@ void reload_location(UCHAR id);
 int player_has(UCHAR objid);
 int lamp_is_lit();
 void move_player(UCHAR id);
+void show_picture(UCHAR n);
+void draw_view();
 char * word_of(UCHAR code);
 int ask_carried(UCHAR carrier, UCHAR prompt, UCHAR *matches, int *nmatches, UCHAR *id);
 int count_word(UCHAR w, UCHAR *matches, int nmatches);
@@ -290,7 +295,10 @@ int main(int argc, char *argv[]) {
     option01=getbyte("17CA",option-1);
   else if(!choose_option())//$141B
     return 0;
-  print_description(get_player_location_id());
+  if(option01&0xA0)//$1446: start with the picture if pictures are on
+    draw_view();
+  else
+    print_description(get_player_location_id());
   //*LOAD comes back here, to the prompt of the turn that was saved
   if(setjmp(resume_point)){
     print_description(get_player_location_id());
@@ -449,6 +457,7 @@ void set_character_class(UCHAR id, UCHAR classcode){
 //Sets where the drawbridge at $28 leads, see $125A
 void set_drawbridge(UCHAR dest){
   long a=get_location(0x28)->exits[0].addr;
+  ctkv[0x1F28-start] = dest==0x29 ? 0x0B : 0x0C;//Its picture, $1249 and $123B
   if(ctkv[a+1]!=dest){
     ctkv[a+1]=dest;
     reload_location(0x28);
@@ -726,8 +735,8 @@ void player_move(UCHAR *matches, int nmatches){
   for(i=0;i<0x0E;i++)   //Find index of commanded direction
     if(dir==dirbytes[i])
       break;
-  if(move(dir,i)==MOVED)
-    print_description(get_player_location_id());
+  if(move(dir,i)==MOVED)//$2458
+    move_player(get_player_location_id());
 }
 
 //Commands $25-$2E don't use up a turn
@@ -1413,10 +1422,11 @@ void picture(){
   else if(is_dark(here)==DARK)
     process_output("It's too dark.\n");
   else
-    process_output("Apologies, graphics not implemented yet.\n");
+    draw_view();
 }
 
 void print_description(UCHAR id){
+  ctkv[getlocationaddress(id)]|=0x10;//$20BD: visited
   if(is_dark(id)==DARK){
     process_output("It is dark here.\n");
   } else {
@@ -1738,8 +1748,25 @@ void look(UCHAR *matches, int nmatches){
   UCHAR here=get_player_location_id();
   UCHAR id;
   int i;
-  if(is_dark(here)==DARK || match_carried_object(CARRIED,matches,nmatches,&id)==0){
+  if(is_dark(here)==DARK){
     print_description(here);
+    return;
+  }
+  if(match_carried_object(CARRIED,matches,nmatches,&id)==0){
+    //$420A: LOOK PICTURE in a few places shows close-ups
+    UCHAR close[5]={0,0,0,0,0};
+    if(count_word(0x29,matches,nmatches)){
+      if(here==0x00){ close[0]=0x55; }
+      else if(here==0x57){ close[0]=0x55; close[1]=0x4E; close[2]=0x51; }
+      else if(here==0x56 || here==0x5B){ close[0]=0x54; }
+      else if(here==0x38){ close[0]=0x51; }
+    }
+    if(close[0]==0)
+      print_description(here);
+    for(i=0;close[i];i++){//$421B
+      show_picture(close[i]);
+      print_description(here);
+    }
     return;
   }
   for(i=6;i>=0;i--)
@@ -1749,13 +1776,16 @@ void look(UCHAR *matches, int nmatches){
     process_output("Seems ordinary.\n");
     return;
   }
-  if(getbyte("42F9",i)!=0xC3){
-    process_output("Apologies, graphics not implemented yet.\n");
+  if(getbyte("42F9",i)!=0xC3){//$4263: a picture of the object
+    show_picture(getbyte("42F9",i));
+    print_description(here);
     return;
   }
   print_score();
   if(picture28==4){//$4274: the end
     move_player(0xAF);
+    show_picture(0xC3);
+    print_description(0xAF);
     process_output("The secret of life is simple yet complex, as is the picture of it.\n");
     process_output("          Stay cool.\n");
     exit(0);
@@ -1775,7 +1805,54 @@ int lamp_is_lit(){
 //$245A: puts the player somewhere and describes it
 void move_player(UCHAR id){
   set_player_location_id(id);
-  print_description(id);
+  long a=getlocationaddress(id);
+  UCHAR before=ctkv[a];
+  ctkv[a]|=0x10;//$20BD: visited
+  //$2462: no picture in the dark or where there isn't one; otherwise as the
+  //option says, always (bit 7) or the first time here (bit 5)
+  if(is_dark(id)==LIGHT && (before&0x40)==0
+     && ( (option01&0x80) || ((option01&0x20) && (before&0x10)==0) ))
+    draw_view();
+  else
+    print_description(id);
+}
+
+//How wide to print pictures: the terminal's width, but no taller than it
+//and no more than one column per pixel. TKV_PICTURE_WIDTH overrides it.
+int picture_columns(){
+  const char *e=getenv("TKV_PICTURE_WIDTH");
+  struct winsize w;
+  int cols=80;
+  if(e!=NULL && atoi(e)>0)
+    return atoi(e)>PIC_W ? PIC_W : atoi(e);
+  if(ioctl(STDOUT_FILENO,TIOCGWINSZ,&w)==0 && w.ws_col>0){
+    cols=w.ws_col;
+    if(w.ws_row>8 && cols*PIC_H/(4*PIC_W)>w.ws_row-4)//Rows printed are cols*256/640
+      cols=(w.ws_row-4)*4*PIC_W/PIC_H;
+  }
+  return cols>PIC_W ? PIC_W : cols;
+}
+
+//Draws picture n, see $0B12
+void show_picture(UCHAR n){
+  static struct picture pic;
+  render_picture(ctkv,n,&pic,PICTURE_MAXSTEPS);
+  fflush(stdout);
+  print_picture(&pic,picture_columns());
+}
+
+//$2517: the picture of where the player is, which way it looks, then the
+//description
+void draw_view(){
+  UCHAR here=get_player_location_id();
+  long a=getlocationaddress(here);
+  show_picture(ctkv[0x1F00-start+here]);
+  if( (ctkv[a]&0x08)==0 ){//$2530: the view is along the first exit
+    char dir[MAXWORD*2];
+    printdirectiondescription(dir,ctkv[a+2+(ctkv[a+1]&0x1F)]);
+    sentence("The picture is your view %s.\n",dir);
+  }
+  print_description(here);
 }
 
 //Re-reads a location after its data in ctkv has been changed, as some
@@ -1987,11 +2064,13 @@ int wave(UCHAR *matches, int nmatches){
   UCHAR dest=getbyte("1385",wave03);
   UCHAR ends[2]={0x19,0x23};
   int i;
+  for(i=0;i<5;i++)//$13C8: the pictures of the chasm change too
+    ctkv[0x1F00-start+getbyte("138C",i)]=getbyte("1380",wave03+i);
   for(i=0;i<2;i++){//$13F3
     ctkv[get_location(ends[i])->exits[0].addr+1]=dest;
     reload_location(ends[i]);
   }
-  print_description(here);//$2517
+  draw_view();//$2517
   return SUCCESS;
 }
 
