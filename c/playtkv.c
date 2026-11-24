@@ -4,8 +4,7 @@
 #include <errno.h>
 #include "libtkv.h"
 #include "pictures.h"
-#include <unistd.h>
-#include <sys/ioctl.h>
+#include "m6502.h"
 
 #define NLOCATIONS 0xB1 //Locations $00-$B0, see the tables at $2A00 and $2B00
 #define MAXLINE 1000
@@ -102,9 +101,11 @@ struct character {
 void init_game();
 
 void process_output(char *s);
+void prompt();
 int read_command(UCHAR *matches, int *nmatches);
 int get_command(UCHAR *matches, int *nmatches);
 void free_action(UCHAR code, UCHAR *matches, int nmatches);
+void free_action_do(UCHAR code, UCHAR *matches, int nmatches);
 void look(UCHAR *matches, int nmatches);
 void print_score();
 void player_move(UCHAR *matches, int nmatches);
@@ -129,7 +130,7 @@ UCHAR find_enemy();
 void print_score_and_strength();
 void player_attack(UCHAR verb, UCHAR *matches, int nmatches);
 UCHAR get_match(UCHAR *word);
-void report_invalid_move(struct exit *e, UCHAR dirindex, UCHAR type);
+void report_invalid_move(struct exit *e, UCHAR dir, UCHAR type);
 
 int noncombat_action(UCHAR code, UCHAR *matches, int nmatches);
 int use_lamp(UCHAR action);
@@ -140,6 +141,7 @@ int take(UCHAR *matches, int nmatches);
 int inventory(UCHAR character_id);
 int print_carried(UCHAR loc, int holdall_follows);
 int yes_no();
+int read_key();
 void fill_holdall();
 void empty_holdall();
 int fill(UCHAR verb, UCHAR *matches, int nmatches);
@@ -166,7 +168,7 @@ void move_player(UCHAR id);
 void show_picture(UCHAR n);
 void draw_view();
 char * word_of(UCHAR code);
-int ask_carried(UCHAR carrier, UCHAR prompt, UCHAR *matches, int *nmatches, UCHAR *id);
+int ask_carried(UCHAR carrier, UCHAR verb, UCHAR *matches, int *nmatches, UCHAR *id);
 int count_word(UCHAR w, UCHAR *matches, int nmatches);
 int match_character(UCHAR loc, UCHAR *matches, int nmatches, UCHAR *id);
 int match_object_words(UCHAR loc, UCHAR *matches, int nmatches, UCHAR *id);
@@ -212,6 +214,26 @@ struct character *characters;
 UCHAR lampoil; //Stored in $27FB
 
 int debug=0; //Set by -d: show player location, lamp oil and character moves
+//Pictures are drawn in one machine for the whole game, as the original
+//draws them in its own memory
+struct m6502 picture_machine;
+//The return addresses on the original's stack when it calls $0B12, which
+//matter as the fill routine stops when the stack is nearly full ($417C)
+unsigned short picture_chain[6]={0x2526,0x144A,0};
+//The carry flag when $0B12 is called: it uses it, unset, working out where
+//the bottom row of the screen is, so pictures differ slightly with it
+int picture_carry=0;
+int text25=0; //$25: game text printed since input was last asked for
+
+//Sets picture_chain to the given return addresses, innermost first
+void call_chain(unsigned short a, unsigned short b, unsigned short c, unsigned short d){
+  picture_chain[0]=a; picture_chain[1]=b; picture_chain[2]=c;
+  picture_chain[3]=d; picture_chain[4]=0;
+}
+#define VIA_2517 0x2526       //JSR $0B12 at $2524 in $2517
+#define VIA_LOOK 0x421F       //JSR $0B12 at $421D
+#define IN_FREE  0x0C94,0x1455 //JSR $14A7 at $0C92 in $0C00, called at $1453
+#define IN_EVENT 0x0C1B,0x1455 //JSR $42A0 at $0C19 in $0C00, called at $1453
 jmp_buf resume_point;     //Where *LOAD resumes the game
 int can_resume=0;
 volatile int resumed=0;
@@ -295,6 +317,8 @@ int main(int argc, char *argv[]) {
     option01=getbyte("17CA",option-1);
   else if(!choose_option())//$141B
     return 0;
+  text25=0;//$1430
+  picture_carry=0;
   if(option01&0xA0)//$1446: start with the picture if pictures are on
     draw_view();
   else
@@ -318,11 +342,13 @@ int main(int argc, char *argv[]) {
     npcs_act(0);//Characters away from the player act, $0C98
     if(verb<FIRSTCOMBAT){//A direction
       if(status[0]&0x80){//Player attacked last turn so gets away first, $145D
+        call_chain(VIA_2517,0x1463,0,0);//JSR $24D4 at $1461
         player_move(matches,nmatches);
         status[0]=0x40;
         turn_end();
       } else {//Characters here act before the player moves, $1474
         turn_end();
+        call_chain(VIA_2517,0x147B,0,0);//JSR $24D4 at $1479
         player_move(matches,nmatches);
       }
       status[0]=0;
@@ -330,6 +356,7 @@ int main(int argc, char *argv[]) {
       player_attack(verb,matches,nmatches);
       turn_end();
     } else {
+      call_chain(VIA_2517,0x1493,0,0);//JSR $14A7 at $1491
       noncombat_action(verb,matches,nmatches);
       turn_end();
       status[0]=0;
@@ -349,9 +376,9 @@ void turn_start(){
   int x;
   //Turn separator: the original draws a line of magenta dashes
   if(debug)
-    printf("          ---------------%02x,%02x\n",get_player()->location_id,lampoil);
+    printf("          --------------------%02x,%02x\n",get_player()->location_id,lampoil);
   else
-    printf("          ---------------\n");
+    printf("          --------------------\n");//$0C07: 20 of $5F, a bar in MODE 7
   update();
   for(x=0;x<MAXCHARS;x++)//$0C1E: forget all but last turn's attacks
     status[x]&=0x80;
@@ -417,20 +444,25 @@ void location_events(){
     inflict(0,0xBE,0x7F);
     for(i=0;i<256;i++)//$0F14: Y counts down from 4 and wraps, as in the original
       if(getbyte("1283",--y)==loc14){
+        call_chain(VIA_2517,0x0F1F,IN_EVENT);//JSR $245A at $0F1D
         move_player(getbyte("1289",y));
         break;
       }
   } else if(here==0x37){//Diving down a large waterfall
     at1a=here;
     inflict(0,0x64,0x3F);
+    call_chain(VIA_2517,0x0F2E,IN_EVENT);//JSR $245A at $0F2C
     move_player(0x1A);
     scramble_out();
+    call_chain(VIA_2517,0x0F49,IN_EVENT);//JSR $245A at $0F47
     move_player(0x1B);
   } else if(here==0x1A){
     scramble_out();
+    call_chain(VIA_2517,0x0F49,IN_EVENT);
     move_player(0x1B);
   } else if(here==0x32){
     scramble_out();
+    call_chain(VIA_2517,0x0F49,IN_EVENT);
     move_player(loc14);
   }
 }
@@ -457,7 +489,7 @@ void set_character_class(UCHAR id, UCHAR classcode){
 //Sets where the drawbridge at $28 leads, see $125A
 void set_drawbridge(UCHAR dest){
   long a=get_location(0x28)->exits[0].addr;
-  ctkv[0x1F28-start] = dest==0x29 ? 0x0B : 0x0C;//Its picture, $1249 and $123B
+  ctkv[0x1F28 - start] = dest==0x29 ? 0x0B : 0x0C;//Its picture, $1249 and $123B
   if(ctkv[a+1]!=dest){
     ctkv[a+1]=dest;
     reload_location(0x28);
@@ -515,11 +547,13 @@ void later_events(){
       process_output("Your generous gift is accepted, and in return you are given "
                      "an amulet to help the forest king's people recognise you.\n");
       transfer(0x28,CARRIED,CARRIED);
+      call_chain(VIA_2517,0x110F,IN_EVENT);//JSR $245A at $110D
       move_player(0x35);
     } else {
       if(found>=0)
         transfer(found,0x6F,0x80);
       process_output("You are told that you are a vagabond without any respect.\n");
+      call_chain(VIA_2517,0x110F,IN_EVENT);//JSR $245A at $110D
       move_player(0x6F);
     }
   } else if(here==0x6D){//$1118: the forest king's land
@@ -527,6 +561,7 @@ void later_events(){
       process_output("The forest king's personal guard arrest you for trespassing and "
                      "demand a suitable payment, to show respect for the king, in "
                      "return for your freedom.\n");
+      call_chain(VIA_2517,0x110F,IN_EVENT);//JSR $245A at $110D
       move_player(0xA9);
     } else if(princess21&0x80){
       process_output("You are honoured and given a silver key. It is indeed a generous gift.\n");
@@ -616,15 +651,24 @@ void update(){
   later_events();
 }
 
+//Prints game text, which the original prints through $3BA1, recording in
+//text25 that something has been printed since input was last asked for
 void process_output(char *s){
+  if(*s)
+    text25=1;
   printf("%s",s);
+}
+
+//The prompt, which the original prints directly with OSWRCH, see $22B1
+void prompt(){
+  printf("?");
 }
 
 //Asks for input until a command that costs a turn is given, see $0C78
 //Returns the first verb-like command ($83) or QUIT
 int get_command(UCHAR *matches, int *nmatches){
   for(;;){
-    process_output("?");
+    prompt();
     int r=read_command(matches,nmatches);
     if(r==QUIT)
       return QUIT;
@@ -645,8 +689,8 @@ int get_command(UCHAR *matches, int *nmatches){
       print_score_and_strength();
       sentence("%s",word_of(verb));
       if(yes_no()){
-        process_output("Bye bye.\n");
-        return QUIT;
+        process_output("Bye-bye.\n");
+        after_death();//$19FA: as after dying, only * commands work
       }
       continue;
     }
@@ -655,11 +699,16 @@ int get_command(UCHAR *matches, int *nmatches){
 }
 
 //Reads a line of input and converts its words to command codes, see $229F
-//Returns QUIT at end of input, EMPTY if there's nothing to act on
+//Returns QUIT at end of input, EMPTY if there's nothing to act on.
+//* commands are carried out here and the prompt repeated, wherever the
+//input was asked for, as $0BCA returns to $229F.
 int read_command(UCHAR *matches, int *nmatches){
   char line[MAXLINE];
-  int c,i=0;
+  int c,i;
 
+again:
+  i=0;
+  text25=0;//$22A1
   *nmatches=0;
   verb83=-1;
   placedir8c=0;
@@ -679,7 +728,8 @@ int read_command(UCHAR *matches, int *nmatches){
   for(i=0;i<len-1;i++){//$230D loop
     if(line[i]=='*'){//$2310
       star_command(line+i+1);
-      return EMPTY;
+      prompt();
+      goto again;
     }
     char word[MAXWORD];
     int j=0;
@@ -741,6 +791,11 @@ void player_move(UCHAR *matches, int nmatches){
 
 //Commands $25-$2E don't use up a turn
 void free_action(UCHAR code, UCHAR *matches, int nmatches){
+  call_chain(VIA_2517,IN_FREE,0);
+  free_action_do(code,matches,nmatches);
+}
+
+void free_action_do(UCHAR code, UCHAR *matches, int nmatches){
   switch(code){
     case 0x27: case 0x28: look(matches,nmatches); return; //LOOK,VIEW
     case 0x29: case 0x2A: picture(); return; //PICTURE,DRAW
@@ -862,7 +917,7 @@ int print_carried(UCHAR loc, int holdall_follows){
       if(nitems++==0)
         process_output("the following\n");
       char line[MAXLINE];
-      snprintf(line,sizeof(line),"  %s\n",obj->description);
+      snprintf(line,sizeof(line),"  %s.\n",obj->description);//$167E
       line[2]=toupper(line[2]);
       process_output(line);
     }
@@ -914,7 +969,7 @@ int drop(UCHAR verb, UCHAR *matches, int nmatches){
     return EMPTY;
   }
   transfer(id,get_player_location_id(),0xFF);
-  process_output("OK.\n");
+  process_output("Ok.\n");
   return SUCCESS;
 }
 
@@ -922,18 +977,28 @@ int drop(UCHAR verb, UCHAR *matches, int nmatches){
 int yes_no(){
   int c;
   process_output(" (yes / no) ?");
-  for(;;){
-    c=getchar();
-    if(c==EOF)
-      return 0;
-    if(c=='y' || c=='Y' || c=='n' || c=='N'){
-      int answer = c=='y' || c=='Y';
-      while(c!='\n' && c!=EOF)
-        c=getchar();
-      process_output("\n");
-      return answer;
-    }
+  do//$1A3F: wait for Y or N
+    c=toupper(read_key());
+  while(c!='Y' && c!='N');
+  process_output("\n");
+  return c=='Y';
+}
+
+//$185A: waits for a key and echoes it. Input comes a line at a time, so
+//the key is the line's first character and the rest is ignored; an empty
+//line is Return. At the end of input the game ends, as nothing more can happen.
+int read_key(){
+  int c=getchar(), k=c;
+  if(c==EOF){
+    process_output("\n");
+    exit(0);
   }
+  while(c!='\n' && c!=EOF)
+    c=getchar();
+  if(k=='\n')
+    return 13;
+  putchar(k);
+  return k;
 }
 
 //FILL HOLDALL: offers each object carried, see $1A4E
@@ -954,7 +1019,7 @@ void fill_holdall(){
 //EMPTY or POUR HOLDALL: everything in it falls out here, see $19D4
 void empty_holdall(){
   int id;
-  process_output("OK.\n");
+  process_output("Ok.\n");
   for(id=getnumberofobjects()-1;id>0;id--)
     if(get_object(id)->location_id==0xFF)
       get_object(id)->location_id=get_player_location_id();
@@ -991,7 +1056,7 @@ void empty_jug(){
 
 //"You can't fill a brass key", see $1ABE
 void cant(UCHAR verb, UCHAR id){
-  sentence("You can't %s %s.\n",word_of(verb),get_object(id)->description);
+  sentence("You can't %s %s\n",word_of(verb),get_object(id)->description);//No full stop, $1AC8
 }
 
 //FILL, see $1AAC
@@ -1011,7 +1076,7 @@ int fill(UCHAR verb, UCHAR *matches, int nmatches){
       if(here!=0x3C)
         empty_jug();
       lampoil=0xFF;
-      process_output("OK.\n");
+      process_output("Ok.\n");
     } else
       process_output("There is no oil here.\n");
   } else if(id==JUG){//$1B1A
@@ -1048,7 +1113,7 @@ int fill(UCHAR verb, UCHAR *matches, int nmatches){
       holdallweight+=0x0F;
     }
     set_object_code(jug,code);
-    process_output("OK.\n");
+    process_output("Ok.\n");
   } else
     cant(0x1D,id);
   return SUCCESS;
@@ -1135,8 +1200,8 @@ int swim(){
     if(get_player_location_id()==0x89){//The magic pool heals
       process_output("You feel strangely healthy.\n");
       get_player()->strength=0xBE;
-    }
-    process_output("The water is cool.\n");
+    } else
+      process_output("The water is cool.\n");
   }
   return SUCCESS;
 }
@@ -1169,11 +1234,11 @@ int move(UCHAR dir, UCHAR dirindex){
   if(ematch==NULL){
     if( (dir&1) !=0 )//User asked to go down, $2418
       type=0;
-    report_invalid_move(ematch,dirindex,type);
+    report_invalid_move(ematch,dir,type);
     return INVALID_MOVE;
   } else {
     if(ematch->ispassable==IMPASSABLE){
-      report_invalid_move(ematch,dirindex,0);
+      report_invalid_move(ematch,dir,0);
       return INVALID_MOVE;
     } 
     set_player_location_id(ematch->destination);
@@ -1181,13 +1246,13 @@ int move(UCHAR dir, UCHAR dirindex){
   }
 }
 
-void report_invalid_move(struct exit *e, UCHAR dirindex, UCHAR type){
-  char w[100];
+void report_invalid_move(struct exit *e, UCHAR dir, UCHAR type){
+  char w[MAXWORD*4];
   char line[1000];
-  getword(w, dirindex);
+  printdirectiondescription(w,dir);//$242B
   //These are given in order they appear in code from $247A
   switch(type){ //type is 0-7
-    case 1: sprintf(line,"Steep lag heaps block your way.\n"); break;
+    case 1: sprintf(line,"Steep slag heaps block your way.\n"); break;
     case 2: sprintf(line,"The cliff is too steep.\n"); break;
     case 3: sprintf(line,"The mountains are too steep.\n"); break;
     case 4: sprintf(line,"There are bushes in your way.\n"); break;
@@ -1421,14 +1486,31 @@ void picture(){
     process_output("A magical darkness lingers here.\n");
   else if(is_dark(here)==DARK)
     process_output("It's too dark.\n");
-  else
+  else {
+    picture_carry=(ctkv[getlocationaddress(here)+1]>>4)&1;//As $24FB leaves it
     draw_view();
+  }
 }
 
 void print_description(UCHAR id){
   ctkv[getlocationaddress(id)]|=0x10;//$20BD: visited
   if(is_dark(id)==DARK){
     process_output("It is dark here.\n");
+  } else if( (ctkv[getlocationaddress(id)+1]&0x1F)==0
+             && (ctkv[getlocationaddress(id)]&7)>=3 && (ctkv[getlocationaddress(id)]&7)<=5 ){
+    //$2151: woods, high mountains and dense forest list the ways out
+    struct location *l=get_location(id);
+    char line[MAXLINE], dir[MAXWORD*4];
+    int i;
+    snprintf(line,sizeof(line),"You are %s",l->description);
+    for(i=0;i<l->nexits;i++){
+      printdirectiondescription(dir,ctkv[l->exits[i].addr]);
+      strncat(line,i ? ", " : " ",sizeof(line)-strlen(line)-1);
+      strncat(line,dir,sizeof(line)-strlen(line)-1);
+    }
+    process_output(line);
+    process_output(".\n");
+    print_objects(id);
   } else {
     print_short_description(id);
     //$21DC: the exits are listed with a long description option, unless
@@ -1454,22 +1536,20 @@ int choose_option(){
   process_output("Select option.\n");
   for(i=0;i<6;i++)
     printf("%d %s\n",i+1,lines[i]);
-  for(;;){//$1846: wait for 1-6
-    c=getchar();
-    if(c==EOF)
-      return 0;
-    if(c>='1' && c<='6')
-      break;
-  }
+  do//$1846: wait for 1-6
+    c=read_key();
+  while(c!=EOF && (c<'1' || c>'6'));
+  if(c==EOF)
+    return 0;
   option01=getbyte("17CA",c-'1');
-  while(c!='\n' && c!=EOF)
-    c=getchar();
+  process_output("\n");
   return 1;
 }
 
+//$21A6: the objects here, last first
 void print_objects(UCHAR id){
   int i;
-  for(i=0;i<getnumberofobjects();i++){
+  for(i=getnumberofobjects()-1;i>=0;i--){
     char w[1000];
     struct object *obj=get_object(i);
     if(obj->location_id==get_player_location_id()){
@@ -1515,7 +1595,9 @@ void print_long_description(UCHAR id){
 	else
 	  process_output("an open ");
 	process_output(e.exittext);
-	if(strstr(e.exittext,"grate")!=NULL){
+	//$2231: grates ($14-$17) can always be seen through, doors ($18-$1F) when open
+	UCHAR kind=((ctkv[e.addr+2]>>3)&0x0F)|0x10;
+	if(kind>=0x14 && (kind<0x18 || e.islocked==UNLOCKED)){
 	  sprintf(text," through which ");//15 chars
 	  you_can_see(text+15,*dest);
 	  process_output(text);
@@ -1701,7 +1783,7 @@ void damage(UCHAR victim, UCHAR amount){
     c->strength=0;
     if(victim==0){//$1C4D: the game is over
       print_score_and_strength();
-      process_output("Bye bye.\n");
+      process_output("Bye-bye.\n");
       after_death();
     }
     c->location_id=BROKEN;
@@ -1764,6 +1846,14 @@ void look(UCHAR *matches, int nmatches){
     if(close[0]==0)
       print_description(here);
     for(i=0;close[i];i++){//$421B
+      //In the throne room the first two are drawn by JSR $421B and JSR $421D
+      if(here==0x57 && i<2)
+        call_chain(VIA_LOOK, i==0 ? 0x422F : 0x4234, IN_FREE);
+      else
+        call_chain(VIA_LOOK,IN_FREE,0);
+      //The carry is left set by a comparison just before, except in the
+      //cabin, where it's from comparing the first word with PICTURE ($1539)
+      picture_carry = here==0x00 ? nmatches>0 && matches[0]>=0x29 : 1;
       show_picture(close[i]);
       print_description(here);
     }
@@ -1777,6 +1867,8 @@ void look(UCHAR *matches, int nmatches){
     return;
   }
   if(getbyte("42F9",i)!=0xC3){//$4263: a picture of the object
+    call_chain(VIA_LOOK,IN_FREE,0);
+    picture_carry=0;//CPX #$C3 at $4267
     show_picture(getbyte("42F9",i));
     print_description(here);
     return;
@@ -1784,6 +1876,8 @@ void look(UCHAR *matches, int nmatches){
   print_score();
   if(picture28==4){//$4274: the end
     move_player(0xAF);
+    call_chain(VIA_LOOK,0x427D,IN_FREE);//JSR $421D at $427B
+    picture_carry=0;
     show_picture(0xC3);
     print_description(0xAF);
     process_output("The secret of life is simple yet complex, as is the picture of it.\n");
@@ -1811,32 +1905,39 @@ void move_player(UCHAR id){
   //$2462: no picture in the dark or where there isn't one; otherwise as the
   //option says, always (bit 7) or the first time here (bit 5)
   if(is_dark(id)==LIGHT && (before&0x40)==0
-     && ( (option01&0x80) || ((option01&0x20) && (before&0x10)==0) ))
+     && ( (option01&0x80) || ((option01&0x20) && (before&0x10)==0) )){
+    picture_carry=1;//As $20BD leaves it
     draw_view();
+  }
   else
     print_description(id);
 }
 
-//How wide to print pictures: the terminal's width, but no taller than it
-//and no more than one column per pixel. TKV_PICTURE_WIDTH overrides it.
-int picture_columns(){
-  const char *e=getenv("TKV_PICTURE_WIDTH");
-  struct winsize w;
-  int cols=80;
-  if(e!=NULL && atoi(e)>0)
-    return atoi(e)>PIC_W ? PIC_W : atoi(e);
-  if(ioctl(STDOUT_FILENO,TIOCGWINSZ,&w)==0 && w.ws_col>0){
-    cols=w.ws_col;
-    if(w.ws_row>8 && cols*PIC_H/(4*PIC_W)>w.ws_row-4)//Rows printed are cols*256/640
-      cols=(w.ws_row-4)*4*PIC_W/PIC_H;
+
+//Copies the state kept in structures back into the game's own tables,
+//which the picture code reads, eg to draw what's lying around
+void sync_memory(){
+  int i;
+  for(i=0;i<getnumberofobjects();i++){
+    ctkv[0x25C0 - start + i]=get_object(i)->location_id;
+    ctkv[0x2580 - start + i]=get_object(i)->code;
   }
-  return cols>PIC_W ? PIC_W : cols;
+  for(i=0;i<getnumberofcharacters();i++){
+    struct character *c=get_npc(i);
+    ctkv[0x29B4 - start + i]=c->location_id;
+    ctkv[0x2968 - start + i]=c->classcode;
+    ctkv[0x298E - start + i]=c->strength;
+    ctkv[0x29DA - start + i]=c->amount_carried;
+  }
+  ctkv[0x27FA - start]=holdallweight;
+  ctkv[0x27FB - start]=lampoil;
 }
 
 //Draws picture n, see $0B12
 void show_picture(UCHAR n){
   static struct picture pic;
-  render_picture(ctkv,n,&pic,PICTURE_MAXSTEPS);
+  sync_memory();
+  render_picture_in(&picture_machine,ctkv,n,&pic,picture_chain,picture_carry,PICTURE_MAXSTEPS);
   fflush(stdout);
   print_picture(&pic,picture_columns());
 }
@@ -1846,6 +1947,8 @@ void show_picture(UCHAR n){
 void draw_view(){
   UCHAR here=get_player_location_id();
   long a=getlocationaddress(here);
+  if(text25)//$2519: wait a moment after text, which leaves the carry set ($3B20)
+    picture_carry=1;
   show_picture(ctkv[0x1F00-start+here]);
   if( (ctkv[a]&0x08)==0 ){//$2530: the view is along the first exit
     char dir[MAXWORD*2];
@@ -1874,13 +1977,13 @@ char * word_of(UCHAR code){
 }
 
 //$15D2: finds the object the carrier ($C8 for the player) has that best
-//matches the words, asking "<prompt> what?" once if there's none.
+//matches the words, asking "<verb> what?" once if there's none.
 //Returns the number of words matched, 0 if still none.
-int ask_carried(UCHAR carrier, UCHAR prompt, UCHAR *matches, int *nmatches, UCHAR *id){
+int ask_carried(UCHAR carrier, UCHAR verb, UCHAR *matches, int *nmatches, UCHAR *id){
   if(match_carried_object(carrier,matches,*nmatches,id))
     return 1;
-  sentence("%s what",word_of(prompt));
-  process_output("?");
+  sentence("%s what",word_of(verb));
+  prompt();
   if(read_command(matches,nmatches)!=SUCCESS)
     *nmatches=0;
   return match_carried_object(carrier,matches,*nmatches,id);
@@ -1952,7 +2055,7 @@ int match_carried_object(UCHAR carrier, UCHAR *matches, int nmatches, UCHAR *id)
 //Asks a question such as "Hit who" and reads the answer, see $229F
 void ask_again(UCHAR word, UCHAR *matches, int *nmatches){
   sentence("%s who",word_of(word));
-  process_output("?");
+  prompt();
   if(read_command(matches,nmatches)!=SUCCESS)
     *nmatches=0;
 }
@@ -2006,7 +2109,7 @@ int give(UCHAR verb, UCHAR *matches, int nmatches){
   if(transfer(what,CARRIED+who,0xFF))//$1599
     sentence("%s can't carry any more.\n",get_npc(who)->description);
   else
-    process_output("OK.\n");
+    process_output("Ok.\n");
   return SUCCESS;
 }
 
@@ -2070,6 +2173,7 @@ int wave(UCHAR *matches, int nmatches){
     ctkv[get_location(ends[i])->exits[0].addr+1]=dest;
     reload_location(ends[i]);
   }
+  picture_carry=(ctkv[getlocationaddress(0x23)+1]>>4)&1;//As $24FB leaves it for $23
   draw_view();//$2517
   return SUCCESS;
 }
@@ -2445,13 +2549,9 @@ void text_delay(){
   int c;
   process_output("Choose text delay, 0 to 9 ?");
   do
-    c=getchar();
-  while(c!=EOF && (c<'0' || c>'9'));
-  if(c==EOF)
-    return;
+    c=read_key();
+  while(c<'0' || c>'9');
   textdelay2a=c-'0';
-  while(c!='\n' && c!=EOF)
-    c=getchar();
   process_output("\n");
 }
 
@@ -2469,7 +2569,7 @@ void after_death(){
   UCHAR matches[MAXMATCHES];
   int nmatches;
   for(;;){
-    process_output("?");
+    prompt();
     if(read_command(matches,&nmatches)==QUIT)
       exit(0);
   }

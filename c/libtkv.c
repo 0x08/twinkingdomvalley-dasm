@@ -48,29 +48,24 @@ UCHAR getnumberofcharacters(){
   return ctkv[strtol("27FE",NULL,16)-start]; //This is $34
 }
 
+//Describes a direction as $242D does: a word for each of the bits N, S, E,
+//W, U and D that are set, eg "north east", with "and" before up or down
+//if another word comes first, eg "north and down"
 void printdirectiondescription(char *word, UCHAR dirbyte){
-  UCHAR searchdir=dirbyte&0x3F;
-  UCHAR di;
-  long dirtable = strtol("23B5",NULL,16)-start;
-  for(di=0;di<0x0E;di++){//Corresponds to index of direction commands
-    UCHAR dd=ctkv[dirtable+di];
-    if(dd==searchdir)
-      break;
-  }
-  if(di<0x0E)
-    getwordforaddress(word,getcommandaddress(di));
-  else {//Must be a compound direction
-    int pos=0;
-    for(di=0;di<0x06;di++){//Corresponds to index of N,S,E,W,U,D
-      UCHAR dd=ctkv[dirtable+di];
-      if( (dd&searchdir) !=0 )//Is the relevant bit set of dd: each one has only one bit set
-	if(pos==0)
-	  pos=getwordforaddress(word,getcommandaddress(di));
-	else {
-	  sprintf(word+pos-1," and ");
-	  getwordforaddress(word+pos+4,getcommandaddress(di));
-	}
-    }    
+  int bit,n=0,pos=0;
+  word[0]='\0';
+  for(bit=0;bit<6;bit++){//Bit 5 is north, word 0, down to bit 0, down, word 5
+    if( (dirbyte&(0x20>>bit))==0 )
+      continue;
+    if(n>0){
+      word[pos-1]=' ';
+      if(bit>=4){
+        pos+=getwordforaddress(word+pos,getcommandaddress(0x3C));//"and"
+        word[pos-1]=' ';
+      }
+    }
+    pos+=getwordforaddress(word+pos,getcommandaddress(bit));
+    n++;
   }
 }
 
@@ -153,7 +148,7 @@ void namelocation(char *name, long addr){
 
 void incodedescription(char *ss, UCHAR b){
   //These are given in order they appear in code from $2122
-  switch(b){
+  switch(b&0x07){//Bits 0-2 of the location's first byte
     case 6: sprintf(ss,"in a sloping maze"); return;
     case 2: sprintf(ss,"on the canyon floor"); return;
     case 7: sprintf(ss,"in an arid desert"); return;
@@ -165,7 +160,7 @@ void incodedescription(char *ss, UCHAR b){
 
 void incodeexits(char *ss, UCHAR b){
   //These are given in order they appear in code from $2038
-  switch(b){
+  switch(b&0x07){//Bits 0-2 of the location's first byte
     case 1: sprintf(ss,"a disused quarry"); return;
     case 2: sprintf(ss,"the canyon floor"); return;
     case 3: sprintf(ss,"a mountain range"); return;

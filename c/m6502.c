@@ -271,17 +271,24 @@ static int step(struct m6502 *c){
 }
 
 long m6502_call(struct m6502 *c, unsigned short address, long maxsteps){
+  return m6502_call_from(c,address,RETURN_ADDRESS,maxsteps);
+}
+
+long m6502_call_from(struct m6502 *c, unsigned short address, unsigned short caller, long maxsteps){
   long steps=0;
-  push(c,(RETURN_ADDRESS-1)>>8);
-  push(c,(RETURN_ADDRESS-1)&0xFF);
+  unsigned char s=c->s;
+  push(c,(caller-1)>>8);
+  push(c,(caller-1)&0xFF);
   c->pc=address;
   c->p|=FU;
   while(steps<maxsteps){
-    if(c->pc==RETURN_ADDRESS)
+    if(c->pc==caller && c->s==s)
       return steps;
     if(c->pc>=0xFF00){//An OS routine: let the caller handle it, then return
       if(c->os_call)
         c->os_call(c,c->pc);
+      if(c->halt)
+        return -1;
       c->pc=pull(c);
       c->pc|=pull(c)<<8;
       c->pc++;

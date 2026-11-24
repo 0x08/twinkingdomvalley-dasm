@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
 #include "m6502.h"
 #include "pictures.h"
 
@@ -88,7 +90,7 @@ static void vdu_command(struct vdu *v){
   }
 }
 
-static void oswrch(struct vdu *v, unsigned char c){
+void vdu_write(struct vdu *v, unsigned char c){
   if(v->needed>0){
     v->queue[v->queued++]=c;
     if(--v->needed==0)
@@ -102,35 +104,87 @@ static void oswrch(struct vdu *v, unsigned char c){
     vdu_command(v);
 }
 
+struct vdu * vdu_create(struct m6502 *cpu){
+  struct vdu *v=calloc(1,sizeof(struct vdu));
+  if(v==NULL)
+    return NULL;
+  v->cpu=cpu;
+  v->palette[0]=0; v->palette[1]=1; v->palette[2]=3; v->palette[3]=7;
+  return v;
+}
+
+void vdu_read_screen(const struct vdu *v, struct picture *p){
+  int x,y;
+  for(y=0;y<PIC_H;y++)
+    for(x=0;x<PIC_W;x++){
+      unsigned char b=v->cpu->mem[SCREEN+(y>>3)*320+(x>>2)*8+(y&7)];
+      int s=x&3;
+      p->pixel[y][x]=((b&(0x80>>s))?2:0) | ((b&(0x08>>s))?1:0);
+    }
+  memcpy(p->palette,v->palette,4);
+}
+
 static void os_call(struct m6502 *cpu, unsigned short address){
   if(address==0xFFEE)//OSWRCH; the drawing code makes no other OS calls
-    oswrch((struct vdu *)cpu->context,cpu->a);
+    vdu_write((struct vdu *)cpu->context,cpu->a);
+}
+
+int render_picture_in(struct m6502 *cpu, unsigned char *image, unsigned char n, struct picture *p,
+                      const unsigned short *chain, int carry, long maxsteps){
+  struct vdu *v=vdu_create(cpu);
+  int i;
+  if(v==NULL)
+    return -1;
+  memcpy(cpu->mem+IMAGE_START,image,IMAGE_SIZE);
+  cpu->os_call=os_call;
+  cpu->context=v;
+  //The stack as the game would have it: its return addresses, outermost
+  //first, below where the game itself was entered with the stack at $FF
+  cpu->s=0xFF;
+  for(i=0;chain[i+1];i++);
+  cpu->mem[0x1FF]=0xFF; cpu->mem[0x1FE]=0xFE;//Whatever started the game, see runtkv
+  cpu->s=0xFD;
+  for(;i>0;i--){
+    cpu->mem[0x100+cpu->s]=chain[i]>>8; cpu->s--;
+    cpu->mem[0x100+cpu->s]=chain[i]&0xFF; cpu->s--;
+  }
+  cpu->x=n;
+  cpu->p = carry ? cpu->p|1 : cpu->p&~1;
+  long steps=m6502_call_from(cpu,0x0B12,chain[0]+1,maxsteps);//JSR $0B12 with X=picture
+  vdu_read_screen(v,p);
+  memcpy(image,cpu->mem+IMAGE_START,IMAGE_SIZE);
+  free(v);
+  return steps<0 ? -1 : 0;
 }
 
 int render_picture(const unsigned char *image, unsigned char n, struct picture *p, long maxsteps){
   struct m6502 *cpu=calloc(1,sizeof(struct m6502));
-  struct vdu v;
-  int x,y;
-  if(cpu==NULL)
-    return -1;
-  memset(&v,0,sizeof(v));
-  v.cpu=cpu;
-  v.palette[0]=0; v.palette[1]=1; v.palette[2]=3; v.palette[3]=7;
-  memcpy(cpu->mem+IMAGE_START,image,IMAGE_SIZE);
-  cpu->os_call=os_call;
-  cpu->context=&v;
-  cpu->s=0xFF;
-  cpu->x=n;
-  long steps=m6502_call(cpu,0x0B12,maxsteps);//$2524: JSR $0B12 with X=picture
-  for(y=0;y<PIC_H;y++)
-    for(x=0;x<PIC_W;x++){
-      unsigned char b=cpu->mem[SCREEN+(y>>3)*320+(x>>2)*8+(y&7)];
-      int s=x&3;
-      p->pixel[y][x]=((b&(0x80>>s))?2:0) | ((b&(0x08>>s))?1:0);
-    }
-  memcpy(p->palette,v.palette,4);
+  unsigned char *copy=malloc(IMAGE_SIZE);
+  int r=-1;
+  if(cpu!=NULL && copy!=NULL){
+    memcpy(copy,image,IMAGE_SIZE);
+    r=render_picture_in(cpu,copy,n,p,picture_call_start,0,maxsteps);
+  }
+  free(copy);
   free(cpu);
-  return steps<0 ? -1 : 0;
+  return r;
+}
+
+//Return addresses on the stack when the game calls $0B12, innermost first
+const unsigned short picture_call_start[]={0x2526,0x144A,0};
+
+int picture_columns(){
+  const char *e=getenv("TKV_PICTURE_WIDTH");
+  struct winsize w;
+  int cols=80;
+  if(e!=NULL && atoi(e)>0)
+    return atoi(e)>PIC_W ? PIC_W : atoi(e);
+  if(ioctl(STDOUT_FILENO,TIOCGWINSZ,&w)==0 && w.ws_col>0){
+    cols=w.ws_col;
+    if(w.ws_row>8 && cols*PIC_H/(4*PIC_W)>w.ws_row-4)//Rows printed are cols*256/640
+      cols=(w.ws_row-4)*4*PIC_W/PIC_H;
+  }
+  return cols>PIC_W ? PIC_W : cols;
 }
 
 void picture_rgb(const struct picture *p, int x, int y, unsigned char rgb[3]){

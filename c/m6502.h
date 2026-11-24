@@ -12,11 +12,16 @@ struct m6502 {
   //Called when execution reaches $FF00 or above, eg OSWRCH at $FFEE
   void (*os_call)(struct m6502 *cpu, unsigned short address);
   void *context; //For os_call's use
+  int halt;      //os_call sets this to stop m6502_call
 };
 
 //Calls the subroutine at address, with the registers as set in cpu, and
-//runs it until it returns or maxsteps instructions have executed.
-//Returns the number of instructions executed, or -1 if it didn't return.
+//runs it until it returns, maxsteps instructions have executed or os_call
+//sets halt. Returns the number of instructions executed, or -1 if it didn't return.
 long m6502_call(struct m6502 *cpu, unsigned short address, long maxsteps);
+
+//The same, as if called by a JSR just before caller: its return address
+//is what's pushed, and the call ends when execution returns there.
+long m6502_call_from(struct m6502 *cpu, unsigned short address, unsigned short caller, long maxsteps);
 
 #endif
