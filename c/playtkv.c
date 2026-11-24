@@ -479,7 +479,7 @@ int take(UCHAR *matches, int nmatches){
       process_output("I have it now.\n");
       return SUCCESS;
     } else {
-      process_output("You can carry any more.\n");
+      process_output("You can't carry any more.\n");
       return CONTINUE; //Check in original if turn is indeed missed in this case.
     }
   } else {//To do: In game it asks "Take what?" and gives second chance for input, see $15D2
