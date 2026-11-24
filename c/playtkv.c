@@ -884,8 +884,10 @@ void cleanup(){
     free_object(objects+i);
   for(i=0;i<getnumberofcharacters();i++)
     free_character(characters+i);
+  free(lampdescsave);
   free(locations);
   free(objects);
+  free(characters);
 }
 
 void free_location(struct location *l){
@@ -901,7 +903,6 @@ void free_location(struct location *l){
 
 void free_object(struct object *o){
   free(o->description);
-  free(lampdescsave);
 }
 
 void free_character(struct character *c){
