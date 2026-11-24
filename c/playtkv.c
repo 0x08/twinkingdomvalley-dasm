@@ -176,6 +176,7 @@ char * get_dirtext(UCHAR dirbyte);
 void print_short_description(UCHAR i);
 void print_long_description(UCHAR i);
 void print_description(UCHAR i);
+int choose_option();
 void print_objects(UCHAR i);
 void update();
 void print_npc_info();
@@ -201,6 +202,7 @@ struct character *characters;
 UCHAR lampoil; //Stored in $27FB
 
 int debug=0; //Set by -d: show player location, lamp oil and character moves
+UCHAR option01=0x40; //$01: bit 7 always draw, bit 5 draw if unvisited, bit 6 long descriptions
 
 //Per-turn state, named after the original's memory locations
 #define MAXCHARS 0x26 //$0C1E clears $2AD0-$2AF5
@@ -237,12 +239,24 @@ UCHAR magic00=0;     //$00: bit 7 set once the concealed doors are revealed
 int verb83; //$83: the first verb-like word of the last input, or -1
 UCHAR placedir8c; //$8C: direction to a place named instead of a direction, see $3500
 
+//Usage: playtkv [-d] [-o 1-6] [location]
+//  -d        show the player's location, lamp oil and character moves
+//  -o N      choose display option N instead of being asked at the start
+//  location  print the description of a location (hex) and exit
 int main(int argc, char *argv[]) {
   int i;
-  if(argc>1 && strcmp(argv[1],"-d")==0){
-    debug=1;
-    argc--;
-    argv++;
+  int option=0;
+  for(;;){
+    if(argc>1 && strcmp(argv[1],"-d")==0){
+      debug=1;
+      argc--;
+      argv++;
+    } else if(argc>2 && strcmp(argv[1],"-o")==0 && argv[2][0]>='1' && argv[2][0]<='6' && argv[2][1]=='\0'){
+      option=argv[2][0]-'0';
+      argc-=2;
+      argv+=2;
+    } else
+      break;
   }
   init_tkv(); //Loads original TKV binary and sets up lookup addresses
   init_game();
@@ -262,6 +276,10 @@ int main(int argc, char *argv[]) {
   }
 
   set_player_location_id(1);
+  if(option)
+    option01=getbyte("17CA",option-1);
+  else if(!choose_option())//$141B
+    return 0;
   print_description(get_player_location_id());
   //Main game loop, see $1451
   for(;;){
@@ -700,7 +718,7 @@ void free_action(UCHAR code, UCHAR *matches, int nmatches){
     case 0x29: case 0x2A: process_output("Apologies, graphics not implemented yet.\n"); return; //PICTURE,DRAW
     case 0x2B: print_score_and_strength(); return; //SCORE, $12EE
     case 0x2C: inventory(0); return; //INVENTORY
-    case 0x2D: process_output("Not implemented yet.\n"); return; //OPTION
+    case 0x2D: choose_option(); return; //OPTION
     case 0x2E: help(); return; //HELP
   }
 }
@@ -1368,9 +1386,40 @@ void print_description(UCHAR id){
     process_output("It is dark here.\n");
   } else {
     print_short_description(id);
-    print_long_description(id); //Need to make this conditional
+    //$21DC: the exits are listed with a long description option, unless
+    //bit 5 of the location's first byte says there's no long description
+    if( (option01&0x40) && (ctkv[getlocationaddress(id)]&0x20)==0 )
+      print_long_description(id);
     print_objects(id);
   }
+}
+
+//OPTION, and at the start of the game: choose pictures and descriptions,
+//see $180D. Pictures aren't drawn, so only long or short matters.
+//Returns 0 at end of input.
+int choose_option(){
+  const char *lines[]={
+    "Draw picture if room unvisited, give long description.",
+    "Draw picture if room unvisited, give short description.",
+    "Draw picture always, give long description.",
+    "Draw picture always, give short description.",
+    "Don't draw picture, give long description.",
+    "Don't draw picture, give short description."};
+  int i,c;
+  process_output("Select option.\n");
+  for(i=0;i<6;i++)
+    printf("%d %s\n",i+1,lines[i]);
+  for(;;){//$1846: wait for 1-6
+    c=getchar();
+    if(c==EOF)
+      return 0;
+    if(c>='1' && c<='6')
+      break;
+  }
+  option01=getbyte("17CA",c-'1');
+  while(c!='\n' && c!=EOF)
+    c=getchar();
+  return 1;
 }
 
 void print_objects(UCHAR id){
