@@ -602,17 +602,18 @@ void load_object(struct object *o, UCHAR id){
 void load_character(struct character *c, UCHAR id){
   char desc[MAXLINE];
   UCHAR  classcode = getbyte("2968",id);
+  UCHAR  class = classcode&0x1F; //$1BEA and $1BA8 mask off bits 5-7
 
   c->location_id=getbyte("29B4",id);
   c->strength=getbyte("298E",id);
-  printcharacterdescription(desc, classcode);
+  printcharacterdescription(desc, class);
   c->description=create_copy_string(desc);
   c->ishostile=NONHOSTILE;
   if( (classcode&0x80) != 0 ){
     c->ishostile=HOSTILE;
   }
-  c->amount_carried=getbyte("29DA",classcode);//Check what NPCs start carrying against this
-  c->max_carried=getbyte("28E0",classcode);
+  c->amount_carried=getbyte("29DA",id);//Indexed by character, see $1B9F
+  c->max_carried=getbyte("28E0",class);//Indexed by class, see $1BA8
   //Also need stuff in $2880 and 28A0
 }
 
