@@ -234,12 +234,14 @@ int parse_and_process(char *line, int len){
     }
     char word[MAXWORD];
     int j=0;
-    while(line[i]>='a' && line[i]<='z' && i<len-1){//$231E
+    while(isalpha((unsigned char)line[i]) && i<len-1){//$231E, letters checked at $238D
       if(j<MAXWORD-1)//Letters beyond the buffer are dropped
-        word[j++]=line[i];
+        word[j++]=tolower((unsigned char)line[i]);
       i++;
     }
     word[j]='\0';
+    if(j==0)//Not a letter: an empty word would match the first table entry, NORTH
+      continue;
     UCHAR m=get_match(word);
     //printf("Match result for %s: %02x\n",word,m);
     if(m!=NOMATCH && nmatches<MAXMATCHES)
