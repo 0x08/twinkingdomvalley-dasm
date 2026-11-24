@@ -1,5 +1,7 @@
 #include <ctype.h>
 #include <stdarg.h>
+#include <setjmp.h>
+#include <errno.h>
 #include "libtkv.h"
 
 #define NLOCATIONS 0xB1 //Locations $00-$B0, see the tables at $2A00 and $2B00
@@ -178,6 +180,8 @@ void print_long_description(UCHAR i);
 void print_description(UCHAR i);
 int choose_option();
 void picture();
+void star_command(char *s);
+void after_death();
 void print_objects(UCHAR i);
 void update();
 void print_npc_info();
@@ -203,6 +207,11 @@ struct character *characters;
 UCHAR lampoil; //Stored in $27FB
 
 int debug=0; //Set by -d: show player location, lamp oil and character moves
+jmp_buf resume_point;     //Where *LOAD resumes the game
+int can_resume=0;
+volatile int resumed=0;
+UCHAR textdelay2a=0;      //$2A: *TEXT delay, kept but not used
+#define SAVEFILE "tkv.sav"
 UCHAR option01=0x40; //$01: bit 7 always draw, bit 5 draw if unvisited, bit 6 long descriptions
 
 //Per-turn state, named after the original's memory locations
@@ -282,11 +291,19 @@ int main(int argc, char *argv[]) {
   else if(!choose_option())//$141B
     return 0;
   print_description(get_player_location_id());
+  //*LOAD comes back here, to the prompt of the turn that was saved
+  if(setjmp(resume_point)){
+    print_description(get_player_location_id());
+    resumed=1;
+  }
+  can_resume=1;
   //Main game loop, see $1451
   for(;;){
     UCHAR matches[MAXMATCHES];
     int nmatches;
-    turn_start();
+    if(!resumed)
+      turn_start();
+    resumed=0;
     int verb=get_command(matches,&nmatches);
     if(verb==QUIT)
       break;
@@ -652,7 +669,7 @@ int read_command(UCHAR *matches, int *nmatches){
     return EMPTY;
   for(i=0;i<len-1;i++){//$230D loop
     if(line[i]=='*'){//$2310
-      process_output("The * commands are not implemented yet.\n");
+      star_command(line+i+1);
       return EMPTY;
     }
     char word[MAXWORD];
@@ -1674,7 +1691,7 @@ void damage(UCHAR victim, UCHAR amount){
     if(victim==0){//$1C4D: the game is over
       print_score_and_strength();
       process_output("Bye bye.\n");
-      exit(0);
+      after_death();
     }
     c->location_id=BROKEN;
     int x;
@@ -2250,4 +2267,130 @@ void free_object(struct object *o){
 
 void free_character(struct character *c){
   free(c->description);
+}
+/* ---------------------------------------------------------------------
+ * * commands, see $0BCA: *SAVE, *LOAD and *TEXT. The original saves
+ * memory to the files "dat", "stk" and "zp"; this saves the game's
+ * state to SAVEFILE in the current directory.
+ * --------------------------------------------------------------------- */
+
+#define SAVEMAGIC "TKVSAVE1"
+
+//The single-byte state, in save file order
+UCHAR * saved_bytes[]={ &lampoil,&option01,&loc14,&loc1c,&rnd1d,&rnd1e,&rnd1f,
+  (UCHAR *)&staff27,&holdallweight,&thirst02,&magic00,&wave03,&witch04,&gift20,
+  &princess21,&bridge24,&picture28,&textdelay2a };
+#define NSAVED (sizeof(saved_bytes)/sizeof(saved_bytes[0]))
+
+void save_game(){
+  FILE *fp=fopen(SAVEFILE,"wb");
+  int i;
+  if(fp==NULL){
+    printf("Can't save: %s.\n",strerror(errno));
+    return;
+  }
+  fwrite(SAVEMAGIC,1,8,fp);
+  fputc(getnumberofobjects(),fp);
+  fputc(getnumberofcharacters(),fp);
+  fwrite(ctkv,1,FILESIZE,fp);//Includes changes to the map and doors
+  for(i=0;i<getnumberofobjects();i++){
+    fputc(get_object(i)->location_id,fp);
+    fputc(get_object(i)->code,fp);
+  }
+  for(i=0;i<getnumberofcharacters();i++){
+    struct character *c=get_npc(i);
+    fputc(c->location_id,fp);
+    fputc(c->classcode,fp);
+    fputc(c->strength,fp);
+    fputc(c->amount_carried,fp);
+  }
+  fwrite(status,1,MAXCHARS,fp);
+  fwrite(nextloc,1,MAXCHARS,fp);
+  for(i=0;i<(int)NSAVED;i++)
+    fputc(*saved_bytes[i],fp);
+  if(fclose(fp)!=0)
+    printf("Can't save: %s.\n",strerror(errno));
+  else
+    process_output("Saved.\n");
+}
+
+//Loads a saved game and resumes it. Only returns if it can't.
+void load_game(){
+  FILE *fp=fopen(SAVEFILE,"rb");
+  char magic[8];
+  int i;
+  long size=8+2+FILESIZE+2*getnumberofobjects()+4*getnumberofcharacters()+2*MAXCHARS+NSAVED;
+  static UCHAR buf[8+2+FILESIZE+2*256+4*256+2*MAXCHARS+64];
+  if(fp==NULL){
+    printf("Can't load: %s.\n",strerror(errno));
+    return;
+  }
+  long n=fread(buf,1,sizeof(buf),fp);
+  fclose(fp);
+  memcpy(magic,buf,8);
+  if(n!=size || memcmp(magic,SAVEMAGIC,8)!=0
+     || buf[8]!=getnumberofobjects() || buf[9]!=getnumberofcharacters()){
+    process_output("That isn't a saved game.\n");
+    return;
+  }
+  UCHAR *p=buf+10;
+  memcpy(ctkv,p,FILESIZE);
+  p+=FILESIZE;
+  for(i=0;i<NLOCATIONS;i++)
+    reload_location(i);
+  for(i=0;i<getnumberofobjects();i++){
+    get_object(i)->location_id=*p++;
+    set_object_code(get_object(i),*p++);
+  }
+  for(i=0;i<getnumberofcharacters();i++){
+    struct character *c=get_npc(i);
+    c->location_id=*p++;
+    set_character_class(i,*p++);
+    c->strength=*p++;
+    c->amount_carried=*p++;
+  }
+  memcpy(status,p,MAXCHARS);
+  p+=MAXCHARS;
+  memcpy(nextloc,p,MAXCHARS);
+  p+=MAXCHARS;
+  for(i=0;i<(int)NSAVED;i++)
+    *saved_bytes[i]=*p++;
+  if(can_resume)
+    longjmp(resume_point,1);
+}
+
+//*TEXT asks for the delay between characters, see $356D. It's kept and saved
+//but output isn't slowed.
+void text_delay(){
+  int c;
+  process_output("Choose text delay, 0 to 9 ?");
+  do
+    c=getchar();
+  while(c!=EOF && (c<'0' || c>'9'));
+  if(c==EOF)
+    return;
+  textdelay2a=c-'0';
+  while(c!='\n' && c!=EOF)
+    c=getchar();
+  process_output("\n");
+}
+
+//The letter after * picks the command; anything else is ignored, $0BCA
+void star_command(char *s){
+  switch(toupper((unsigned char)s[0])){
+    case 'S': save_game(); break;
+    case 'L': load_game(); break;
+    case 'T': text_delay(); break;
+  }
+}
+
+//After death only * commands work, so a saved game can be loaded, $19FF
+void after_death(){
+  UCHAR matches[MAXMATCHES];
+  int nmatches;
+  for(;;){
+    process_output("?");
+    if(read_command(matches,&nmatches)==QUIT)
+      exit(0);
+  }
 }
