@@ -143,8 +143,15 @@ struct character *characters;
 char *lampdescsave;
 UCHAR lampoil; //Stored in $27FB
 
+int debug=0; //Set by -d: show player location and lamp oil at each turn
+
 int main(int argc, char *argv[]) {
   int i;
+  if(argc>1 && strcmp(argv[1],"-d")==0){
+    debug=1;
+    argc--;
+    argv++;
+  }
   init_tkv(); //Loads original TKV binary and sets up lookup addresses
   init_game();
   locations = (struct location *) malloc(NLOCATIONS*sizeof(struct location));
@@ -169,7 +176,11 @@ int main(int argc, char *argv[]) {
       print_description(get_player_location_id());
     }
     if(input==MOVED || input==SUCCESS || input==CONTINUE) {//A new turn
-      printf("          ---------------%02x,%02x\n",get_player()->location_id,lampoil);
+      //Turn separator: the original draws a line of magenta dashes, see $0C00
+      if(debug)
+        printf("          ---------------%02x,%02x\n",get_player()->location_id,lampoil);
+      else
+        printf("          ---------------\n");
       update();
       print_npc_info();
     }
