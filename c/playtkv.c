@@ -138,6 +138,11 @@ int fill(UCHAR verb, UCHAR *matches, int nmatches);
 int pour(UCHAR verb, UCHAR *matches, int nmatches);
 int drink();
 int swim();
+int give(UCHAR verb, UCHAR *matches, int nmatches);
+int ask(UCHAR *matches, int nmatches);
+int given(UCHAR id);
+int wave(UCHAR *matches, int nmatches);
+void help();
 int move(UCHAR dir, UCHAR dirindex);
 
 char * create_copy_string(char *from);
@@ -478,7 +483,7 @@ void free_action(UCHAR code){
     case 0x2B: print_score_and_strength(); return; //SCORE, $12EE
     case 0x2C: inventory(0); return; //INVENTORY
     case 0x2D: process_output("Not implemented yet.\n"); return; //OPTION
-    case 0x2E: process_output("Not implemented yet.\n"); return; //HELP
+    case 0x2E: help(); return; //HELP
   }
 }
 
@@ -494,11 +499,10 @@ int noncombat_action(UCHAR code, UCHAR *matches, int nmatches){
     case 0x1b:            return use_lamp(DARK);  //OFF    
     case 0x1d: return fill(code,matches,nmatches); //FILL
     case 0x1e: case 0x1f: return pour(code,matches,nmatches); //POUR,EMPTY
-    case 0x1c: case 0x20: //GIVE,ASK
-      process_output("Not implemented yet.\n"); return EMPTY;
+    case 0x1c: return give(code,matches,nmatches); //GIVE
+    case 0x20: return ask(matches,nmatches); //ASK
     case 0x21:            process_output("You wait here.\n"); return CONTINUE; //WAIT
-    case 0x22: //WAVE
-      process_output("Not implemented yet.\n"); return EMPTY;
+    case 0x22: return wave(matches,nmatches); //WAVE
     case 0x23: return swim(); //SWIM
     case 0x24: return drink(); //DRINK
   }
@@ -1568,27 +1572,37 @@ void ask_again(UCHAR word, UCHAR *matches, int *nmatches){
     *nmatches=0;
 }
 
-//HIT, CUT or THROW, see $1DDA
-void player_attack(UCHAR verb, UCHAR *matches, int nmatches){
-  UCHAR victim=0, objid=0;
+//$1DFD: finds the character here and the carried object the words name.
+//Asks "<objprompt> what?" once if there's no object, then "<whoprompt> who?"
+//once if there's no character. Returns 0, having said why, if either is missing.
+int find_who_and_what(UCHAR objprompt, UCHAR whoprompt, UCHAR *matches, int *nmatches,
+                      UCHAR *who, UCHAR *what){
   UCHAR ploc=get_player_location_id();
-  int found=match_character(ploc,matches,nmatches,&victim);
-  //$15D2: which weapon? Asks "With what?" or "Throw what?" once
-  if(ask_carried(CARRIED,verb==0x10 ? verb : 0xB3,matches,&nmatches,&objid)==0){
+  int found=match_character(ploc,matches,*nmatches,who);
+  if(ask_carried(CARRIED,objprompt,matches,nmatches,what)==0){
     process_output("You haven't got that.\n");
-    return;
+    return 0;
   }
-  //$1E17: at whom? Asks "Hit who?", "Cut who?" or "At who?" once
-  if(found==0)
-    found=match_character(ploc,matches,nmatches,&victim);
+  if(found==0)//$1E17: perhaps named in the answer
+    found=match_character(ploc,matches,*nmatches,who);
   if(found==0){
-    ask_again(verb==0x10 ? 0x49 : verb,matches,&nmatches);
-    if(match_character(ploc,matches,nmatches,&victim)==0){
+    ask_again(whoprompt,matches,nmatches);
+    if(match_character(ploc,matches,*nmatches,who)==0){
       process_output("I can't see any here.\n");
-      return;
+      return 0;
     }
   }
   at1a=ploc;
+  return 1;
+}
+
+//HIT, CUT or THROW, see $1DDA
+void player_attack(UCHAR verb, UCHAR *matches, int nmatches){
+  UCHAR victim=0, objid=0;
+  //"With what?" or "Throw what?", then "Hit who?", "Cut who?" or "At who?"
+  if(!find_who_and_what(verb==0x10 ? verb : 0xB3, verb==0x10 ? 0x49 : verb,
+                        matches,&nmatches,&victim,&objid))
+    return;
   if(weapon_too_weak(objid)){//$1E62
     process_output("You are too weak.\n");
     return;
@@ -1597,6 +1611,98 @@ void player_attack(UCHAR verb, UCHAR *matches, int nmatches){
     throw_attack(objid,victim,0xFF);//$1D45
   else
     melee_attack(objid,victim,0xFF);//$1CCF
+}
+
+//GIVE, see $1E43: "Give what?", then "To who?"
+int give(UCHAR verb, UCHAR *matches, int nmatches){
+  UCHAR who=0, what=0;
+  if(!find_who_and_what(verb,0x43,matches,&nmatches,&who,&what))
+    return EMPTY;
+  if(transfer(what,CARRIED+who,0xFF))//$1599
+    sentence("%s can't carry any more.\n",get_npc(who)->description);
+  else
+    process_output("OK.\n");
+  return SUCCESS;
+}
+
+//$133D: the player is handed an object. Returns 1 if they can't carry it.
+int given(UCHAR id){
+  sentence("You are given %s.\n",get_object(id)->description);
+  return transfer(id,CARRIED,CARRIED);
+}
+
+//ASK, see $1E74: "Ask who?", then "For what?"
+int ask(UCHAR *matches, int nmatches){
+  UCHAR who=0, what=0;
+  UCHAR ploc=get_player_location_id();
+  if(match_character(ploc,matches,nmatches,&who)==0){
+    process_output("Ask who?");
+    if(read_command(matches,&nmatches)!=SUCCESS)
+      nmatches=0;
+    if(match_character(ploc,matches,nmatches,&who)==0){
+      process_output("I can't see any here.\n");
+      return EMPTY;
+    }
+  }
+  if(ask_carried(CARRIED+who,0xB8,matches,&nmatches,&what)==0){//$15D4
+    sentence("%s hasn't got that.\n",get_npc(who)->description);
+    return EMPTY;
+  }
+  if(who==0x10 || (get_npc(who)->classcode&0x80)){
+    process_output("Your request is refused.\n");
+    return SUCCESS;
+  }
+  if(given(what))
+    process_output("You can't carry any more.\n");
+  return SUCCESS;
+}
+
+UCHAR wave03=0x80; //$03: which way the rod last set the chasm crossing
+
+//WAVE, see $1391. Waving the rod at either end of the chasm ($19, $23)
+//changes where their first exits lead, $97 or $33, see the table at $1380.
+int wave(UCHAR *matches, int nmatches){
+  UCHAR id;
+  UCHAR here=get_player_location_id();
+  if(match_carried_object(CARRIED,matches,nmatches,&id)==0){
+    if(nmatches>=2)//$15F6
+      process_output("You haven't got that.\n");
+    else
+      process_output("Nothing happens.\n");
+    return SUCCESS;
+  }
+  if(id!=0x07 || (here!=0x19 && here!=0x23)){
+    process_output("Nothing happens.\n");
+    return SUCCESS;
+  }
+  wave03 = wave03 ? 0 : 6;
+  UCHAR dest=getbyte("1385",wave03);
+  UCHAR ends[2]={0x19,0x23};
+  int i;
+  for(i=0;i<2;i++){//$13F3
+    ctkv[get_location(ends[i])->exits[0].addr+1]=dest;
+    reload_location(ends[i]);
+  }
+  print_description(here);//$2517
+  return SUCCESS;
+}
+
+//HELP, see $1356: lists the commands $2E down to $0E
+void help(){
+  int code,col=0;
+  process_output("I understand the following,\n");
+  for(code=FIRSTFREE+9;code>=FIRSTCOMBAT;code--){
+    char *w=word_of(code);
+    int len=strlen(w);
+    if(col+len+1>39){
+      process_output("\n");
+      col=0;
+    }
+    process_output(w);
+    process_output(" ");
+    col+=len+1;
+  }
+  process_output("\nand any direction.\n");
 }
 
 //Finds the healthiest character at at1a on the other side, see $0D8D
