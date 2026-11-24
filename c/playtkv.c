@@ -596,8 +596,15 @@ int get_command(UCHAR *matches, int *nmatches){
     }
     if(verb<FIRSTFREE)
       return verb;
-    if(verb==0x25 || verb==0x26)//QUIT,END
-      return QUIT;
+    if(verb==0x25 || verb==0x26){//QUIT,END: score, then confirm, $19ED
+      print_score_and_strength();
+      sentence("%s",word_of(verb));
+      if(yes_no()){
+        process_output("Bye bye.\n");
+        return QUIT;
+      }
+      continue;
+    }
     free_action(verb,matches,*nmatches);
   }
 }
