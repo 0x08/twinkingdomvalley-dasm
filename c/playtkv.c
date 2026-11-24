@@ -839,10 +839,10 @@ void print_npc_info(){
   for(id=1;id<getnumberofcharacters();id++){
     struct character *npc = get_npc(id);
     if(npc->location_id==get_player()->location_id){
-      char desc[100];
-      sprintf(desc,"%s is here with ",npc->description);
+      char desc[MAXLINE];
+      snprintf(desc,sizeof(desc),"%s",npc->description);
       process_output(sfirstcaps(desc));
-      inventory(id);
+      inventory(id); //Prints " is here with ...
     }
   }
 }
