@@ -34,7 +34,8 @@ $04-07 TKV
 $08-0A NOT USED
 $0B-13 TKV
 $14-5D TKV with executable code at $1400
->=$5E wiped when MODE 2 entered for drawing pictures.
+>=$58 is MODE 5 screen memory, cleared when a picture is drawn (the
+     game switches to MODE 5 for pictures and back to MODE 7 for text).
 
 4+9+74 pages = 87 * 256 bytes = 22,272 bytes
 

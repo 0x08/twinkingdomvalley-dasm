@@ -56,3 +56,28 @@ $3BA1 Prints A and then waits for $2A centiseconds
 $3BC4 Looks up address for command word Y i.e. <0 in $3600 table and stores it in $70-1
 $3B8D Checks if player has object X. Z=1 if player has this item, Z=0 if not.
 $42A0 Handles special stuff for small cave then calls $0F03 to set player location
+
+More routines, identified while porting the game to C (c/playtkv.c)
+$0BCA * commands: *S save, *L load, *T text delay ($356D)
+$0D3D Follow the player's trail if on it; $0D79 maybe wander; $0DB9 random exit
+$0D8D Find the healthiest character on the other side at $1A
+$0DE2 Try an exit for a character; $0DFF check the destination is in its regions
+$0E5B Character attacks with its first usable weapon; $0E99 picks one up
+$0EE0 "You scramble out of the water" and damage
+$12A4 Print a 16-bit number; $12EE score and strength; $1303 score
+$133D "You are given" an object
+$1356 HELP; $1391 WAVE; $15D2 find a carried object, asking "<verb> what?"
+$160F DROP; $1624 "You have..."; $162F INVENTORY; $163F the holdall's contents
+$164C List what's at a location, or NOTHING
+$16A7 LIGHT/ON; $16F9 OFF; $1712 first lockable exit; $1745 lock or unlock
+$17A3 OPEN/UNLOCK; $17BC LOCK/SHUT/CLOSE; $180D OPTION; $185A read a key
+$1873 PICTURE/DRAW; $18B0 SWIM; $1950 DRINK; $19A2 POUR/EMPTY
+$19ED QUIT/END; $1A08/$1A16 deep water/water here; $1A3A yes or no
+$1A4E FILL HOLDALL; $1AAC FILL; $1D9C find a character matching the words
+$1DDA HIT/CUT/THROW; $1DFD find who and with what; $1E43 GIVE; $1E74 ASK
+$1FD9 Print a word, with spacing, capitals and line breaks
+$2038 Print what can be seen through an exit
+$2151 Describe woods, mountains and forest ("paths lead ...")
+$21A6 List the objects here; $21DC list the exits
+$242D Print a direction; $3500 move by naming a place
+$4200 LOOK, including pictures of objects and the ending

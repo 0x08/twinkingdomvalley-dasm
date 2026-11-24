@@ -8,14 +8,14 @@ $0F32-125F
 $1260-1400
 $14EF-152F
 $1548-163F - taking stuff
-$169C-17CF - lamp and locks NEEDS DISASSEMBLY
+$169C-17CF - lamp and locks, ported in c/playtkv.c (use_lamp, use_key)
 $17D0-1910 - lots of 14CE lines need replaced
 $1911-1B6C - lots of 14CE lines about tell user they can't do something
 $1D9C-1FBF
 $216A-2193
 $2255-229E
 $2460-2452
-$254A-29D9 - NEEDS DISASSEMBLY
+$254A-29D9 - mostly data tables, see below
 $29DA-     - Weight carried by player/NPCs
 $2A00-2AB0 - DATA: Low bytes for addresses to location blocks
 $2AB1-2ACF - ?
@@ -163,7 +163,8 @@ $17CA-F ; Codes for options 1-6 for draw/desc: 60 20 C0 80 40 00
 $L1EB1,X ; This a table of low bytes for each command index
 $L1ECF,X ; and these are high bytes. See $14A7
 
-$1F00+1 ; Something to do with drawing, see $251E
+$1F00+L ; Picture number for location L, passed in X to $0B12. WAVE and the
+        ; drawbridge change some entries ($13C8, $123B).
 
 $23B5-C3 ; Bytes for directions, see command process at $23CA
 ; 23B5 20 10 08 04 02 01 28 24 28 24 18 14 18 14
@@ -213,8 +214,10 @@ x$2800 Max health see $0F4D
 x$2820 Table with first NPC word, see $1BEA
 x$2840 Table with second NPC word
 x$2860 Table with third NPC word
-x$2880 Dunno but indexed by character class like $2820 see $0D01, fight or flee maybe, see $0D79?
-x$28A0 Dunno but indexed by character class like $2820 see $0D01
+x$2880 Movement: bits 4-7 say which regions the class may enter (ranges at
+       $1263-$1282, see $0DFF); bits 0-3 are its chance of wandering ($0D79)
+x$28A0 Non-zero if the class follows the player ($0D3D). Note $28A0+X with
+       X>=$C8 is how the code reads $2968, the characters' classes
 x$28C0 Health increment see $0F4D
 x$28E0 Table of max carry limits. Char can carry LESS than the limit.
 
@@ -289,3 +292,71 @@ $2BC0 contains value from hardware clock from OSWORD 1 see $2AC0
 
 $3400- Offsets for words stored from $3600
 $3600-$3B04 Words. Commands are first: directions, combat then other ones then all other words.
+
+=====================
+Findings from porting the game to C (c/playtkv.c), checked against the
+original running in an emulator (c/runtkv.c). See c/playtkv.c for detail;
+it cites the addresses throughout.
+
+The game
+- There are 177 locations, $00-$B0.
+- Location block first byte: bits 0-2 type for descriptions made in code
+  (2 canyon floor, 3 high mountains, 4 woods, 5 dense forest, 6 maze,
+  7 desert); bit 3 no "The picture is your view..."; bit 4 visited; bit 5 no
+  list of exits; bit 6 no picture; bit 7 dark. Types 3-5 say "paths lead"
+  and list directions instead of exits ($2151).
+- Exit third byte: bits 3-6 | $10 pick the door words; $14-$17 (grates)
+  can always be seen through, $18-$1F (doors) only when open ($2231).
+- Keys: bits 0-2 of a door's third byte index $173D, a mask of which keys
+  2-6 (master, gold, silver, bronze, brass) open it ($1745).
+- Directions are printed a word per bit, N S E W U D, "and" before up or
+  down ($242D), eg "north east", "north and down".
+- Parser ($229F): the first verb-like word ($00-$2E) is the command ($83);
+  unless it's a direction ($00-$0D) it's replaced by $FF in the list matched
+  against objects. Later verbs stay. Input with no verb may name a place an exit leads to ($3500).
+- $0C8E: commands $25-$2E (QUIT/END, LOOK, PICTURE, SCORE, INVENTORY,
+  OPTION, HELP) don't use a turn; everything else does.
+- Random numbers ($1C88): 24-bit shift register in $1D-$1F, feeding in
+  bit 6 XOR bit 3 of $1D. $1D is $AA at the start; $1E and $1F aren't set.
+- Characters run $0CEE twice a turn: first only deciding, then acting
+  (those away from the player before the player's command, those with
+  the player after it); moves are applied together at $0CC3. When looking
+  for an enemy ($0D8D), nobody fights if bit 6 of the player's $2AD0 entry
+  is set, ie the player is getting away.
+- Score ($130A): the $2654 value of each object carried or in the cabin
+  (location 0), holdall included. $28 counts each time the running total
+  passes a multiple of 256, every time the score is worked out; looking at
+  the secret of life with $28 = 4 ends the game ($4274).
+- The word at $07D3 is corrupt in this disk image, so the keeper of the
+  mountains says "prove yourself w by bringing...". It must be "worthy".
+
+Special events ($42A0, $0F03-$124D), in order each turn
+- $93 small cave opens east with the desert king's chest; $33 fall lands
+  by the $1283/$1289 tables (the search wraps past the table, so $16 is
+  found); $37, $1A, $32 wash the player out of the water.
+- Health recovery, the lamp, thirst ($02; 7 a turn in $20-$2F, $80-$84).
+- $78 witch: spells after a turn's grace ($04) until given the crystal
+  ball, then gives the bronze key and becomes friendly (class 8).
+- The ill giant in the magic pool ($89) becomes the giant; the dragon
+  breathes on whoever is in $4E.
+- $6D/$A9 forest king and guard: a gift worth $1E or more buys the
+  amulet ($20), otherwise you're a vagabond; freeing the princess (door at
+  $A8) with the amulet earns a silver key ($21).
+- A lit lamp in the holdall burns it; the drawbridge ($28) closes behind
+  anyone who has crossed it ($24) without the uniform.
+- Drinking from the magic pool reveals concealed doors: seven locations
+  ($1A33) gain the exit stored after their others.
+
+Pictures
+- $0B12 builds a table of screen row addresses at $0900/$0A00 and jumps to
+  $3C00 with X = picture. It uses the carry flag without setting it, so the
+  bottom row's address depends on how the game got there.
+- $3C00-$57FF draws in MODE 5 using only OSWRCH: VDU 22 (MODE), 23, 19
+  (palette), 18 (GCOL) and 25 (PLOT move/draw). It fills shapes itself,
+  reading and writing screen memory, and gives up a fill when the stack
+  is nearly full ($417C), so how much gets filled depends on how deeply the
+  game had called it. Picture $C3, the ending, is an animated fractal cube.
+- PICTURE, LOOK at some objects ($42F2 codes -> $42F9 pictures) and LOOK
+  PICTURE in a few rooms ($420A) show pictures; pressing TAB at the prompt
+  does too ($22C9).
+- MODE 7 shows character $5F as a bar, so the turn separator is a line.
