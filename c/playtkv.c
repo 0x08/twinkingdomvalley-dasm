@@ -210,8 +210,12 @@ int process_input(){
     line[i++]=c;
   } while( i<MAXLINE && c!=EOF && c!='\n' );
   line[i-1]='\0';
-  
+
   //printf("|%s|\n",line);
+  if(c==EOF && i==1){//End of input with nothing left to process
+    process_output("\n");
+    return QUIT;
+  }
   if(i==1)
     return EMPTY;
   return parse_and_process(line,i);
