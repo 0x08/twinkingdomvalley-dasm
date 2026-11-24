@@ -26,9 +26,11 @@ a { color:var(--accent); }
 #text .cursor { background:#fff; color:#000; animation: flash 1s steps(1) infinite; }
 @keyframes flash { 50% { visibility:hidden; } }
 #picture { position:absolute; inset:0; width:100%; height:100%; image-rendering:pixelated; display:none; }
-.controls { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:12px 0; }
-#typing { flex:1 1 220px; min-width:0; font:inherit; padding:8px 10px; border:1px solid var(--line);
-          border-radius:6px; background:var(--card); color:var(--fg); }
+#screen:focus-within { box-shadow:0 0 0 2px var(--accent); }
+/* An invisible text box over the screen takes the typing, so phones show their keyboard */
+#typing { position:absolute; inset:0; width:100%; height:100%; opacity:0; border:0; padding:0;
+          background:transparent; color:transparent; caret-color:transparent; cursor:text; font-size:16px; }
+.controls { display:flex; gap:8px; align-items:center; margin:12px 0; }
 button { font:inherit; padding:8px 12px; border:1px solid var(--line); border-radius:6px;
          background:var(--card); color:var(--fg); cursor:pointer; }
 button:hover { border-color:var(--accent); }
@@ -45,19 +47,18 @@ button:hover { border-color:var(--accent); }
 <div id="screen" title="Click and type">
   <div id="text"></div>
   <canvas id="picture" width="160" height="256"></canvas>
+  <input id="typing" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"
+         aria-label="Type commands for the game">
 </div>
 
 <div class="controls">
-  <input id="typing" autocomplete="off" autocapitalize="off" spellcheck="false"
-         placeholder="Type here: commands go to the game as you type" aria-label="Keyboard">
-  <button id="tab" title="The TAB key: see the picture of where you are">Picture (TAB)</button>
   <button id="restart">Restart</button>
 </div>
 
 <div class="help">
   <p>Choose an option with a number key, then type commands such as <code>N</code>, <code>TAKE LAMP</code>,
-  <code>LOOK</code>, <code>INVENTORY</code> or <code>HELP</code> and press Return. Press TAB (or the button)
-  at the <code>?</code> prompt to see a picture. <code>*SAVE</code> and <code>*LOAD</code> keep one saved game
+  <code>LOOK</code>, <code>INVENTORY</code> or <code>HELP</code> and press Return: click the screen and type.
+  <code>DRAW</code> (or <code>PICTURE</code>) shows the picture of where you are. <code>*SAVE</code> and <code>*LOAD</code> keep one saved game
   in this browser.</p>
   <p>This is the game's own 6502 code in an emulator with a small stand-in for the BBC's operating system,
   from the <a href="https://github.com/0x08/twinkingdomvalley-dasm">disassembly project</a>.
@@ -137,9 +138,10 @@ async function start() {
   loop();
 }
 
-// Keys: typed characters arrive through the text box, which also brings up
-// the keyboard on phones; Return, Delete, TAB and Escape through keydown.
-// Keys pressed with the focus elsewhere on the page go to the game too.
+// Keys: typed characters arrive through the invisible text box over the
+// screen, which also brings up the keyboard on phones; Return, Delete, TAB
+// and Escape through keydown. Keys pressed with the focus elsewhere on the
+// page go to the game too.
 const SPECIAL = {Enter: 13, Backspace: 127, Tab: 9, Escape: 27};
 document.addEventListener('keydown', e => {
   if (e.ctrlKey || e.metaKey || e.altKey) return;
@@ -161,8 +163,6 @@ typing.addEventListener('input', () => {
   }
   typing.value = '';
 });
-document.getElementById('screen').addEventListener('click', () => typing.focus());
-document.getElementById('tab').addEventListener('click', () => { key(9); typing.focus(); });
 document.getElementById('restart').addEventListener('click', () => { start(); typing.focus(); });
 
 start().then(() => { if (!testScript) typing.focus(); });

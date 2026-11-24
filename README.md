@@ -43,7 +43,7 @@ game does its own fills in screen memory.
 
 `docs/play/` runs the original game in the browser: `tkv.js` is the same
 6502 emulator and operating system stand-in in JavaScript, with MODE 7
-teletext text and MODE 5 pictures drawn live on a canvas, and
+teletext text and MODE 5 pictures drawn live on a canvas (type on the screen; `DRAW` shows the picture), and
 `valleyr.bin` a copy of `machinecode/VALLEYR`. `*SAVE` and `*LOAD` use
 the browser's storage. It needs no build: serve or open `docs/`.
 
