@@ -55,7 +55,10 @@ static void change_mode(unsigned char mode){
     if(column>0)
       newline();
     fflush(stdout);
-    print_picture(&pic,picture_columns());
+    if(getenv("TKV_PICTURE_HASH"))//For comparing with the browser version
+      printf("[picture:%08lx]\n",picture_crc(&pic));
+    else
+      print_picture(&pic,picture_columns());
   }
 }
 

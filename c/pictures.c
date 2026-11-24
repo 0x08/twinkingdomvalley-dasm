@@ -173,6 +173,13 @@ int render_picture(const unsigned char *image, unsigned char n, struct picture *
 //Return addresses on the stack when the game calls $0B12, innermost first
 const unsigned short picture_call_start[]={0x2526,0x144A,0};
 
+static unsigned long crc(unsigned long c, const unsigned char *buf, size_t len);
+
+//CRC-32 of the pixels then the palette, to identify a picture in tests
+unsigned long picture_crc(const struct picture *p){
+  return crc(crc(0,&p->pixel[0][0],PIC_W*PIC_H),p->palette,4);
+}
+
 int picture_columns(){
   const char *e=getenv("TKV_PICTURE_WIDTH");
   struct winsize w;

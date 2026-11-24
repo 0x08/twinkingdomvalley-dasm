@@ -48,6 +48,9 @@ void print_picture(const struct picture *p, int columns);
 //and no more than one column per pixel. TKV_PICTURE_WIDTH overrides it.
 int picture_columns(void);
 
+//CRC-32 of the pixels followed by the palette
+unsigned long picture_crc(const struct picture *p);
+
 //The VDU driver, for a program running the game's code itself: write the
 //bytes sent to OSWRCH while in MODE 5, then read the picture off the screen.
 struct m6502;
