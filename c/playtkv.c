@@ -99,7 +99,9 @@ void init_game();
 void process_output(char *s);
 int read_command(UCHAR *matches, int *nmatches);
 int get_command(UCHAR *matches, int *nmatches);
-void free_action(UCHAR code);
+void free_action(UCHAR code, UCHAR *matches, int nmatches);
+void look(UCHAR *matches, int nmatches);
+void print_score();
 void player_move(UCHAR *matches, int nmatches);
 void turn_start();
 void turn_end();
@@ -117,6 +119,7 @@ int throw_attack(UCHAR objid, UCHAR victim, UCHAR flag);
 void weapon_lands(UCHAR objid, UCHAR flag);
 void inflict(UCHAR victim, UCHAR max, UCHAR rndmask);
 void damage(UCHAR victim, UCHAR amount);
+UCHAR find_enemy();
 void print_score_and_strength();
 void player_attack(UCHAR verb, UCHAR *matches, int nmatches);
 UCHAR get_match(UCHAR *word);
@@ -340,8 +343,194 @@ void turn_end(){
 }
 
 //Per-turn events, see $0F03
+//$0EE0: washed out of the water
+void scramble_out(){
+  process_output("You scramble out of the water.\n");
+  at1a=get_player_location_id();
+  inflict(0,0x64,0x3F);
+}
+
+//Per-turn events tied to the player's location, see $42A0 and $0F03
+void location_events(){
+  UCHAR here=get_player_location_id();
+  if(here==0x93){//$42A0: the small cave in the west mountains
+    long a=get_location(0x93)->exits[0].addr;
+    if(player_has(0x2B)){//The desert king's treasure chest opens the way east
+      ctkv[a]=0xC8;
+      ctkv[a+2]=0x47;
+      reload_location(0x93);
+    } else if(ctkv[a]!=0xC8)
+      //"worthy" is corrupt in the game data ($07D3), see tkv_notes.txt
+      process_output("The deep magical voice of the keeper of the mountains says, "
+                     "you may pass east if you prove yourself worthy by bringing "
+                     "the treasure chest of the desert king.\n");
+  }
+  if(here==0x33){//Diving down a dangerous fall: land below where you jumped
+    UCHAR y=5;
+    int i;
+    at1a=here;
+    inflict(0,0xBE,0x7F);
+    for(i=0;i<256;i++)//$0F14: Y counts down from 4 and wraps, as in the original
+      if(getbyte("1283",--y)==loc14){
+        move_player(getbyte("1289",y));
+        break;
+      }
+  } else if(here==0x37){//Diving down a large waterfall
+    at1a=here;
+    inflict(0,0x64,0x3F);
+    move_player(0x1A);
+    scramble_out();
+    move_player(0x1B);
+  } else if(here==0x1A){
+    scramble_out();
+    move_player(0x1B);
+  } else if(here==0x32){
+    scramble_out();
+    move_player(loc14);
+  }
+}
+
+UCHAR witch04=0;     //$04: the witch waits a turn before her first spell
+UCHAR gift20=0;      //$20: number of gifts the forest king has accepted
+UCHAR princess21=0;  //$21: $40 princess freed, $80 freed and owed a reward
+UCHAR bridge24=0;    //$24: set once the player has been beyond the drawbridge
+UCHAR picture28=0;   //$28: counts score overflows past 256, see $1333
+
+//Changes a character's class, which sets its side, description and limits
+void set_character_class(UCHAR id, UCHAR classcode){
+  struct character *c=get_npc(id);
+  char desc[MAXLINE];
+  c->classcode=classcode;
+  c->class=classcode&0x1F;
+  c->ishostile = (classcode&0x80) ? HOSTILE : NONHOSTILE;
+  c->max_carried=getbyte("28E0",c->class);
+  printcharacterdescription(desc,c->class);
+  free(c->description);
+  c->description=create_copy_string(desc);
+}
+
+//Sets where the drawbridge at $28 leads, see $125A
+void set_drawbridge(UCHAR dest){
+  long a=get_location(0x28)->exits[0].addr;
+  if(ctkv[a+1]!=dest){
+    ctkv[a+1]=dest;
+    reload_location(0x28);
+  }
+}
+
+//Events after the player's location is recorded, see $1008-$124D
+void later_events(){
+  UCHAR here=get_player_location_id();
+  int x;
+  //$1008: the witch's lair. Give her the crystal ball and she hands
+  //over the bronze key and makes peace; otherwise she casts spells.
+  if(here==0x78){
+    if(get_object(0x08)->location_id==CARRIED+0x10){
+      if(get_object(0x05)->location_id==CARRIED+0x10){
+        given(0x05);
+        set_character_class(0x10,0x08);
+      }
+    } else if( (witch04&0x80) || (--witch04&0x80)==0 ){
+      sentence("%s casts a spell on you.\n",get_npc(0x10)->description);
+      at1a=here;
+      damage(0,0x3C);
+    }
+  } else
+    witch04=0;
+  //$104A: the ill giant recovers in the magic pool
+  struct character *giant=get_npc(2);
+  if(giant->classcode!=1 && giant->location_id==0x89){
+    if(loc14==0x89)
+      sentence("%s swims.\n",giant->description);
+    set_character_class(2,1);
+    giant->strength=getbyte("2800",1);
+  }
+  //$1074: the dragon breathes fire at whoever is in its lair
+  if(get_npc(9)->strength!=0){
+    at1a=0x4E;
+    align1b=0x89;
+    if(find_enemy()){
+      if(here==0x4E)
+        process_output("Flames fill the room.\n");
+      inflict(target17,0x5A,0x1F);
+    }
+  }
+  here=get_player_location_id();
+  if(here==0xA9){//$10A4: before the forest king, with what was given to his guard
+    int found=-1;
+    for(x=getnumberofobjects()-1;x>=0;x--)
+      if(get_object(x)->location_id==CARRIED+0x1A){
+        found=x;
+        break;
+      }
+    if(found>=0 && getbyte("2654",get_object(found)->code)>=0x1E){
+      transfer(found,0xB0,0xB0);
+      gift20++;
+      process_output("Your generous gift is accepted, and in return you are given "
+                     "an amulet to help the forest king's people recognise you.\n");
+      transfer(0x28,CARRIED,CARRIED);
+      move_player(0x35);
+    } else {
+      if(found>=0)
+        transfer(found,0x6F,0x80);
+      process_output("You are told that you are a vagabond without any respect.\n");
+      move_player(0x6F);
+    }
+  } else if(here==0x6D){//$1118: the forest king's land
+    if(gift20==0){
+      process_output("The forest king's personal guard arrest you for trespassing and "
+                     "demand a suitable payment, to show respect for the king, in "
+                     "return for your freedom.\n");
+      move_player(0xA9);
+    } else if(princess21&0x80){
+      process_output("You are honoured and given a silver key. It is indeed a generous gift.\n");
+      princess21>>=1;
+      if(transfer(0x04,CARRIED,CARRIED)){
+        transfer(0x04,0x6D,0xFF);
+        process_output("It drops to the floor, because your hands are full.\n");
+      }
+    } else
+      process_output("You are welcome here.\n");
+  }
+  //$1192: once the door at $A8 is open, the princess escapes
+  if(princess21==0 && get_location(0xA8)->exits[0].ispassable==PASSABLE){
+    if(gift20 && get_object(0x28)->location_id==CARRIED){
+      princess21=0x80;
+      process_output("A princess flees. She recognises you by your amulet and says that "
+                     "her father, the forest king, will reward you handsomely.\n");
+    } else {
+      princess21=0x40;
+      process_output("A princess flees. She doesn't recognise you.\n");
+    }
+  }
+  //$11E4: a lit lamp in the holdall sets it alight
+  if(get_object(LAMP)->location_id==0xFF && lamp_is_lit()){
+    process_output("The holdall is engulfed in flames.\n");
+    for(x=getnumberofobjects()-1;x>=0;x--)
+      if(get_object(x)->location_id==0xFF)
+        get_object(x)->location_id=get_player_location_id();
+    holdallweight=0;
+    transfer(0,BROKEN,BROKEN);
+  }
+  //$1207: the drawbridge closes behind anyone who has been beyond it,
+  //unless they wear the uniform
+  here=get_player_location_id();
+  if(here==0x29 || here==0x4D)
+    bridge24=here;
+  if(here!=0x28)
+    set_drawbridge(0x29);
+  else if(loc1c!=0x28){
+    if(bridge24 && get_object(0x29)->location_id!=CARRIED){
+      process_output("You see the draw bridge close.\n");
+      set_drawbridge(0x32);
+    } else
+      set_drawbridge(0x29);
+  }
+}
+
 void update(){
   int x;
+  location_events();
   //$0F4A: every living character, the player included, recovers some health
   for(x=getnumberofcharacters()-1;x>=0;x--){
     struct character *c=get_npc(x);
@@ -378,6 +567,7 @@ void update(){
   //$0FFE: remember where the player has been
   loc1c=loc14;
   loc14=get_player_location_id();
+  later_events();
 }
 
 void process_output(char *s){
@@ -403,7 +593,7 @@ int get_command(UCHAR *matches, int *nmatches){
       return verb;
     if(verb==0x25 || verb==0x26)//QUIT,END
       return QUIT;
-    free_action(verb);
+    free_action(verb,matches,*nmatches);
   }
 }
 
@@ -476,9 +666,9 @@ void player_move(UCHAR *matches, int nmatches){
 }
 
 //Commands $25-$2E don't use up a turn
-void free_action(UCHAR code){
+void free_action(UCHAR code, UCHAR *matches, int nmatches){
   switch(code){
-    case 0x27: case 0x28: print_description(get_player_location_id()); return; //LOOK,VIEW
+    case 0x27: case 0x28: look(matches,nmatches); return; //LOOK,VIEW
     case 0x29: case 0x2A: process_output("Apologies, graphics not implemented yet.\n"); return; //PICTURE,DRAW
     case 0x2B: print_score_and_strength(); return; //SCORE, $12EE
     case 0x2C: inventory(0); return; //INVENTORY
@@ -1440,18 +1630,58 @@ void damage(UCHAR victim, UCHAR amount){
 }
 
 //$12EE. The score is the value of the treasure in the cabin or carried, $130A.
-void print_score_and_strength(){
+//$1303. Each time the running total passes a multiple of 256, $28 goes up,
+//every time the score is worked out.
+void print_score(){
   int x;
   unsigned int score=0;
   for(x=getnumberofobjects()-1;x>=0;x--){
     UCHAR loc=get_object(x)->location_id;
     if(loc==0xFF)
       loc=get_object(0)->location_id;
-    if(loc==0 || loc==CARRIED)
+    if(loc==0 || loc==CARRIED){
+      unsigned int before=score;
       score+=getbyte("2654",get_object(x)->code);
+      if( (score>>8)!=(before>>8) )
+        picture28++;
+    }
   }
   sentence("Your score is %u.\n",score);
+}
+
+void print_score_and_strength(){
+  print_score();
   sentence("Your strength is %u.\n",get_player()->strength);
+}
+
+//LOOK, see $4200. Looking at certain carried objects shows their picture;
+//one of them, once the score has reached 1024, ends the game.
+void look(UCHAR *matches, int nmatches){
+  UCHAR here=get_player_location_id();
+  UCHAR id;
+  int i;
+  if(is_dark(here)==DARK || match_carried_object(CARRIED,matches,nmatches,&id)==0){
+    print_description(here);
+    return;
+  }
+  for(i=6;i>=0;i--)
+    if(getbyte("42F2",i)==get_object(id)->code)
+      break;
+  if(i<0){
+    process_output("Seems ordinary.\n");
+    return;
+  }
+  if(getbyte("42F9",i)!=0xC3){
+    process_output("Apologies, graphics not implemented yet.\n");
+    return;
+  }
+  print_score();
+  if(picture28==4){//$4274: the end
+    move_player(0xAF);
+    process_output("The secret of life is simple yet complex, as is the picture of it.\n");
+    process_output("          Stay cool.\n");
+    exit(0);
+  }
 }
 
 //$3B8D: does the player carry the object, or have it in a carried holdall?
