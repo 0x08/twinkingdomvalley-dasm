@@ -1,0 +1,43 @@
+# The holdall, brought to the start
+# object 00=01
+5
+take holdall
+i
+n
+take lamp
+take key
+take jug
+i
+fill holdall
+y
+n
+y
+i
+drop lamp
+i
+drop
+key
+i
+empty holdall
+look
+i
+drop
+foo
+take key
+take lamp
+take flint
+fill holdall
+y
+y
+n
+i
+s
+w
+w
+take flint
+light lamp
+fill holdall
+y
+wait
+i
+look

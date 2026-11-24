@@ -1,0 +1,25 @@
+# Pictures: on first visits, PICTURE, LOOK PICTURE, objects, options
+1
+n
+look picture
+s
+picture
+e
+w
+e
+option
+3
+w
+e
+option
+2
+take lamp
+n
+take lamp
+take key
+picture
+option
+4
+s
+s
+n

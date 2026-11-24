@@ -1,0 +1,11 @@
+# The dangerous fall
+5
+ne
+n
+w
+w
+ne
+n
+look
+wait
+score

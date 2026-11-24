@@ -1,0 +1,10 @@
+# A gift for the forest king
+# start 6d
+# object 32=01
+5
+take gold
+n
+give gold to guard
+wait
+i
+look

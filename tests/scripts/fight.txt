@@ -1,0 +1,32 @@
+# Fetch the axe, fight at the inn, throw
+5
+ne
+n
+w
+w
+n
+sw
+take axe
+hit
+axe
+troll
+hit with axe
+you
+s
+s
+se
+e
+e
+e
+e
+e
+hit keeper with axe
+hit keeper with axe
+hit keeper with axe
+hit keeper with axe
+hit keeper with axe
+hit keeper with axe
+throw axe at elf
+look
+i
+score

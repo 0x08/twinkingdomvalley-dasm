@@ -1,0 +1,12 @@
+# The witch is given the crystal ball
+# start 78
+# object 08=01
+5
+take ball
+n
+give ball to witch
+wait
+wait
+i
+hit witch with key
+wait

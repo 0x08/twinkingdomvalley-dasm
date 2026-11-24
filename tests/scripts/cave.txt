@@ -1,0 +1,7 @@
+# The small cave without the chest
+# start 93
+5
+n
+wait
+e
+wait

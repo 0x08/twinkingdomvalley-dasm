@@ -1,0 +1,8 @@
+# The witch casts spells
+# start 78
+5
+n
+wait
+wait
+wait
+wait

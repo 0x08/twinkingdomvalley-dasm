@@ -1,0 +1,27 @@
+# The drawbridge
+5
+ne
+n
+w
+n
+n
+n
+e
+n
+n
+n
+sw
+w
+s
+e
+e
+se
+n
+s
+look
+n
+look
+s
+s
+n
+look

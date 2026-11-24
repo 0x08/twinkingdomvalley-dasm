@@ -1,0 +1,37 @@
+# GIVE, ASK, WAVE, HELP, place names, OPTION, PICTURE, QUIT
+5
+help
+cabin
+take jug
+road
+road
+road
+road
+inn
+give jug to elf
+i
+ask elf for jug
+ask keeper
+jug
+give
+jug
+keeper
+ask keeper for jug
+wave
+wave rod
+wave beer
+xyzzy
+cabin
+option
+6
+look
+w
+e
+option
+2
+picture
+look picture
+inn
+quit
+n
+score

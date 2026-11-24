@@ -1,0 +1,11 @@
+# The magic pool and the ill giant
+# start 89
+# npc 02=89
+5
+n
+wait
+drink
+swim
+score
+drink
+wait

@@ -1,0 +1,8 @@
+# The small cave with the chest
+# start 93
+# object 2b=c8
+5
+n
+wait
+e
+look

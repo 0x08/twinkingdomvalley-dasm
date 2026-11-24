@@ -1,0 +1,7 @@
+# The dragon breathes fire
+# start 4e
+5
+n
+wait
+wait
+wait

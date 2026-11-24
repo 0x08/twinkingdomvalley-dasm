@@ -1,0 +1,161 @@
+# The jug at a stream and the inn, swimming, drinking, thirst
+5
+n
+take jug
+take lamp
+s
+ne
+n
+fill jug
+i
+fill jug
+drink
+fill jug
+pour jug
+pour jug
+empty lamp
+fill lamp
+fill key
+swim
+w
+n
+swim
+fill jug
+drink
+drink
+n
+e
+e
+e
+s
+s
+e
+drink
+fill jug
+i
+drink
+i
+empty jug
+fill jug
+drink jug
+score
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait

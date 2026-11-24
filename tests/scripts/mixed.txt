@@ -1,0 +1,1502 @@
+# A random mix of commands
+5
+cabin
+se
+n
+take jug
+u
+s
+take jug
+take axe
+d
+ne
+take jug
+take jug
+off
+d
+d
+d
+5
+light lamp
+s
+u
+n
+nw
+give axe to elf
+w
+take all
+take jug
+light lamp
+look jug
+off
+score
+sw
+y
+e
+ne
+sw
+drop lamp
+sw
+take axe
+i
+give axe to elf
+look
+picture
+light lamp
+empty holdall
+n
+lock door
+d
+pour jug
+w
+drop axe
+n
+drink
+w
+sw
+take all
+hit troll with axe
+nw
+u
+take key
+take key
+s
+empty holdall
+u
+lock door
+d
+e
+throw axe at elf
+look jug
+look
+nw
+nw
+nw
+wave rod
+swim
+drop axe
+picture
+cabin
+ne
+ask elf for axe
+n
+d
+w
+n
+ne
+nw
+lock door
+throw axe at elf
+take axe
+d
+nw
+pour jug
+fill jug
+y
+sw
+wave rod
+wave rod
+wait
+5
+light lamp
+w
+picture
+take all
+i
+cabin
+give axe to elf
+i
+take axe
+5
+give axe to elf
+pour jug
+s
+look
+fill jug
+e
+wave rod
+sw
+sw
+swim
+take lamp
+fill holdall
+fill holdall
+drop axe
+take flint
+e
+sw
+e
+n
+inn
+wait
+give axe to elf
+fill jug
+e
+y
+w
+fill jug
+n
+take axe
+give axe to elf
+wave rod
+w
+w
+se
+ask elf for axe
+picture
+u
+take all
+cabin
+drink
+w
+i
+e
+w
+drink
+swim
+u
+score
+s
+n
+pour jug
+sw
+help
+take all
+u
+nw
+ne
+quit
+ne
+fill jug
+w
+drop axe
+pour jug
+n
+empty holdall
+se
+look
+throw axe at elf
+5
+take all
+take lamp
+empty holdall
+look
+throw axe at elf
+look
+lock door
+ne
+lock door
+d
+nw
+n
+take key
+option
+i
+u
+ne
+wait
+5
+hit troll with axe
+pour jug
+d
+u
+hit troll with axe
+nw
+road
+nw
+ne
+option
+nw
+i
+se
+s
+take key
+nw
+s
+picture
+give axe to elf
+cabin
+e
+quit
+n
+lock door
+se
+ne
+pour jug
+se
+inn
+take key
+sw
+fill holdall
+u
+nw
+nw
+n
+nw
+s
+cabin
+drop axe
+se
+n
+take flint
+unlock door
+se
+take all
+road
+take all
+quit
+5
+look jug
+se
+take jug
+drink
+n
+sw
+se
+nw
+nw
+se
+u
+take key
+ne
+s
+option
+picture
+take flint
+fill jug
+n
+fill jug
+d
+empty holdall
+light lamp
+light lamp
+give axe to elf
+y
+take axe
+ne
+swim
+look jug
+nw
+se
+n
+wave rod
+n
+e
+nw
+n
+wait
+wave rod
+nw
+i
+se
+n
+drop lamp
+fill jug
+look
+look
+wait
+e
+road
+sw
+n
+take all
+d
+look jug
+u
+look jug
+se
+w
+drink
+n
+take axe
+nw
+take lamp
+nw
+quit
+wave rod
+w
+fill jug
+n
+w
+n
+take jug
+u
+cabin
+light lamp
+nw
+quit
+s
+e
+wave rod
+e
+w
+pour jug
+nw
+w
+ne
+take key
+hit troll with axe
+give axe to elf
+s
+ne
+option
+quit
+cabin
+w
+e
+sw
+drink
+w
+d
+cabin
+w
+road
+wait
+off
+inn
+n
+off
+empty holdall
+look
+n
+wave rod
+picture
+cabin
+lock door
+n
+look
+5
+take key
+d
+unlock door
+d
+n
+e
+drop lamp
+take key
+5
+score
+w
+sw
+take all
+nw
+u
+option
+fill jug
+d
+n
+throw axe at elf
+lock door
+take all
+sw
+ask elf for axe
+e
+take all
+take key
+wave rod
+nw
+e
+y
+cabin
+drink
+take key
+u
+look
+take key
+se
+take lamp
+w
+take key
+d
+unlock door
+nw
+take lamp
+d
+cabin
+u
+sw
+inn
+cabin
+ne
+take axe
+sw
+w
+ne
+inn
+s
+nw
+fill jug
+w
+look jug
+s
+n
+nw
+s
+take axe
+throw axe at elf
+ne
+fill holdall
+help
+pour jug
+n
+w
+swim
+swim
+i
+wave rod
+take flint
+d
+se
+take flint
+off
+se
+fill jug
+nw
+drop axe
+d
+i
+ne
+score
+quit
+inn
+e
+quit
+n
+n
+help
+throw axe at elf
+take axe
+w
+pour jug
+n
+quit
+ne
+drop lamp
+option
+fill holdall
+sw
+throw axe at elf
+w
+d
+e
+n
+wait
+nw
+w
+u
+swim
+look
+give axe to elf
+w
+wait
+take key
+ask elf for axe
+e
+u
+w
+w
+off
+fill holdall
+e
+take all
+take all
+light lamp
+se
+sw
+nw
+take key
+picture
+take all
+road
+option
+fill holdall
+swim
+unlock door
+help
+u
+fill holdall
+drop lamp
+ne
+d
+take all
+e
+ne
+ne
+w
+ne
+look
+off
+se
+u
+off
+ne
+quit
+s
+e
+nw
+inn
+n
+throw axe at elf
+w
+score
+lock door
+light lamp
+fill jug
+ask elf for axe
+drop lamp
+quit
+give axe to elf
+take key
+w
+ne
+n
+w
+d
+take flint
+e
+quit
+wait
+nw
+ne
+quit
+sw
+ne
+picture
+score
+ne
+hit troll with axe
+d
+sw
+take lamp
+s
+se
+w
+y
+d
+picture
+d
+drop lamp
+n
+e
+pour jug
+drink
+swim
+empty holdall
+sw
+n
+ne
+n
+pour jug
+se
+u
+nw
+i
+u
+take flint
+fill jug
+w
+nw
+lock door
+d
+nw
+n
+off
+drop lamp
+take jug
+u
+n
+look jug
+se
+take flint
+give axe to elf
+e
+take lamp
+wait
+unlock door
+score
+w
+wait
+ne
+inn
+y
+n
+help
+quit
+y
+unlock door
+u
+n
+se
+take axe
+n
+u
+wait
+n
+ne
+n
+se
+e
+s
+unlock door
+picture
+s
+w
+sw
+ne
+s
+score
+take flint
+w
+sw
+e
+unlock door
+help
+fill jug
+lock door
+ne
+se
+cabin
+unlock door
+nw
+off
+drop lamp
+w
+u
+cabin
+e
+light lamp
+take jug
+ne
+s
+swim
+ne
+empty holdall
+nw
+se
+throw axe at elf
+drop axe
+take lamp
+give axe to elf
+take flint
+road
+take all
+w
+pour jug
+empty holdall
+fill jug
+s
+sw
+i
+s
+n
+w
+w
+s
+e
+s
+picture
+ne
+take key
+se
+ne
+option
+swim
+nw
+take key
+pour jug
+take key
+empty holdall
+ne
+wave rod
+ask elf for axe
+off
+s
+throw axe at elf
+w
+lock door
+ne
+picture
+light lamp
+swim
+n
+unlock door
+e
+light lamp
+fill holdall
+w
+y
+look
+score
+d
+score
+take key
+empty holdall
+take all
+s
+picture
+light lamp
+take flint
+nw
+d
+s
+e
+take lamp
+s
+e
+fill jug
+cabin
+sw
+se
+help
+take lamp
+swim
+n
+n
+d
+ne
+unlock door
+w
+pour jug
+ask elf for axe
+ne
+help
+n
+se
+cabin
+se
+d
+u
+s
+ne
+d
+hit troll with axe
+se
+u
+option
+look
+picture
+fill jug
+n
+ne
+take lamp
+e
+n
+nw
+ne
+w
+e
+nw
+inn
+n
+w
+take lamp
+unlock door
+u
+w
+take flint
+empty holdall
+unlock door
+help
+ne
+throw axe at elf
+score
+wave rod
+se
+ne
+n
+take lamp
+give axe to elf
+d
+pour jug
+empty holdall
+ne
+take flint
+d
+y
+look jug
+u
+5
+sw
+road
+empty holdall
+sw
+swim
+cabin
+i
+score
+n
+inn
+sw
+drink
+s
+se
+sw
+take lamp
+n
+look
+n
+ne
+lock door
+take key
+lock door
+take jug
+ne
+throw axe at elf
+e
+w
+e
+w
+d
+throw axe at elf
+picture
+5
+sw
+take jug
+nw
+ne
+se
+drop axe
+take flint
+i
+ne
+empty holdall
+take lamp
+nw
+hit troll with axe
+u
+w
+score
+give axe to elf
+lock door
+score
+d
+se
+d
+take flint
+hit troll with axe
+wave rod
+n
+n
+i
+ask elf for axe
+take lamp
+take jug
+quit
+u
+y
+hit troll with axe
+hit troll with axe
+w
+take lamp
+n
+fill holdall
+give axe to elf
+road
+5
+s
+s
+se
+quit
+d
+n
+e
+s
+se
+n
+se
+take lamp
+fill holdall
+y
+ne
+take flint
+w
+cabin
+s
+drop axe
+i
+pour jug
+se
+e
+help
+ask elf for axe
+take axe
+road
+drop lamp
+look
+take axe
+pour jug
+nw
+w
+look jug
+ne
+s
+road
+sw
+lock door
+option
+pour jug
+sw
+drop axe
+e
+s
+nw
+e
+take flint
+sw
+wait
+take lamp
+5
+option
+look
+n
+5
+s
+throw axe at elf
+w
+d
+sw
+w
+lock door
+fill holdall
+score
+wait
+drop axe
+inn
+help
+hit troll with axe
+quit
+d
+fill jug
+sw
+5
+ne
+lock door
+take flint
+d
+wait
+take all
+w
+fill jug
+ne
+take flint
+se
+drop axe
+take all
+w
+i
+d
+n
+ne
+option
+take flint
+help
+ne
+ask elf for axe
+empty holdall
+w
+light lamp
+off
+fill jug
+se
+take all
+sw
+ne
+fill jug
+fill jug
+off
+hit troll with axe
+ne
+se
+look
+inn
+lock door
+n
+drop lamp
+d
+nw
+n
+quit
+ne
+nw
+n
+hit troll with axe
+u
+i
+take all
+take key
+take lamp
+take all
+throw axe at elf
+se
+e
+cabin
+take flint
+s
+u
+d
+e
+take lamp
+off
+s
+u
+off
+se
+w
+e
+ask elf for axe
+ne
+se
+u
+se
+quit
+d
+n
+sw
+wave rod
+w
+i
+light lamp
+w
+w
+drop axe
+w
+se
+ne
+u
+throw axe at elf
+se
+light lamp
+fill holdall
+d
+ne
+n
+n
+u
+take key
+road
+u
+fill holdall
+take flint
+w
+fill jug
+take jug
+e
+empty holdall
+quit
+score
+lock door
+take lamp
+n
+n
+ask elf for axe
+score
+d
+n
+wait
+light lamp
+nw
+throw axe at elf
+e
+give axe to elf
+s
+fill jug
+take all
+nw
+se
+se
+sw
+lock door
+e
+ne
+s
+n
+nw
+unlock door
+n
+quit
+drop axe
+s
+take lamp
+score
+drink
+u
+sw
+drink
+wait
+picture
+n
+fill jug
+fill holdall
+empty holdall
+pour jug
+hit troll with axe
+give axe to elf
+take all
+w
+nw
+picture
+u
+pour jug
+road
+hit troll with axe
+i
+take all
+help
+se
+take key
+swim
+n
+e
+quit
+5
+score
+se
+u
+look
+look jug
+throw axe at elf
+sw
+cabin
+wave rod
+light lamp
+sw
+d
+y
+option
+sw
+sw
+drop lamp
+nw
+i
+light lamp
+y
+s
+give axe to elf
+n
+picture
+n
+unlock door
+score
+n
+w
+drop lamp
+u
+drink
+u
+n
+n
+u
+n
+sw
+n
+se
+drink
+i
+hit troll with axe
+nw
+w
+w
+n
+fill jug
+n
+score
+y
+sw
+score
+pour jug
+nw
+option
+wave rod
+u
+take jug
+sw
+ask elf for axe
+hit troll with axe
+ne
+nw
+e
+n
+i
+w
+empty holdall
+wave rod
+n
+take flint
+w
+take jug
+drop axe
+sw
+light lamp
+se
+option
+i
+give axe to elf
+i
+hit troll with axe
+e
+n
+u
+score
+drink
+u
+s
+drink
+take key
+look jug
+e
+swim
+look
+u
+drink
+nw
+off
+s
+se
+5
+w
+option
+quit
+cabin
+n
+w
+d
+take jug
+n
+off
+hit troll with axe
+empty holdall
+wait
+quit
+d
+nw
+give axe to elf
+pour jug
+sw
+n
+y
+5
+fill holdall
+fill jug
+quit
+se
+help
+sw
+i
+ask elf for axe
+ne
+drop lamp
+sw
+w
+w
+wait
+nw
+picture
+off
+sw
+fill jug
+w
+ne
+drink
+drop lamp
+road
+light lamp
+sw
+cabin
+unlock door
+y
+light lamp
+u
+e
+hit troll with axe
+inn
+empty holdall
+take axe
+se
+pour jug
+ne
+se
+u
+give axe to elf
+score
+e
+s
+road
+take key
+se
+sw
+y
+d
+e
+quit
+off
+look jug
+e
+give axe to elf
+score
+n
+sw
+n
+n
+wait
+take flint
+e
+e
+take all
+5
+look
+drop lamp
+u
+light lamp
+picture
+take flint
+empty holdall
+unlock door
+take key
+e
+ne
+look
+pour jug
+u
+drink
+w
+empty holdall
+quit
+u
+give axe to elf
+take key
+d
+help
+n
+drop lamp
+nw
+empty holdall
+nw
+s
+give axe to elf
+hit troll with axe
+drink
+lock door
+throw axe at elf
+s
+look jug
+empty holdall
+look jug
+take key
+n
+w
+road
+throw axe at elf
+ne
+light lamp
+ne
+drink
+n
+fill jug
+take flint
+e
+off
+take lamp
+nw
+lock door
+y
+w
+sw
+take key
+nw
+s
+picture
+s
+nw
+e
+n
+nw
+light lamp
+option
+fill jug
+off
+drop axe
+u
+take key
+drop axe
+fill jug
+d
+take axe
+nw
+sw
+ne
+take key
+n
+i
+u
+take axe
+n
+w
+take axe
+option
+nw
+u
+road
+take axe
+empty holdall
+pour jug
+w
+e
+sw
+n
+u
+wait
+swim
+ne
+drink
+u
+s
+nw
+take flint
+take all
+option
+sw
+n
+score
+look jug
+picture
+look jug
+i
+inn
+throw axe at elf
+take all
+light lamp
+d
+nw
+ne
+s
+i
+n
+sw
+se
+picture
+se
+n
+inn
+nw
+fill holdall
+nw
+nw
+n
+sw
+d
+take flint
+look jug
+hit troll with axe
+d
+ne
+pour jug
+n
+take axe
+sw
+s
+n
+sw
+e
+n
+n
+5

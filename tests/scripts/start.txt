@@ -1,0 +1,9 @@
+# The start: option menu, the road, the cabin, inventory, score, quitting
+5
+look
+n
+take lamp
+i
+score
+quit
+y

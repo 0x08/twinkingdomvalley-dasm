@@ -1,0 +1,7 @@
+# Arrested by the forest king's guard
+# start 6d
+5
+n
+wait
+wait
+look

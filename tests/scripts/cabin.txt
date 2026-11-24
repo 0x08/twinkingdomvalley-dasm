@@ -1,0 +1,36 @@
+# The cabin, the lamp and the flint, keys and the grate, dark places
+5
+n
+take lamp
+light lamp
+take jug
+take key
+i
+s
+w
+w
+take flint
+e
+e
+light lamp
+i
+off
+light
+drop flint
+off
+ne
+w
+unlock grate
+unlock door
+lock door
+lock
+open
+d
+look
+u
+d
+d
+d
+u
+u
+u
