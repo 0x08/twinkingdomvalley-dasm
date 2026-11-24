@@ -74,9 +74,15 @@ void printdirectiondescription(char *word, UCHAR dirbyte){
   }
 }
 
-void printobjectdescription(char *line, UCHAR code){
+//Describes object number id using its current code in $2580
+void printobjectdescription(char *line, UCHAR id){
+  printobjectcodedescription(line,getbyte("2580",id));
+}
+
+//Describes an object from its code, which indexes the word tables at $2750-$27CE.
+//Some objects change code, eg the lamp when lit or the jug when filled.
+void printobjectcodedescription(char *line, UCHAR lu){
   char addrs[NOBJWORDS][5]={"2750","277A","27A4","27CE"};
-  UCHAR  lu = getbyte("2580",code);
   int  i;
   int linepos=0;
   for(i=0;i<NOBJWORDS;i++){
@@ -183,6 +189,21 @@ long getcommandaddress(UCHAR code){
 //Note: last word in $3600 table has code $FE and is *** (3 asterisks)
 void getword(char *w, UCHAR code){
   getwordforaddress(w,getcommandaddress(code));
+}
+
+//Words $80-$FF used by $14B8 and $14CE come from the response table at
+//$0500-$07FF, addressed through $0380 (low bytes) and $0400 (high bytes)
+void getresponseword(char *w, UCHAR code){
+  long addr=ctkv[lbwordtable+code] | (ctkv[hbwordtable+code]<<8);
+  getwordforaddress(w,addr-start);
+}
+
+//A word as $14B8 prints it: $00-$7F from $3600, $80-$FF from the response table
+void getanyword(char *w, UCHAR code){
+  if(code&0x80)
+    getresponseword(w,code);
+  else
+    getword(w,code);
 }
 
 //Writes the word stored at address into w

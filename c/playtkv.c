@@ -60,6 +60,7 @@ struct exit {
   UCHAR ispassable;
   UCHAR exittype;
   UCHAR islocked;
+  long addr; //Offset of the exit's first byte in ctkv
 };
 
 struct object {
@@ -131,6 +132,18 @@ char * sfirstcaps(char *s);
 
 void load_location(struct location *l, UCHAR id);
 void load_object(struct object *o, UCHAR id);
+void set_object_code(struct object *o, UCHAR code);
+void reload_location(UCHAR id);
+int player_has(UCHAR objid);
+int lamp_is_lit();
+void move_player(UCHAR id);
+char * word_of(UCHAR code);
+int ask_carried(UCHAR carrier, UCHAR prompt, UCHAR *matches, int *nmatches, UCHAR *id);
+int count_word(UCHAR w, UCHAR *matches, int nmatches);
+int match_character(UCHAR loc, UCHAR *matches, int nmatches, UCHAR *id);
+int match_object_words(UCHAR loc, UCHAR *matches, int nmatches, UCHAR *id);
+int match_carried_object(UCHAR carrier, UCHAR *matches, int nmatches, UCHAR *id);
+void ask_again(UCHAR word, UCHAR *matches, int *nmatches);
 void load_character(struct character *c, UCHAR id);
 long load_exit(struct exit *e, long addr);
 void free_location(struct location *l);
@@ -164,7 +177,6 @@ struct location *locations;
 struct object *objects;
 struct character *characters;
 
-char *lampdescsave;
 UCHAR lampoil; //Stored in $27FB
 
 int debug=0; //Set by -d: show player location, lamp oil and character moves
@@ -318,13 +330,14 @@ void update(){
     UCHAR h=c->strength+getbyte("28C0",c->class);
     c->strength = h>=max ? max : h;
   }
-  //See code around $0F86 for lamp stuff
-  if(lampoil>0 && strstr(get_object(LAMP)->description,"unlit")==NULL){
-    lampoil--;
-    if(lampoil==0x14)
-      process_output("Your lamp flickers.\n");
-    else if(lampoil==0)
+  //$0F6A: a lit lamp burns oil, flickering when low and going out when empty
+  if(lamp_is_lit()){
+    struct object *lamp=get_object(LAMP);
+    if(--lampoil==0){
+      set_object_code(lamp,1);
       process_output("Your lamp dies.\n");
+    } else if(lampoil==0x14 && (lamp->location_id==CARRIED || lamp->location_id==get_player_location_id()))
+      process_output("Your lamp flickers.\n");
   }
   //$0FFE: remember where the player has been
   loc1c=loc14;
@@ -457,32 +470,32 @@ int noncombat_action(UCHAR code, UCHAR *matches, int nmatches){
   return EMPTY; //Should never get here
 }
 
+//LIGHT and ON ($16A7), OFF ($16F9). The lamp is lit when its code is 0.
 int use_lamp(UCHAR action){
   struct object *lamp = get_object(LAMP);
-  if(lamp->location_id!=CARRIED){
+  if(!player_has(LAMP)){
     process_output("You don't have a lamp.\n");
     return CONTINUE;
   }
-  if(action==LIGHT && strstr(lamp->description,"unlit")==NULL){
-    process_output("The lamp is already on.\n");
-    return CONTINUE;
+  if(action==LIGHT){
+    if(lamp_is_lit())
+      process_output("Your lamp is already on.\n");
+    else if(!player_has(FLINT))
+      process_output("You don't have a flint.\n");
+    else if(lampoil==0)
+      process_output("Your lamp is empty.\n");
+    else {
+      set_object_code(lamp,0);
+      process_output("The lamp is now on.\n");
+    }
+  } else {
+    if(!lamp_is_lit())
+      process_output("Your lamp is already off.\n");
+    else {
+      set_object_code(lamp,1);
+      process_output("The lamp is now off.\n");
+    }
   }
-  if(action==DARK && strstr(lamp->description,"unlit")!=NULL){
-    process_output("The lamp is already off.\n");
-    return CONTINUE;
-  }
-  if(action==LIGHT && get_object(FLINT)->location_id!=CARRIED){
-    process_output("You don't have the flint.\n");
-    return CONTINUE;    
-  }
-  //All good so turn the lamp on or off
-  char *tmp=lamp->description;
-  lamp->description=lampdescsave;
-  lampdescsave=tmp;
-  if(action==LIGHT)
-    process_output("The lamp is now on.\n");
-  else
-    process_output("The lamp is now off.\n");
   return SUCCESS;
 }
 
@@ -527,6 +540,8 @@ void use_key_on_doors(struct exit *e){
   }
   if(otherside==NULL)
     fprintf(stderr,"SERIOUS ERROR: %s is one sided at location id %02x.\n",e->exittext,e->destination);
+  ctkv[e->addr]^=0x40; //$1764: the original flips bit 6 in the location data
+  ctkv[otherside->addr]^=0x40;
   if(e->islocked==LOCKED){ //NEED TO ALTER DESCRIPTION TEXT AND PASSABLE
     e->islocked=UNLOCKED;
     e->ispassable=PASSABLE;
@@ -738,13 +753,13 @@ char * sfirstcaps(char *s){
   return s;
 }
 
-void load_object(struct object *o, UCHAR id){
+//An object's description and properties come from its code, which changes
+//when the lamp is lit or the jug filled, see $2580
+void set_object_code(struct object *o, UCHAR code){
   char desc[MAXLINE];
-  UCHAR  code = getbyte("2580",id);
-
-  o->location_id=getbyte("25C0",id);
   o->code=code;
-  printobjectdescription(desc, id);
+  printobjectcodedescription(desc,code);
+  free(o->description);
   o->description=create_copy_string(desc);
   o->size = getbyte("2600",code);
   o->strength_required = getbyte("262A",code);
@@ -753,10 +768,15 @@ void load_object(struct object *o, UCHAR id){
   o->rnd_throw_damage = getbyte("26D2",code);
   o->max_melee_damage = getbyte("26FC",code);
   o->rnd_melee_damage = getbyte("2726",code);
-  if(id==LAMP){
-    char tmpdesc[]="a lit oil lamp";
-    lampdescsave=create_copy_string(tmpdesc);
-  }
+}
+
+void load_object(struct object *o, UCHAR id){
+  char desc[MAXLINE];
+  UCHAR  code = getbyte("2580",id);
+
+  o->location_id=getbyte("25C0",id);
+  o->description=NULL;
+  set_object_code(o,code);
 }
 
 void load_character(struct character *c, UCHAR id){
@@ -806,6 +826,7 @@ void load_location(struct location *l, UCHAR id){
 
 long load_exit(struct exit *e, long addr){
     UCHAR  first = ctkv[addr],second = ctkv[addr+1],third = ctkv[addr+2]; //For two or three bytes
+    e->addr=addr;
     if(first <0x80) // Positive byte, two bytes follow
       addr+=2;
     else // Negative byte, three bytes follow
@@ -908,8 +929,7 @@ UCHAR is_dark(UCHAR id){
   if(l->isdark==LIGHT)
     return LIGHT;
   struct object *lamp = get_object(LAMP);
-  if( (lamp->location_id==CARRIED || lamp->location_id==get_player_location_id())
-    && strstr(lamp->description,"unlit")==NULL )
+  if( (lamp->location_id==CARRIED || lamp->location_id==get_player_location_id()) && lamp_is_lit() )
     return LIGHT;
   
   return DARK;
@@ -1190,6 +1210,53 @@ void print_score_and_strength(){
   sentence("Your strength is %u.\n",get_player()->strength);
 }
 
+//$3B8D: does the player carry the object, or have it in a carried holdall?
+int player_has(UCHAR objid){
+  UCHAR loc=get_object(objid)->location_id;
+  return loc==CARRIED || (loc==0xFF && get_object(0)->location_id==CARRIED);
+}
+
+int lamp_is_lit(){
+  return get_object(LAMP)->code==0;
+}
+
+//$245A: puts the player somewhere and describes it
+void move_player(UCHAR id){
+  set_player_location_id(id);
+  print_description(id);
+}
+
+//Re-reads a location after its data in ctkv has been changed, as some
+//events do to open passages or move bridges
+void reload_location(UCHAR id){
+  free_location(get_location(id));
+  load_location(get_location(id),id);
+}
+
+//A word as $14B8 prints it, in one of several buffers so a few can be
+//used in one sentence
+char * word_of(UCHAR code){
+  static char words[4][MAXWORD];
+  static int next=0;
+  char *w=words[next];
+  next=(next+1)%4;
+  getanyword(w,code);
+  return w;
+}
+
+//$15D2: finds the object the carrier ($C8 for the player) has that best
+//matches the words, asking "<prompt> what?" once if there's none.
+//Returns the number of words matched, 0 if still none.
+int ask_carried(UCHAR carrier, UCHAR prompt, UCHAR *matches, int *nmatches, UCHAR *id){
+  if(match_carried_object(carrier,matches,*nmatches,id))
+    return 1;
+  sentence("%s what",word_of(prompt));
+  process_output("?");
+  if(read_command(matches,nmatches)!=SUCCESS)
+    *nmatches=0;
+  return match_carried_object(carrier,matches,*nmatches,id);
+}
+
 //Counts how many of the given words match word code w, see $152F
 int count_word(UCHAR w, UCHAR *matches, int nmatches){
   int i,n=0;
@@ -1239,11 +1306,11 @@ int match_object_words(UCHAR loc, UCHAR *matches, int nmatches, UCHAR *id){
   return best;
 }
 
-//An object the player carries, or has in a carried holdall, see $15A7
-int match_carried_object(UCHAR *matches, int nmatches, UCHAR *id){
+//An object at carrier, or in the holdall if that is there too, see $15A7
+int match_carried_object(UCHAR carrier, UCHAR *matches, int nmatches, UCHAR *id){
   UCHAR inholdall;
-  int n=match_object_words(CARRIED,matches,nmatches,id);
-  if(get_object(0)->location_id==CARRIED){
+  int n=match_object_words(carrier,matches,nmatches,id);
+  if(get_object(0)->location_id==carrier){
     int m=match_object_words(0xFF,matches,nmatches,&inholdall);
     if(m>n){
       *id=inholdall;
@@ -1255,9 +1322,7 @@ int match_carried_object(UCHAR *matches, int nmatches, UCHAR *id){
 
 //Asks a question such as "Hit who" and reads the answer, see $229F
 void ask_again(UCHAR word, UCHAR *matches, int *nmatches){
-  char w[MAXWORD];
-  getword(w,word);
-  sentence("%s %s",w,"who");
+  sentence("%s who",word_of(word));
   process_output("?");
   if(read_command(matches,nmatches)!=SUCCESS)
     *nmatches=0;
@@ -1269,20 +1334,9 @@ void player_attack(UCHAR verb, UCHAR *matches, int nmatches){
   UCHAR ploc=get_player_location_id();
   int found=match_character(ploc,matches,nmatches,&victim);
   //$15D2: which weapon? Asks "With what?" or "Throw what?" once
-  if(match_carried_object(matches,nmatches,&objid)==0){
-    if(verb==0x10){
-      char w[MAXWORD];
-      getword(w,verb);
-      sentence("%s what",w);
-    } else
-      process_output("With what");
-    process_output("?");
-    if(read_command(matches,&nmatches)!=SUCCESS)
-      nmatches=0;
-    if(match_carried_object(matches,nmatches,&objid)==0){
-      process_output("You haven't got that.\n");
-      return;
-    }
+  if(ask_carried(CARRIED,verb==0x10 ? verb : 0xB3,matches,&nmatches,&objid)==0){
+    process_output("You haven't got that.\n");
+    return;
   }
   //$1E17: at whom? Asks "Hit who?", "Cut who?" or "At who?" once
   if(found==0)
@@ -1538,7 +1592,6 @@ void cleanup(){
     free_object(objects+i);
   for(i=0;i<getnumberofcharacters();i++)
     free_character(characters+i);
-  free(lampdescsave);
   free(locations);
   free(objects);
   free(characters);
