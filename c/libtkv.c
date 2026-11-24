@@ -188,16 +188,15 @@ void getword(char *w, UCHAR code){
 //Writes the word stored at address into w
 //Returns characters written including final \0
 long getwordforaddress(char *w, long address){
-  long i=0;
-  do {
-    w[i]=tolower(ctkv[address+i]);
-    if(w[i]<0){
-      w[i]=tolower(w[i]+128);
+  long i;
+  for(i=0;i<MAXWORD-1;i++){
+    UCHAR b=ctkv[address+i];
+    w[i]=tolower(b&0x7F);
+    if(b&0x80){//Last letter of a word has bit 7 set
+      i++;
       break;
     }
-    //printf("Char: %x or %d or [%c]\n",word[i],word[i],word[i]);  
-    i++;
-  } while(i<MAXWORD-1);
-  w[++i]='\0';
+  }
+  w[i]='\0';
   return i+1;
 }
