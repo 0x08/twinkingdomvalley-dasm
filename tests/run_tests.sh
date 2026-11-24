@@ -33,4 +33,11 @@ for script in "$ROOT"/tests/scripts/*.txt; do
 done
 [ $failed = 0 ] && echo "ok      no sanitizer errors"
 rm -f "$SRC/tkv.sav"
+
+if command -v "${CHROMIUM:-chromium}" >/dev/null 2>&1; then
+  echo "== Comparing the browser version with the original"
+  python3 "$ROOT/tests/compare.py" --browser || failed=1
+else
+  echo "Chromium not found: skipping the browser version (set CHROMIUM)"
+fi
 exit $failed

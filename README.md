@@ -4,6 +4,7 @@ A disassembly of **Twin Kingdom Valley**, Trevor Hall's 1983 text adventure
 with pictures for the BBC Micro, and a reimplementation of it in C that
 uses the game's own data and plays the same, word for word.
 
+Play it in your browser: <https://0x08.github.io/twinkingdomvalley-dasm/play/>  
 Gallery of every picture: <https://0x08.github.io/twinkingdomvalley-dasm/>
 
 ## The tools
@@ -38,6 +39,14 @@ emulator (`c/m6502.c`), which only asks the operating system to change
 screen mode and palette and draw lines; `c/pictures.c` does that and the
 game does its own fills in screen memory.
 
+## In the browser
+
+`docs/play/` runs the original game in the browser: `tkv.js` is the same
+6502 emulator and operating system stand-in in JavaScript, with MODE 7
+teletext text and MODE 5 pictures drawn live on a canvas, and
+`valleyr.bin` a copy of `machinecode/VALLEYR`. `*SAVE` and `*LOAD` use
+the browser's storage. It needs no build: serve or open `docs/`.
+
 ## Tests
 
     make -C c test
@@ -45,6 +54,8 @@ game does its own fills in screen memory.
 plays every script in `tests/scripts` in both `runtkv` (the original) and
 `playtkv`, and checks they print exactly the same words and pictures, then
 runs them all again with AddressSanitizer and UndefinedBehaviorSanitizer.
+If Chromium is installed it also checks the browser version against the
+original the same way (`tests/compare.py --browser`).
 Scripts can start the player somewhere else or move objects first; see
 `tests/compare.py`. The one deliberate difference is a word that is corrupt
 in the game data (`$07D3`): playtkv says "worthy" where the game says "w".

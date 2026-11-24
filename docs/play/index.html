@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Play Twin Kingdom Valley</title>
+<style>
+:root { --bg:#f4f1ea; --fg:#1c1b19; --muted:#625d55; --line:#ddd6c9; --accent:#9b2d20; --card:#fffdf8; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#141311; --fg:#ece7de; --muted:#a39d92; --line:#34312c; --accent:#e0705f; --card:#1d1c19; }
+}
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--fg);
+       font:16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width:880px; margin:0 auto; padding:24px 16px 48px; }
+h1 { font-size:1.6rem; margin:0 0 4px; }
+.lede { color:var(--muted); margin:0 0 16px; }
+a { color:var(--accent); }
+/* The BBC's screen: 40 by 25 teletext characters, or a MODE 5 picture */
+#screen { position:relative; width:100%; aspect-ratio:5/4; background:#000; border-radius:6px;
+          overflow:hidden; cursor:text; box-shadow:0 0 0 1px var(--line); }
+#text { position:absolute; inset:0; padding:2.5% 3%; color:#fff; white-space:pre;
+        font-family: ui-monospace, Menlo, Consolas, "DejaVu Sans Mono", monospace; }
+#text .row { height:4%; overflow:hidden; }
+#text .flash { animation: flash 1s steps(1) infinite; }
+#text .cursor { background:#fff; color:#000; animation: flash 1s steps(1) infinite; }
+@keyframes flash { 50% { visibility:hidden; } }
+#picture { position:absolute; inset:0; width:100%; height:100%; image-rendering:pixelated; display:none; }
+.controls { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:12px 0; }
+#typing { flex:1 1 220px; min-width:0; font:inherit; padding:8px 10px; border:1px solid var(--line);
+          border-radius:6px; background:var(--card); color:var(--fg); }
+button { font:inherit; padding:8px 12px; border:1px solid var(--line); border-radius:6px;
+         background:var(--card); color:var(--fg); cursor:pointer; }
+button:hover { border-color:var(--accent); }
+.help { color:var(--muted); font-size:0.92rem; }
+.help code { font-family: ui-monospace, Menlo, Consolas, monospace; }
+#transcript { display:none; }
+</style>
+</head>
+<body>
+<main>
+<h1>Twin Kingdom Valley</h1>
+<p class="lede">Trevor Hall's 1983 BBC Micro adventure: the original game, running in your browser.</p>
+
+<div id="screen" title="Click and type">
+  <div id="text"></div>
+  <canvas id="picture" width="160" height="256"></canvas>
+</div>
+
+<div class="controls">
+  <input id="typing" autocomplete="off" autocapitalize="off" spellcheck="false"
+         placeholder="Type here: commands go to the game as you type" aria-label="Keyboard">
+  <button id="tab" title="The TAB key: see the picture of where you are">Picture (TAB)</button>
+  <button id="restart">Restart</button>
+</div>
+
+<div class="help">
+  <p>Choose an option with a number key, then type commands such as <code>N</code>, <code>TAKE LAMP</code>,
+  <code>LOOK</code>, <code>INVENTORY</code> or <code>HELP</code> and press Return. Press TAB (or the button)
+  at the <code>?</code> prompt to see a picture. <code>*SAVE</code> and <code>*LOAD</code> keep one saved game
+  in this browser.</p>
+  <p>This is the game's own 6502 code in an emulator with a small stand-in for the BBC's operating system,
+  from the <a href="https://github.com/0x08/twinkingdomvalley-dasm">disassembly project</a>.
+  See also <a href="../">every picture</a>.</p>
+</div>
+<pre id="transcript"></pre>
+</main>
+
+<script src="tkv.js"></script>
+<script>
+'use strict';
+const params = new URLSearchParams(location.search);
+const testScript = params.get('test');     // Test mode: a script of input lines
+const imageUrl = params.get('image') || 'valleyr.bin';
+const textEl = document.getElementById('text'), canvas = document.getElementById('picture');
+const typing = document.getElementById('typing');
+let machine = null, waiting = false, timer = null;
+
+function fitText() {
+  // 25 rows down, then spaced out so 40 columns fill the width
+  const w = textEl.clientWidth * 0.94, h = textEl.clientHeight * 0.95;
+  const size = Math.min(w / 40 / 0.6, h / 25);
+  textEl.style.fontSize = size + 'px';
+  textEl.style.lineHeight = (h / 25) + 'px';
+  const probe = document.createElement('span');
+  probe.textContent = '0'.repeat(40);
+  probe.style.letterSpacing = '0';
+  textEl.appendChild(probe);
+  const natural = probe.getBoundingClientRect().width / 40;
+  probe.remove();
+  textEl.style.letterSpacing = Math.max(0, w / 40 - natural) + 'px';
+}
+window.addEventListener('resize', fitText);
+
+function showMode(mode) {
+  canvas.style.display = mode === 5 ? 'block' : 'none';
+  textEl.style.display = mode === 5 ? 'none' : 'block';
+}
+
+function loop() {
+  timer = null;
+  if (!machine) return;
+  const state = machine.run(testScript ? 200 : 12);
+  machine.render();
+  if (state === 'halted') {
+    if (testScript) {
+      document.getElementById('transcript').textContent = machine.transcript.join('');
+      document.title = 'done';
+    }
+    return;
+  }
+  if (state === 'input') { waiting = true; return; }
+  if (testScript) timer = setTimeout(loop, 0);
+  else if (state === 'idle') timer = setTimeout(loop, 20);   // Polling for a key: no hurry
+  else timer = setTimeout(loop, 0);
+}
+
+function key(code) {
+  if (!machine || testScript) return;
+  machine.key(code);
+  if (waiting) { waiting = false; if (!timer) loop(); }
+}
+
+async function start() {
+  if (timer) clearTimeout(timer);
+  timer = null; waiting = false;
+  const image = new Uint8Array(await (await fetch(imageUrl)).arrayBuffer());
+  let script = null;
+  if (testScript) {
+    const text = await (await fetch(testScript)).text();
+    script = text.split('\n').filter(l => !l.startsWith('#'));
+    if (script.length && script[script.length - 1] === '') script.pop();
+  }
+  machine = new Machine({image, textEl, canvas, script, onMode: showMode});
+  showMode(7);
+  fitText();
+  loop();
+}
+
+// Keys: typed characters arrive through the text box, which also brings up
+// the keyboard on phones; Return, Delete, TAB and Escape through keydown
+typing.addEventListener('keydown', e => {
+  const special = {Enter: 13, Backspace: 127, Tab: 9, Escape: 27}[e.key];
+  if (special !== undefined) { e.preventDefault(); key(special); typing.value = ''; }
+});
+typing.addEventListener('input', () => {
+  for (const ch of typing.value) {
+    const c = ch.charCodeAt(0);
+    if (c >= 32 && c < 127) key(c);
+  }
+  typing.value = '';
+});
+document.getElementById('screen').addEventListener('click', () => typing.focus());
+document.getElementById('tab').addEventListener('click', () => { key(9); typing.focus(); });
+document.getElementById('restart').addEventListener('click', () => { start(); typing.focus(); });
+
+start().then(() => { if (!testScript) typing.focus(); });
+</script>
+</body>
+</html>
