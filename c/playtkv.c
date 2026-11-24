@@ -127,9 +127,8 @@ void report_invalid_move(struct exit *e, UCHAR dirindex, UCHAR type);
 
 int noncombat_action(UCHAR code, UCHAR *matches, int nmatches);
 int use_lamp(UCHAR action);
-int use_key(UCHAR action, UCHAR *matches, int nmatches);
-void use_key_on_doors(struct exit *e);
-int player_has_key(char *doortext);
+int use_key(UCHAR action);
+struct exit * lockable_exit(UCHAR loc);
 int drop(UCHAR verb, UCHAR *matches, int nmatches);
 int take(UCHAR *matches, int nmatches);
 int inventory(UCHAR character_id);
@@ -683,8 +682,8 @@ int noncombat_action(UCHAR code, UCHAR *matches, int nmatches){
   switch(code){ //code is 0x11 to 0x24
     case 0x11: return drop(code,matches,nmatches); //DROP
     case 0x12: case 0x13: return take(matches,nmatches); //TAKE,GET
-    case 0x14: case 0x15: case 0x16: return use_key(LOCK,matches,nmatches); //LOCK,SHUT,CLOSE
-    case 0x17: case 0x18: return use_key(UNLOCK,matches,nmatches); //OPEN,UNLOCK
+    case 0x14: case 0x15: case 0x16: return use_key(LOCK); //LOCK,SHUT,CLOSE
+    case 0x17: case 0x18: return use_key(UNLOCK); //OPEN,UNLOCK
     case 0x19: case 0x1a: return use_lamp(LIGHT); //LIGHT,ON
     case 0x1b:            return use_lamp(DARK);  //OFF    
     case 0x1d: return fill(code,matches,nmatches); //FILL
@@ -729,86 +728,52 @@ int use_lamp(UCHAR action){
   return SUCCESS;
 }
 
-int use_key(UCHAR action, UCHAR *matches, int nmatches){
-  struct location *pl = get_player_location();
+//$1712: the first exit at loc that can be locked, a door or grate, or NULL
+struct exit * lockable_exit(UCHAR loc){
+  struct location *l=get_location(loc);
   int i;
-  for(i=0;i<pl->nexits;i++){
-    struct exit *e = pl->exits+i;
-    if(e->exittype==DOOR){//The grate is classed as a DOOR
-      if(action==UNLOCK && e->islocked==UNLOCKED){//$17AD
-	process_output("It's already open.\n");
-	return CONTINUE;
-      } else if(action==LOCK && e->islocked==LOCKED){//$17C6
-	process_output("It's already locked.\n");
-	return CONTINUE;
-      } else if(player_has_key(e->exittext)==0){//$1790
-	process_output("You don't have the key.\n");
-	return CONTINUE;
-      } else  {//Player has the right key for the exit
-	use_key_on_doors(e);
-	return SUCCESS;
-      }
-    }
+  for(i=0;i<l->nexits;i++){
+    struct exit *e=l->exits+i;
+    if( (ctkv[e->addr]&0x80) && (ctkv[e->addr+2]&0x80) )
+      return e;
   }
-  //Will only get here if no lockable exit (DOOR) is found in loop
-  process_output("Nothing here locks.\n"); //$1733
+  return NULL;
+}
+
+//LOCK, SHUT, CLOSE ($17BC), OPEN, UNLOCK ($17A3). Bits 0-2 of a door's
+//third byte pick which keys fit from the table at $173D: bit 0 for the
+//master key (object 2) up to bit 4 for object 6. See $1745.
+int use_key(UCHAR action){
+  struct exit *e=lockable_exit(get_player_location_id());
+  int x;
+  if(e==NULL){
+    process_output("Nothing here locks.\n");
+    return CONTINUE;
+  }
+  int open = ctkv[e->addr]&0x40;
+  if(action==UNLOCK && open){
+    process_output("It's already open.\n");
+    return CONTINUE;
+  }
+  if(action==LOCK && !open){
+    process_output("It's already locked.\n");
+    return CONTINUE;
+  }
+  UCHAR fits=getbyte("173D",ctkv[e->addr+2]&0x07);
+  for(x=2;x<7;x++)
+    if(player_has(x) && (fits&(1<<(x-2)))){
+      UCHAR here=get_player_location_id(), there=e->destination;
+      struct exit *other=lockable_exit(there);
+      ctkv[e->addr]^=0x40;//Bit 6 set means open
+      if(other!=NULL)
+        ctkv[other->addr]^=0x40;
+      reload_location(here);
+      reload_location(there);
+      process_output(action==UNLOCK ? "It is now open.\n" : "It is now locked.\n");
+      return SUCCESS;
+    }
+  process_output("You don't have the key.\n");
   return CONTINUE;
-}
-
-//Unlocks a d
-void use_key_on_doors(struct exit *e){
-  struct location *dest = get_location(e->destination);
-  struct exit *otherside=NULL;
-  int i;
-  
-  //printf("otherside: %s\n",dest->description);
-  for(i=0;i<dest->nexits;i++){
-    otherside=dest->exits+i;
-    //printf("|%s| |%s|\n",otherside->exittext, e->exittext);
-    if( otherside->exittext!=NULL && strcmp(otherside->exittext, e->exittext)==0 )
-      break;
-  }
-  if(otherside==NULL)
-    fprintf(stderr,"SERIOUS ERROR: %s is one sided at location id %02x.\n",e->exittext,e->destination);
-  ctkv[e->addr]^=0x40; //$1764: the original flips bit 6 in the location data
-  ctkv[otherside->addr]^=0x40;
-  if(e->islocked==LOCKED){ //NEED TO ALTER DESCRIPTION TEXT AND PASSABLE
-    e->islocked=UNLOCKED;
-    e->ispassable=PASSABLE;
-    otherside->islocked=UNLOCKED;
-    otherside->ispassable=PASSABLE;
-    process_output("It is now opened.\n"); //Just before $178D
-  } else {
-    e->islocked=LOCKED;
-    e->ispassable=IMPASSABLE;
-    otherside->islocked=LOCKED;
-    otherside->ispassable=IMPASSABLE;
-    process_output("It is now locked.\n");
-  }
-}
-
-int player_has_key(char *doortext){
-  UCHAR id;
-  for(id=0;id<getnumberofobjects();id++){
-    struct object *o=get_object(id);
-    if(o->location_id==CARRIED){//Player has this object
-      char desc[100];
-      char *key;
-      strcpy(desc,o->description);
-      key= strstr(desc,"key");
-      //printf("|%s| |%s|\n",key,doortext);
-      if(key!=NULL){
-	char *keytype=desc+2;//Skip "A " to point to "brass" etc
-	(key-1)[0]='\0'; //Overwrite space before "key";
-	if(keytype[0]=='m' //Must be the master key
-	    || strstr(doortext,"metal")!=NULL //Any key matches the metal door
-	    || strstr(doortext,keytype)!=NULL){ //Key type matches door eg brass, bronze etc
-	  return 1;
-	}
-      }
-    }
-  }
-  return 0;//Player doesn't have key
 }
 
 //Lists what is at loc: the following objects, or nothing. With
