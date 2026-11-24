@@ -7,10 +7,24 @@ long offsettable;
 unsigned char ctkv[FILESIZE];
 
 void init_tkv(){
-  fprintf(stderr,"Opening binary file...\n");
-  FILE *fp = fopen("../machinecode/VALLEYR","r");
-  fread(ctkv,1,FILESIZE,fp);
-  fclose(fp);  
+  //Default path assumes we are run from the c directory.
+  //Set TKV_IMAGE to use the image from anywhere else.
+  const char *path = getenv("TKV_IMAGE");
+  if(path==NULL || *path=='\0')
+    path = "../machinecode/VALLEYR";
+  fprintf(stderr,"Opening binary file %s...\n",path);
+  FILE *fp = fopen(path,"rb");
+  if(fp==NULL){
+    perror(path);
+    fprintf(stderr,"Run from the c directory or set TKV_IMAGE to the VALLEYR image.\n");
+    exit(1);
+  }
+  size_t n = fread(ctkv,1,FILESIZE,fp);
+  fclose(fp);
+  if(n!=FILESIZE){
+    fprintf(stderr,"%s: expected %d bytes but read %zu.\n",path,FILESIZE,n);
+    exit(1);
+  }
   fprintf(stderr,"...closed.\n");
   
   start = strtol("0400",NULL,16);
