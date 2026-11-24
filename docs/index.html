@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Twin Kingdom Valley pictures</title>
+<style>
+:root { --bg:#f4f1ea; --fg:#1c1b19; --muted:#625d55; --card:#fffdf8; --line:#ddd6c9; --accent:#9b2d20; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#141311; --fg:#ece7de; --muted:#a39d92; --card:#1d1c19; --line:#34312c; --accent:#e0705f; }
+}
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--fg);
+       font:16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width:1180px; margin:0 auto; padding:40px 16px 64px; }
+h1 { font-size:2rem; margin:0 0 8px; letter-spacing:-0.01em; }
+h2 { font-size:1.3rem; margin:48px 0 4px; border-top:1px solid var(--line); padding-top:24px; }
+p { max-width:72ch; }
+.lede { color:var(--muted); margin-top:0; }
+.intro { color:var(--muted); margin:0 0 16px; }
+code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size:0.92em; }
+a { color:var(--accent); }
+.grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:16px; }
+figure { margin:0; background:var(--card); border:1px solid var(--line); border-radius:6px; overflow:hidden; }
+figure img { display:block; width:100%; height:auto; aspect-ratio:5/4; image-rendering:pixelated; background:#000; }
+figcaption { padding:8px 10px 10px; font-size:0.9rem; }
+figcaption b { font-family: ui-monospace, Menlo, Consolas, monospace; color:var(--accent); margin-right:4px; }
+figcaption span { font-family: ui-monospace, Menlo, Consolas, monospace; color:var(--muted); font-size:0.85em; }
+</style>
+</head>
+<body>
+<main>
+<h1>Twin Kingdom Valley pictures</h1>
+<p class="lede">All 98 pictures from Trevor Hall's 1983 BBC Micro adventure, drawn by the game's own code.</p>
+<p>The game draws its pictures with a program at <code>$3C00</code> that only asks the BBC to change
+screen mode and palette and to draw lines; it fills the shapes itself, straight into screen memory.
+These were made by running that code in the 6502 emulator in <code>c/m6502.c</code>, with just enough
+of the BBC's VDU drivers (<code>c/pictures.c</code>). <code>playtkv</code> shows them in the terminal
+as you play, and <code>readtkv picture XX file.png</code> saves one. Numbers are as in the table at
+<code>$1F00</code>; locations are given as names and numbers. Pixels are MODE 5's, twice as wide as tall.</p>
+<h2>Locations</h2>
+<p class="intro">The view on arriving somewhere, or with PICTURE.</p>
+<div class="grid">
+<figure><img src="pictures/0b.png" alt="Picture $0B" loading="lazy" width="320" height="256"><figcaption><b>$0B</b> in the desert which surrounds the castle <span>$28</span></figcaption></figure>
+<figure><img src="pictures/0d.png" alt="Picture $0D" loading="lazy" width="320" height="256"><figcaption><b>$0D</b> in an arid desert <span>$2A</span>; in an arid desert <span>$2B</span>; at the back of the castle <span>$2E</span></figcaption></figure>
+<figure><img src="pictures/0e.png" alt="Picture $0E" loading="lazy" width="320" height="256"><figcaption><b>$0E</b> on the draw bridge <span>$29</span></figcaption></figure>
+<figure><img src="pictures/15.png" alt="Picture $15" loading="lazy" width="320" height="256"><figcaption><b>$15</b> in an arid desert <span>$24</span></figcaption></figure>
+<figure><img src="pictures/16.png" alt="Picture $16" loading="lazy" width="320" height="256"><figcaption><b>$16</b> in an arid desert <span>$25</span></figcaption></figure>
+<figure><img src="pictures/17.png" alt="Picture $17" loading="lazy" width="320" height="256"><figcaption><b>$17</b> in an arid desert <span>$26</span></figcaption></figure>
+<figure><img src="pictures/18.png" alt="Picture $18" loading="lazy" width="320" height="256"><figcaption><b>$18</b> in an arid desert <span>$27</span></figcaption></figure>
+<figure><img src="pictures/19.png" alt="Picture $19" loading="lazy" width="320" height="256"><figcaption><b>$19</b> in an arid desert <span>$2C</span></figcaption></figure>
+<figure><img src="pictures/1a.png" alt="Picture $1A" loading="lazy" width="320" height="256"><figcaption><b>$1A</b> in an arid desert <span>$2F</span></figcaption></figure>
+<figure><img src="pictures/21.png" alt="Picture $21" loading="lazy" width="320" height="256"><figcaption><b>$21</b> in a clearing <span>$05</span></figcaption></figure>
+<figure><img src="pictures/27.png" alt="Picture $27" loading="lazy" width="320" height="256"><figcaption><b>$27</b> by a spring <span>$03</span></figcaption></figure>
+<figure><img src="pictures/28.png" alt="Picture $28" loading="lazy" width="320" height="256"><figcaption><b>$28</b> wandering through dense forest <span>$0F</span>; wandering through dense forest <span>$10</span></figcaption></figure>
+<figure><img src="pictures/29.png" alt="Picture $29" loading="lazy" width="320" height="256"><figcaption><b>$29</b> wandering through the woods <span>$0A</span>; wandering through the woods <span>$0C</span>; wandering through the woods <span>$0E</span>; in a pleasant wood <span>$12</span>; at the end of a winding trail <span>$17</span>; wandering through the woods <span>$9A</span>; in the woods <span>$A4</span></figcaption></figure>
+<figure><img src="pictures/2e.png" alt="Picture $2E" loading="lazy" width="320" height="256"><figcaption><b>$2E</b> on a road <span>$01</span></figcaption></figure>
+<figure><img src="pictures/2f.png" alt="Picture $2F" loading="lazy" width="320" height="256"><figcaption><b>$2F</b> inside a wooden cabin <span>$00</span></figcaption></figure>
+<figure><img src="pictures/31.png" alt="Picture $31" loading="lazy" width="320" height="256"><figcaption><b>$31</b> on the canyon floor <span>$1D</span></figcaption></figure>
+<figure><img src="pictures/32.png" alt="Picture $32" loading="lazy" width="320" height="256"><figcaption><b>$32</b> at the west end of the canyon <span>$1E</span>; in a narrow fissure <span>$87</span></figcaption></figure>
+<figure><img src="pictures/33.png" alt="Picture $33" loading="lazy" width="320" height="256"><figcaption><b>$33</b> in a deep canyon , to the east is a grand view of a waterfall <span>$1C</span></figcaption></figure>
+<figure><img src="pictures/34.png" alt="Picture $34" loading="lazy" width="320" height="256"><figcaption><b>$34</b> close by a large rock , sitting on the canyon floor <span>$1B</span></figcaption></figure>
+<figure><img src="pictures/3e.png" alt="Picture $3E" loading="lazy" width="320" height="256"><figcaption><b>$3E</b> on the south edge of a deep fissure <span>$19</span></figcaption></figure>
+<figure><img src="pictures/45.png" alt="Picture $45" loading="lazy" width="320" height="256"><figcaption><b>$45</b> on a landing <span>$69</span></figcaption></figure>
+<figure><img src="pictures/49.png" alt="Picture $49" loading="lazy" width="320" height="256"><figcaption><b>$49</b> in a corridor <span>$5A</span></figcaption></figure>
+<figure><img src="pictures/4c.png" alt="Picture $4C" loading="lazy" width="320" height="256"><figcaption><b>$4C</b> in a corridor <span>$59</span>; in a corridor <span>$5D</span></figcaption></figure>
+<figure><img src="pictures/4f.png" alt="Picture $4F" loading="lazy" width="320" height="256"><figcaption><b>$4F</b> in a very narrow fissure <span>$1F</span></figcaption></figure>
+<figure><img src="pictures/53.png" alt="Picture $53" loading="lazy" width="320" height="256"><figcaption><b>$53</b> in The Sword Inn <span>$9D</span></figcaption></figure>
+<figure><img src="pictures/57.png" alt="Picture $57" loading="lazy" width="320" height="256"><figcaption><b>$57</b> by a babbling brook <span>$04</span>; by a small stream <span>$08</span>; by a stream <span>$09</span></figcaption></figure>
+<figure><img src="pictures/58.png" alt="Picture $58" loading="lazy" width="320" height="256"><figcaption><b>$58</b> wandering through high mountains <span>$11</span>; wandering through high mountains <span>$31</span>; wandering through high mountains <span>$A1</span>; wandering through high mountains <span>$A5</span>; wandering through high mountains <span>$AB</span></figcaption></figure>
+<figure><img src="pictures/59.png" alt="Picture $59" loading="lazy" width="320" height="256"><figcaption><b>$59</b> in an arid desert <span>$2D</span>; in an arid desert <span>$80</span>; in an arid desert <span>$81</span>; in an arid desert <span>$82</span>; on The Crystal Bridge <span>$97</span></figcaption></figure>
+<figure><img src="pictures/5a.png" alt="Picture $5A" loading="lazy" width="320" height="256"><figcaption><b>$5A</b> on the edge of a deep fissure <span>$23</span></figcaption></figure>
+<figure><img src="pictures/5c.png" alt="Picture $5C" loading="lazy" width="320" height="256"><figcaption><b>$5C</b> on a road <span>$02</span></figcaption></figure>
+<figure><img src="pictures/5d.png" alt="Picture $5D" loading="lazy" width="320" height="256"><figcaption><b>$5D</b> at the top of a steep scree slope <span>$06</span>; on a pile of jagged rocks <span>$0B</span></figcaption></figure>
+<figure><img src="pictures/62.png" alt="Picture $62" loading="lazy" width="320" height="256"><figcaption><b>$62</b> in a disused flint quarry , large blocks of stone dwarf the twisty road <span>$07</span></figcaption></figure>
+<figure><img src="pictures/63.png" alt="Picture $63" loading="lazy" width="320" height="256"><figcaption><b>$63</b> on a steeply sloping trail <span>$18</span></figcaption></figure>
+<figure><img src="pictures/65.png" alt="Picture $65" loading="lazy" width="320" height="256"><figcaption><b>$65</b> in the north turret <span>$4E</span>; in the west turret <span>$4F</span>; in the south turret <span>$50</span>; in the east turret <span>$51</span></figcaption></figure>
+<figure><img src="pictures/67.png" alt="Picture $67" loading="lazy" width="320" height="256"><figcaption><b>$67</b> in the west tower <span>$52</span>; in the north tower <span>$53</span>; in the south tower <span>$54</span>; in the east tower <span>$55</span>; on a spiral staircase <span>$6A</span></figcaption></figure>
+<figure><img src="pictures/6d.png" alt="Picture $6D" loading="lazy" width="320" height="256"><figcaption><b>$6D</b> in the throne room <span>$57</span></figcaption></figure>
+<figure><img src="pictures/6e.png" alt="Picture $6E" loading="lazy" width="320" height="256"><figcaption><b>$6E</b> in a room <span>$56</span></figcaption></figure>
+<figure><img src="pictures/70.png" alt="Picture $70" loading="lazy" width="320" height="256"><figcaption><b>$70</b> in a kitchen <span>$3B</span></figcaption></figure>
+<figure><img src="pictures/71.png" alt="Picture $71" loading="lazy" width="320" height="256"><figcaption><b>$71</b> in the dining hall <span>$39</span></figcaption></figure>
+<figure><img src="pictures/72.png" alt="Picture $72" loading="lazy" width="320" height="256"><figcaption><b>$72</b> in the study <span>$38</span></figcaption></figure>
+<figure><img src="pictures/74.png" alt="Picture $74" loading="lazy" width="320" height="256"><figcaption><b>$74</b> in a workshop <span>$3C</span></figcaption></figure>
+<figure><img src="pictures/7a.png" alt="Picture $7A" loading="lazy" width="320" height="256"><figcaption><b>$7A</b> in the royal bedroom <span>$5B</span></figcaption></figure>
+<figure><img src="pictures/7b.png" alt="Picture $7B" loading="lazy" width="320" height="256"><figcaption><b>$7B</b> in a bedroom <span>$5C</span></figcaption></figure>
+<figure><img src="pictures/7c.png" alt="Picture $7C" loading="lazy" width="320" height="256"><figcaption><b>$7C</b> on the Grand Staircase <span>$3A</span></figcaption></figure>
+<figure><img src="pictures/7d.png" alt="Picture $7D" loading="lazy" width="320" height="256"><figcaption><b>$7D</b> in the castle entrance hall <span>$34</span></figcaption></figure>
+<figure><img src="pictures/7e.png" alt="Picture $7E" loading="lazy" width="320" height="256"><figcaption><b>$7E</b> on the landing <span>$58</span></figcaption></figure>
+<figure><img src="pictures/80.png" alt="Picture $80" loading="lazy" width="320" height="256"><figcaption><b>$80</b> in a passage <span>$3E</span>; in a passage <span>$40</span>; in a passage <span>$41</span>; in a narrow passage <span>$42</span>; in a very narrow passage <span>$43</span></figcaption></figure>
+<figure><img src="pictures/82.png" alt="Picture $82" loading="lazy" width="320" height="256"><figcaption><b>$82</b> in the cellar <span>$3F</span></figcaption></figure>
+<figure><img src="pictures/83.png" alt="Picture $83" loading="lazy" width="320" height="256"><figcaption><b>$83</b> in the store room <span>$3D</span></figcaption></figure>
+<figure><img src="pictures/84.png" alt="Picture $84" loading="lazy" width="320" height="256"><figcaption><b>$84</b> in a small room <span>$44</span></figcaption></figure>
+<figure><img src="pictures/86.png" alt="Picture $86" loading="lazy" width="320" height="256"><figcaption><b>$86</b> in a narrow passage <span>$36</span>; in a wet passage <span>$62</span>; in a dank musty passage <span>$63</span>; in a narrow shaft <span>$66</span>; in a narrow shaft <span>$6E</span></figcaption></figure>
+<figure><img src="pictures/88.png" alt="Picture $88" loading="lazy" width="320" height="256"><figcaption><b>$88</b> in a small chamber <span>$6B</span></figcaption></figure>
+<figure><img src="pictures/89.png" alt="Picture $89" loading="lazy" width="320" height="256"><figcaption><b>$89</b> in a damp hall <span>$4C</span>; in a dungeon <span>$65</span>; in a room <span>$6C</span>; in a cave <span>$8B</span>; in a cave <span>$8E</span></figcaption></figure>
+<figure><img src="pictures/8a.png" alt="Picture $8A" loading="lazy" width="320" height="256"><figcaption><b>$8A</b> in a cave <span>$35</span>; in a room <span>$68</span></figcaption></figure>
+<figure><img src="pictures/8c.png" alt="Picture $8C" loading="lazy" width="320" height="256"><figcaption><b>$8C</b> in the strong room <span>$B0</span></figcaption></figure>
+<figure><img src="pictures/90.png" alt="Picture $90" loading="lazy" width="320" height="256"><figcaption><b>$90</b> in a large hall <span>$48</span></figcaption></figure>
+<figure><img src="pictures/92.png" alt="Picture $92" loading="lazy" width="320" height="256"><figcaption><b>$92</b> by a cliff top <span>$16</span>; by a cliff top <span>$20</span>; to the north of a deep canyon <span>$21</span>; by a cliff top <span>$22</span></figcaption></figure>
+<figure><img src="pictures/93.png" alt="Picture $93" loading="lazy" width="320" height="256"><figcaption><b>$93</b> at the top of a waterfall <span>$15</span></figcaption></figure>
+<figure><img src="pictures/94.png" alt="Picture $94" loading="lazy" width="320" height="256"><figcaption><b>$94</b> on a cliff top <span>$83</span>; on a cliff top <span>$84</span>; on a cliff top <span>$85</span>; on a cliff top <span>$86</span></figcaption></figure>
+<figure><img src="pictures/95.png" alt="Picture $95" loading="lazy" width="320" height="256"><figcaption><b>$95</b> at Watersmeet <span>$89</span></figcaption></figure>
+<figure><img src="pictures/96.png" alt="Picture $96" loading="lazy" width="320" height="256"><figcaption><b>$96</b> in a narrow fissure <span>$88</span></figcaption></figure>
+<figure><img src="pictures/97.png" alt="Picture $97" loading="lazy" width="320" height="256"><figcaption><b>$97</b> in The Hall Of The Forest King <span>$6D</span></figcaption></figure>
+<figure><img src="pictures/9c.png" alt="Picture $9C" loading="lazy" width="320" height="256"><figcaption><b>$9C</b> in a damp hollow chamber <span>$64</span></figcaption></figure>
+<figure><img src="pictures/9d.png" alt="Picture $9D" loading="lazy" width="320" height="256"><figcaption><b>$9D</b> in a room <span>$4D</span></figcaption></figure>
+<figure><img src="pictures/9e.png" alt="Picture $9E" loading="lazy" width="320" height="256"><figcaption><b>$9E</b> in the armoury <span>$46</span></figcaption></figure>
+<figure><img src="pictures/9f.png" alt="Picture $9F" loading="lazy" width="320" height="256"><figcaption><b>$9F</b> in a musty dungeon <span>$49</span>; in a dungeon <span>$A8</span></figcaption></figure>
+<figure><img src="pictures/a0.png" alt="Picture $A0" loading="lazy" width="320" height="256"><figcaption><b>$A0</b> in a dungeon <span>$4B</span></figcaption></figure>
+<figure><img src="pictures/a3.png" alt="Picture $A3" loading="lazy" width="320" height="256"><figcaption><b>$A3</b> in a pokey anteroom <span>$4A</span></figcaption></figure>
+<figure><img src="pictures/a4.png" alt="Picture $A4" loading="lazy" width="320" height="256"><figcaption><b>$A4</b> by a narrow river <span>$0D</span>; by a deep river <span>$13</span></figcaption></figure>
+<figure><img src="pictures/a5.png" alt="Picture $A5" loading="lazy" width="320" height="256"><figcaption><b>$A5</b> in a small bedroom <span>$5E</span></figcaption></figure>
+<figure><img src="pictures/a6.png" alt="Picture $A6" loading="lazy" width="320" height="256"><figcaption><b>$A6</b> in a small sitting room <span>$5F</span></figcaption></figure>
+<figure><img src="pictures/a7.png" alt="Picture $A7" loading="lazy" width="320" height="256"><figcaption><b>$A7</b> in a small kitchen <span>$60</span></figcaption></figure>
+<figure><img src="pictures/a8.png" alt="Picture $A8" loading="lazy" width="320" height="256"><figcaption><b>$A8</b> in a passage <span>$47</span>; in a long dry passage <span>$61</span>; in a passage <span>$67</span>; in a short passage <span>$AA</span></figcaption></figure>
+<figure><img src="pictures/a9.png" alt="Picture $A9" loading="lazy" width="320" height="256"><figcaption><b>$A9</b> in the guard room <span>$45</span></figcaption></figure>
+<figure><img src="pictures/ad.png" alt="Picture $AD" loading="lazy" width="320" height="256"><figcaption><b>$AD</b> on a road <span>$99</span></figcaption></figure>
+<figure><img src="pictures/ae.png" alt="Picture $AE" loading="lazy" width="320" height="256"><figcaption><b>$AE</b> at the end of the road <span>$9B</span></figcaption></figure>
+<figure><img src="pictures/b0.png" alt="Picture $B0" loading="lazy" width="320" height="256"><figcaption><b>$B0</b> on a road <span>$98</span></figcaption></figure>
+<figure><img src="pictures/b1.png" alt="Picture $B1" loading="lazy" width="320" height="256"><figcaption><b>$B1</b> on a moor <span>$9C</span>; on a moor <span>$9E</span>; on a moor <span>$9F</span></figcaption></figure>
+<figure><img src="pictures/ba.png" alt="Picture $BA" loading="lazy" width="320" height="256"><figcaption><b>$BA</b> in a large hollow chamber , a river of gold flows through the chamber to the north <span>$AE</span></figcaption></figure>
+<figure><img src="pictures/be.png" alt="Picture $BE" loading="lazy" width="320" height="256"><figcaption><b>$BE</b> in a room full of bones <span>$6F</span></figcaption></figure>
+<figure><img src="pictures/c0.png" alt="Picture $C0" loading="lazy" width="320" height="256"><figcaption><b>$C0</b> wandering through high mountains <span>$14</span>; wandering up the west mountains <span>$8A</span>; wandering through high mountains <span>$A2</span>; wandering through high mountains <span>$A6</span>; wandering through high mountains <span>$AC</span></figcaption></figure>
+<figure><img src="pictures/c1.png" alt="Picture $C1" loading="lazy" width="320" height="256"><figcaption><b>$C1</b> wandering through high mountains <span>$30</span>; wandering through high mountains <span>$A0</span>; wandering through high mountains <span>$A3</span>; wandering through high mountains <span>$A7</span>; wandering through high mountains <span>$AD</span></figcaption></figure>
+</div>
+<h2>Objects</h2>
+<p class="intro">LOOK at one of these while carrying it.</p>
+<div class="grid">
+<figure><img src="pictures/b9.png" alt="Picture $B9" loading="lazy" width="320" height="256"><figcaption><b>$B9</b> a long wooden staff</figcaption></figure>
+<figure><img src="pictures/bb.png" alt="Picture $BB" loading="lazy" width="320" height="256"><figcaption><b>$BB</b> a short dagger</figcaption></figure>
+<figure><img src="pictures/c2.png" alt="Picture $C2" loading="lazy" width="320" height="256"><figcaption><b>$C2</b> a crystal ball</figcaption></figure>
+<figure><img src="pictures/99.png" alt="Picture $99" loading="lazy" width="320" height="256"><figcaption><b>$99</b> a broad sword</figcaption></figure>
+<figure><img src="pictures/bd.png" alt="Picture $BD" loading="lazy" width="320" height="256"><figcaption><b>$BD</b> a short wooden rod</figcaption></figure>
+<figure><img src="pictures/bf.png" alt="Picture $BF" loading="lazy" width="320" height="256"><figcaption><b>$BF</b> a large cut diamond</figcaption></figure>
+</div>
+<h2>Close-ups</h2>
+<p class="intro">LOOK PICTURE in a few places, see $420A.</p>
+<div class="grid">
+<figure><img src="pictures/55.png" alt="Picture $55" loading="lazy" width="320" height="256"><figcaption><b>$55</b> inside a wooden cabin <span>$00</span>; first of three in the throne room <span>$57</span></figcaption></figure>
+<figure><img src="pictures/4e.png" alt="Picture $4E" loading="lazy" width="320" height="256"><figcaption><b>$4E</b> second of three in the throne room <span>$57</span></figcaption></figure>
+<figure><img src="pictures/51.png" alt="Picture $51" loading="lazy" width="320" height="256"><figcaption><b>$51</b> third of three in the throne room <span>$57</span>; in the study <span>$38</span></figcaption></figure>
+<figure><img src="pictures/54.png" alt="Picture $54" loading="lazy" width="320" height="256"><figcaption><b>$54</b> in a room <span>$56</span>; in the royal bedroom <span>$5B</span></figcaption></figure>
+</div>
+<h2>Changes</h2>
+<p class="intro">Pictures that replace others when something happens.</p>
+<div class="grid">
+<figure><img src="pictures/38.png" alt="Picture $38" loading="lazy" width="320" height="256"><figcaption><b>$38</b> at the west end of the canyon <span>$1E</span>, after the first wave of the rod</figcaption></figure>
+<figure><img src="pictures/35.png" alt="Picture $35" loading="lazy" width="320" height="256"><figcaption><b>$35</b> on the canyon floor <span>$1D</span>, after the first wave of the rod</figcaption></figure>
+<figure><img src="pictures/40.png" alt="Picture $40" loading="lazy" width="320" height="256"><figcaption><b>$40</b> on the south edge of a deep fissure <span>$19</span>, after the first wave of the rod</figcaption></figure>
+<figure><img src="pictures/5b.png" alt="Picture $5B" loading="lazy" width="320" height="256"><figcaption><b>$5B</b> on the edge of a deep fissure <span>$23</span>, after the first wave of the rod</figcaption></figure>
+<figure><img src="pictures/0c.png" alt="Picture $0C" loading="lazy" width="320" height="256"><figcaption><b>$0C</b> the drawbridge closed</figcaption></figure>
+</div>
+<h2>The end</h2>
+<p class="intro">The secret of life is simple yet complex, as is the picture of it.</p>
+<div class="grid">
+<figure><img src="pictures/c3.png" alt="Picture $C3" loading="lazy" width="320" height="256"><figcaption><b>$C3</b> the secret of life, the last frame of its animation</figcaption></figure>
+</div>
+</main>
+</body>
+</html>
