@@ -612,9 +612,12 @@ class Machine {
 
   // ---- Drawing the screen
   render() {
+    // In MODE 5 the game fills shapes by writing screen memory itself, so
+    // the picture is redrawn every time
+    if (this.mode === 5) { this.renderPicture(); return; }
     if (!this.dirty) return;
     this.dirty = false;
-    if (this.mode === 5) this.renderPicture(); else this.renderText();
+    this.renderText();
   }
   renderPicture() {
     const ctx = this.canvas.getContext('2d'), img = ctx.createImageData(160, 256), p = this.pixels();
