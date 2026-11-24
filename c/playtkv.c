@@ -177,6 +177,7 @@ void print_short_description(UCHAR i);
 void print_long_description(UCHAR i);
 void print_description(UCHAR i);
 int choose_option();
+void picture();
 void print_objects(UCHAR i);
 void update();
 void print_npc_info();
@@ -715,7 +716,7 @@ void player_move(UCHAR *matches, int nmatches){
 void free_action(UCHAR code, UCHAR *matches, int nmatches){
   switch(code){
     case 0x27: case 0x28: look(matches,nmatches); return; //LOOK,VIEW
-    case 0x29: case 0x2A: process_output("Apologies, graphics not implemented yet.\n"); return; //PICTURE,DRAW
+    case 0x29: case 0x2A: picture(); return; //PICTURE,DRAW
     case 0x2B: print_score_and_strength(); return; //SCORE, $12EE
     case 0x2C: inventory(0); return; //INVENTORY
     case 0x2D: choose_option(); return; //OPTION
@@ -1370,15 +1371,31 @@ char * get_dirtext(UCHAR dirbyte){
   return s;
 }
 
+//$20BD: a dark place is lit by the lamp, if it's lit and either here or
+//carried by someone here (not in the holdall)
 UCHAR is_dark(UCHAR id){
   struct location *l = get_location(id);
   if(l->isdark==LIGHT)
     return LIGHT;
-  struct object *lamp = get_object(LAMP);
-  if( (lamp->location_id==CARRIED || lamp->location_id==get_player_location_id()) && lamp_is_lit() )
+  if(!lamp_is_lit())
+    return DARK;
+  UCHAR loc=get_object(LAMP)->location_id;
+  if(loc==id)
     return LIGHT;
-  
+  if(loc>=CARRIED && loc!=0xFF && get_npc(loc-CARRIED)->location_id==id)
+    return LIGHT;
   return DARK;
+}
+
+//PICTURE and DRAW, see $1873
+void picture(){
+  UCHAR here=get_player_location_id();
+  if(ctkv[getlocationaddress(here)]&0x40)//No picture for this location
+    process_output("A magical darkness lingers here.\n");
+  else if(is_dark(here)==DARK)
+    process_output("It's too dark.\n");
+  else
+    process_output("Apologies, graphics not implemented yet.\n");
 }
 
 void print_description(UCHAR id){
