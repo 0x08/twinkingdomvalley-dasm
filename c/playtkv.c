@@ -2,7 +2,7 @@
 #include <stdarg.h>
 #include "libtkv.h"
 
-#define NLOCATIONS 176
+#define NLOCATIONS 0xB1 //Locations $00-$B0, see the tables at $2A00 and $2B00
 #define MAXLINE 1000
 
 #define QUIT -1
