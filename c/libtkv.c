@@ -81,14 +81,13 @@ void printobjectdescription(char *line, UCHAR code){
   int linepos=0;
   for(i=0;i<NOBJWORDS;i++){
     UCHAR  w = getbyte(addrs[i],lu);
-    if(w==0){
-      line[linepos-1]='\0';
+    if(w==0)//No more words
       break;
-    }
     linepos+=getwordforaddress(line+linepos,getcommandaddress(w));
-    if(i<NOBJWORDS-1)
-      line[linepos-1]=' ';
+    line[linepos-1]=' ';
   }
+  //Replace the trailing space, or give an empty string if there were no words
+  line[linepos>0 ? linepos-1 : 0]='\0';
 }
 
 void printcharacterdescription(UCHAR *line, UCHAR classcode){
@@ -97,14 +96,13 @@ void printcharacterdescription(UCHAR *line, UCHAR classcode){
   int linepos=0;
   for(i=0;i<NNPCWORDS;i++){
     UCHAR w = getbyte(addrs[i],classcode);
-    if(w==0){
-      line[linepos-1]='\0';
+    if(w==0)//No more words
       break;
-    }
     linepos+=getwordforaddress(line+linepos,getcommandaddress(w));
-    if(i<NNPCWORDS-1)
-      line[linepos-1]=' ';
+    line[linepos-1]=' ';
   }
+  //Replace the trailing space, or give an empty string if there were no words
+  line[linepos>0 ? linepos-1 : 0]='\0';
 }
 
 //Gets the address for a code <128 which corresponds to the command table via 14CE
