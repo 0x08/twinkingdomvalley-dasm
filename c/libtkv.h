@@ -16,15 +16,15 @@
 #define L3B6C 2
 
 //The start address of TKV code in BBC's memory 
-long start;
+extern long start;
 //ALL other addresses have start subtracted from them in this code.
-long lbwordtable,hbwordtable;
-long lbloctable,hbloctable;
+extern long lbwordtable,hbwordtable;
+extern long lbloctable,hbloctable;
 
-long offsettable;
+extern long offsettable;
 
 //TKV code as re-ordered into BBC's memory at very start of game.
-unsigned char ctkv[FILESIZE];
+extern unsigned char ctkv[FILESIZE];
 
 void init_tkv();
 UCHAR getbyte(char *addrs, UCHAR  y);

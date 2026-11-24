@@ -1,5 +1,11 @@
 #include "libtkv.h"
 
+long start;
+long lbwordtable,hbwordtable;
+long lbloctable,hbloctable;
+long offsettable;
+unsigned char ctkv[FILESIZE];
+
 void init_tkv(){
   fprintf(stderr,"Opening binary file...\n");
   FILE *fp = fopen("../machinecode/VALLEYR","r");
