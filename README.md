@@ -4,6 +4,11 @@ A disassembly of **Twin Kingdom Valley**, Trevor Hall's 1983 text adventure
 with pictures for the BBC Micro, and a reimplementation of it in C that
 uses the game's own data and plays the same, word for word.
 
+This is a fork of [@mcnalu](https://github.com/mcnalu)'s original
+[twinkingdomvalley-dasm](https://github.com/mcnalu/twinkingdomvalley-dasm),
+which did the groundwork: the disk images, the disassembly and notes, and
+the start of the C reimplementation.
+
 Play it in your browser: <https://0x08.github.io/twinkingdomvalley-dasm/play/>  
 Gallery of every picture: <https://0x08.github.io/twinkingdomvalley-dasm/>
 
