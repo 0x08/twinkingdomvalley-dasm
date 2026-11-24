@@ -686,10 +686,11 @@ int read_command(UCHAR *matches, int *nmatches){
     //printf("Match result for %s: %02x\n",word,m);
     if(m==NOMATCH)
       continue;
-    if(m<FIRSTNOUN && verb83<0)//$2378: the first verb-like word is the command
+    if(m<FIRSTNOUN && verb83<0){//$2378: the first verb-like word is the command
       verb83=m;
-    if(m>=FIRSTCOMBAT && m<FIRSTNOUN)//$2384: verbs aren't matched against objects
-      m=0xFF;
+      if(m>=FIRSTCOMBAT)//$2384: and isn't matched against objects
+        m=0xFF;
+    }
     if(*nmatches<MAXMATCHES)
       matches[(*nmatches)++]=m;
   }
