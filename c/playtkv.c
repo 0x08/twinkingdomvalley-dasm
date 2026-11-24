@@ -1,4 +1,5 @@
 #include <ctype.h>
+#include <stdarg.h>
 #include "libtkv.h"
 
 #define NLOCATIONS 176
@@ -64,6 +65,7 @@ struct exit {
 struct object {
   char *description;
   UCHAR location_id;
+  UCHAR code; //$2580: indexes the $2600-$2726 property tables
   UCHAR size;
   UCHAR strength_required;
   UCHAR durability;
@@ -93,6 +95,21 @@ void free_action(UCHAR code);
 void player_move(UCHAR *matches, int nmatches);
 void turn_start();
 void turn_end();
+void npcs_act(int here);
+void npc_act(UCHAR x);
+void npc_turn(UCHAR x);
+UCHAR rnd();
+void sentence(const char *fmt, ...);
+const char * is_are(UCHAR id);
+UCHAR carrier_location(UCHAR objid);
+int transfer(UCHAR objid, UCHAR dest, UCHAR flag);
+int weapon_too_weak(UCHAR objid);
+int melee_attack(UCHAR objid, UCHAR victim, UCHAR flag);
+int throw_attack(UCHAR objid, UCHAR victim, UCHAR flag);
+void weapon_lands(UCHAR objid, UCHAR flag);
+void inflict(UCHAR victim, UCHAR max, UCHAR rndmask);
+void damage(UCHAR victim, UCHAR amount);
+void print_score_and_strength();
 UCHAR get_match(UCHAR *word);
 void report_invalid_move(struct exit *e, UCHAR dirindex, UCHAR type);
 
@@ -149,13 +166,32 @@ struct character *characters;
 char *lampdescsave;
 UCHAR lampoil; //Stored in $27FB
 
-int debug=0; //Set by -d: show player location and lamp oil at each turn
+int debug=0; //Set by -d: show player location, lamp oil and character moves
 
 //Per-turn state, named after the original's memory locations
 #define MAXCHARS 0x26 //$0C1E clears $2AD0-$2AF5
 UCHAR status[MAXCHARS]; //$2AD0: bit 7 attacked, bit 6 moved after combat/player moving, bit 5 moved
 UCHAR loc14; //$14: player location at the start of this turn
 UCHAR loc1c; //$1C: player location at the start of the previous turn
+UCHAR nextloc[MAXCHARS]; //$2BD0: where each character has decided to move
+
+//Working storage for character actions, named after the zero page bytes
+UCHAR rnd1d=0xAA,rnd1e=0,rnd1f=0; //$1D-$1F: random number state, $1D set at $1403
+UCHAR pass15;   //$15: bit 7 set when actions are carried out, clear when only decided
+UCHAR npc16;    //$16: the character whose turn it is
+UCHAR target17; //$17: healthiest enemy found by find_enemy()
+UCHAR at1a;     //$1A: where the action is happening
+UCHAR align1b;  //$1B: $2968 byte of the acting character, bit 7 is its side
+UCHAR prop18;   //$18: $2880 class entry: bits 4-7 allowed regions, bits 0-3 chance of wandering
+UCHAR prop19;   //$19: $28A0 class entry: non-zero means it follows the player
+UCHAR prev13;   //$13: status of the acting character at the start of its turn
+UCHAR result10; //$10: non-zero if the character did something
+signed char staff27=2; //$27: the staff drops once this goes negative
+UCHAR holdallweight=0; //$27FA
+#define BROKEN 0xC7 //Location of a broken weapon or a dead character
+#define FIRSTWEAPON 0x0A //Objects $0A-$22 can be used as weapons
+#define ENDWEAPON 0x23
+#define STAFF 0x16 //Object code of the long wooden staff
 
 //Command codes, see the $3600 word table and $1EB1 dispatch table
 #define FIRSTCOMBAT 0x0E //HIT, CUT, THROW are $0E-$10
@@ -197,6 +233,7 @@ int main(int argc, char *argv[]) {
     int verb=get_command(matches,&nmatches);
     if(verb==QUIT)
       break;
+    npcs_act(0);//Characters away from the player act, $0C98
     if(verb<FIRSTCOMBAT){//A direction
       if(status[0]&0x80){//Player attacked last turn so gets away first, $145D
         player_move(matches,nmatches);
@@ -236,11 +273,36 @@ void turn_start(){
   update();
   for(x=0;x<MAXCHARS;x++)//$0C1E: forget all but last turn's attacks
     status[x]&=0x80;
+  pass15=0;//Characters decide what to do but nothing happens yet, $0C2D
+  for(x=getnumberofcharacters()-1;x>0;x--)
+    npc_act(x);
   print_npc_info();
+}
+
+//With A=$80, $0C00 lets the characters act: those away from the player
+//before the player's command ($0C98), those with the player after it
+//($0CAE). Then everyone who decided to move does so ($0CC3).
+void npcs_act(int here){
+  int x;
+  pass15=0x80;
+  for(x=getnumberofcharacters()-1;x>0;x--)
+    if( (get_npc(x)->location_id==loc14) == here )
+      if( (status[0]&0x40)==0 )//$0CD9: not if the player is getting away
+        npc_act(x);
 }
 
 //End of a turn: $0C00 with A=$80
 void turn_end(){
+  int x;
+  npcs_act(1);
+  for(x=getnumberofcharacters()-1;x>0;x--){//$0CC3
+    struct character *c=get_npc(x);
+    if(c->strength!=0 && (status[x]&0x60)!=0){
+      if(debug)
+        printf("[%02x %s: %02x -> %02x]\n",x,c->description,c->location_id,nextloc[x]);
+      c->location_id=nextloc[x];
+    }
+  }
 }
 
 //Per-turn events, see $0F03
@@ -680,6 +742,7 @@ void load_object(struct object *o, UCHAR id){
   UCHAR  code = getbyte("2580",id);
 
   o->location_id=getbyte("25C0",id);
+  o->code=code;
   printobjectdescription(desc, id);
   o->description=create_copy_string(desc);
   o->size = getbyte("2600",code);
@@ -946,6 +1009,380 @@ void print_npc_info(){
       inventory(id); //Prints " is here with ...
     }
   }
+}
+
+/* ---------------------------------------------------------------------
+ * Characters: what they decide to do each turn and how fights go.
+ * Ported from $0C00-$0EDF and $1B6C-$1D9B. Each routine runs twice a
+ * turn: first with pass15=0, when it only decides (consuming the same
+ * random numbers), then with pass15=$80, when it acts and reports.
+ * --------------------------------------------------------------------- */
+
+//Pseudo random byte, see $1C88: a 24-bit shift register in $1D-$1F
+//shifted left eight times, feeding in bit 6 XOR bit 3 of $1D
+UCHAR rnd(){
+  int i;
+  for(i=0;i<8;i++){
+    UCHAR in=((rnd1d>>6)^(rnd1d>>3))&1;
+    UCHAR c1=rnd1f>>7, c2=rnd1e>>7;
+    rnd1f=(rnd1f<<1)|in;
+    rnd1e=(rnd1e<<1)|c1;
+    rnd1d=(rnd1d<<1)|c2;
+  }
+  return rnd1d;
+}
+
+//Prints a sentence, capitalising its first letter
+void sentence(const char *fmt, ...){
+  char line[MAXLINE];
+  va_list ap;
+  va_start(ap,fmt);
+  vsnprintf(line,sizeof(line),fmt,ap);
+  va_end(ap);
+  process_output(sfirstcaps(line));
+}
+
+//$1C74 prints IS after a character, or ARE after the player
+const char * is_are(UCHAR id){
+  return id==0 ? "are" : "is";
+}
+
+//Where an object is, counting the holdall's contents as wherever the holdall is
+UCHAR carrier_location(UCHAR objid){
+  UCHAR loc=get_object(objid)->location_id;
+  if(loc==0xFF)
+    loc=get_object(0)->location_id;
+  return loc;
+}
+
+//Moves an object to dest, see $1B6C. Returns 1 if the destination can't take it.
+//Unless bit 7 of flag is set, only checks whether it could.
+int transfer(UCHAR objid, UCHAR dest, UCHAR flag){
+  struct object *o=get_object(objid);
+  UCHAR from=o->location_id;
+  if(dest<CARRIED){//Dropped somewhere
+    if( (flag&0x80)==0 )
+      return 0;
+  } else if(dest==0xFF){//Into the holdall, $1B88: holds less than $64
+    int w=holdallweight+o->size;
+    if(w>0xFF || w>=0x64)
+      return 1;
+    holdallweight=w;
+  } else {//Carried by a character, $1B9F
+    struct character *c=get_npc(dest-CARRIED);
+    int w=c->amount_carried+o->size;
+    if(w>0xFF || w>=c->max_carried)
+      return 1;
+    if( (flag&0x80)==0 )
+      return 0;
+    c->amount_carried=w;
+  }
+  o->location_id=dest;//$1BC4
+  if(from==0xFF)
+    holdallweight-=o->size;
+  else if(from>=CARRIED)
+    get_npc(from-CARRIED)->amount_carried-=o->size;
+  return 0;
+}
+
+//$1D20: a weapon is too heavy if it needs at least its carrier's strength
+int weapon_too_weak(UCHAR objid){
+  struct character *c=get_npc(carrier_location(objid)-CARRIED);
+  return get_object(objid)->strength_required >= c->strength;
+}
+
+//Hits victim with a carried weapon, see $1CCA. Returns 1 if the carrier is too weak.
+int melee_attack(UCHAR objid, UCHAR victim, UCHAR flag){
+  struct object *o=get_object(objid);
+  UCHAR carrier=carrier_location(objid)-CARRIED;
+  if(weapon_too_weak(objid))
+    return 1;
+  if( (flag&0x80)==0 )
+    return 0;
+  if(at1a==get_player_location_id())
+    sentence("%s %s hit with %s.\n",get_npc(victim)->description,is_are(victim),o->description);
+  status[carrier]=0x80;//$1CBE: remember who attacked
+  inflict(victim,o->max_melee_damage,o->rnd_melee_damage);
+  if(rnd()<0xD2){//$1CFB: the weapon is usually kept
+    if(o->code!=STAFF)
+      return 0;
+    if(--staff27>=0)
+      return 0;
+  }
+  if(at1a==get_player_location_id())//$1D0B
+    sentence("%s drops.\n",o->description);
+  weapon_lands(objid,flag);
+  return 0;
+}
+
+//Throws a carried weapon at victim, see $1D40. Returns 1 if the carrier is too weak.
+int throw_attack(UCHAR objid, UCHAR victim, UCHAR flag){
+  struct object *o=get_object(objid);
+  UCHAR carrier=carrier_location(objid)-CARRIED;
+  if(weapon_too_weak(objid))
+    return 1;
+  if( (flag&0x80)==0 )
+    return 0;
+  if(at1a==get_player_location_id())
+    sentence("%s is thrown at %s.\n",o->description,get_npc(victim)->description);
+  status[carrier]=0x80;
+  inflict(victim,o->max_throw_damage,o->rnd_throw_damage);
+  weapon_lands(objid,flag);
+  return 0;
+}
+
+//A thrown or dropped weapon breaks or falls where the fight is, see $1D71
+void weapon_lands(UCHAR objid, UCHAR flag){
+  struct object *o=get_object(objid);
+  UCHAR durability=getbyte("267E",o->code);
+  if( (rnd()&durability)==durability ){
+    if(at1a==get_player_location_id())
+      sentence("%s breaks.\n",o->description);
+    transfer(objid,BROKEN,flag);
+  } else
+    transfer(objid,at1a,flag);
+}
+
+//Damage is max less a random amount masked by rndmask, see $1C9E
+void inflict(UCHAR victim, UCHAR max, UCHAR rndmask){
+  damage(victim,(UCHAR)(max-(rnd()&rndmask)));
+}
+
+//Takes amount off victim's health and reports how they are, see $1C02
+void damage(UCHAR victim, UCHAR amount){
+  struct character *c=get_npc(victim);
+  int here = at1a==get_player_location_id();
+  if(amount>=c->strength){//$1C31: dead
+    if(here)
+      sentence("%s %s dead.\n",c->description,is_are(victim));
+    c->strength=0;
+    if(victim==0){//$1C4D: the game is over
+      print_score_and_strength();
+      process_output("Bye bye.\n");
+      exit(0);
+    }
+    c->location_id=BROKEN;
+    int x;
+    for(x=getnumberofobjects()-1;x>=0;x--)//$1C61: drops everything it had
+      if(get_object(x)->location_id==CARRIED+victim)
+        transfer(x,at1a,0x80);
+    return;
+  }
+  c->strength-=amount;
+  if(c->strength>=0x50 || !here)
+    return;
+  sentence("%s %s %s.\n",c->description,is_are(victim),c->strength>=0x28?"weak":"dying");
+}
+
+//$12EE. The score is the value of the treasure in the cabin or carried, $130A.
+void print_score_and_strength(){
+  int x;
+  unsigned int score=0;
+  for(x=getnumberofobjects()-1;x>=0;x--){
+    UCHAR loc=get_object(x)->location_id;
+    if(loc==0xFF)
+      loc=get_object(0)->location_id;
+    if(loc==0 || loc==CARRIED)
+      score+=getbyte("2654",get_object(x)->code);
+  }
+  sentence("Your score is %u.\n",score);
+  sentence("Your strength is %u.\n",get_player()->strength);
+}
+
+//Finds the healthiest character at at1a on the other side, see $0D8D
+UCHAR find_enemy(){
+  int x;
+  result10=0;
+  for(x=getnumberofcharacters()-1;x>=0;x--){
+    struct character *c=get_npc(x);
+    if(c->location_id!=at1a)
+      continue;
+    if( ((c->classcode^align1b)&0x80)==0 )//Same side
+      continue;
+    if(status[0]&0x40)//Player getting away: nobody fights
+      continue;
+    if(c->strength<result10)
+      continue;
+    result10=c->strength;
+    target17=x;
+  }
+  return result10;
+}
+
+//Can the character go to dest? Each set bit of 4-7 of prop18 allows a
+//region of four location ranges in the tables at $1263-$1282, see $0DFF.
+//Returns 0 and, when acting, records the move ($0E3C).
+int npc_try_dest(UCHAR dest){
+  int y,i;
+  UCHAR p=prop18;
+  for(y=3;y>=0;y--,p<<=1){
+    if( (p&0x80)==0 )
+      continue;
+    for(i=0;i<4;i++){
+      UCHAR lo=getbyte("1263",4*i+y), hi=getbyte("1273",4*i+y);
+      if(dest>=lo && dest<hi){
+        if(pass15&0x80){
+          nextloc[npc16]=dest;
+          status[npc16]|= (prev13&0x80) ? 0x40 : 0x20;
+        }
+        return 0;
+      }
+    }
+  }
+  return 1;
+}
+
+//Tries exit k (1-based) of location l, see $0DE2. Returns 0 if it's taken.
+int npc_try_exit(struct location *l, int k){
+  struct exit *e=l->exits+k-1;
+  result10=k;
+  if(e->ispassable==IMPASSABLE)//Bit 6 of the direction byte
+    return 1;
+  return npc_try_dest(e->destination);
+}
+
+//Picks a random exit, or failing that the last usable one, see $0DB9
+void npc_random_move(){
+  struct location *l;
+  int k;
+  result10=0;
+  if(at1a>=NLOCATIONS)
+    return;
+  l=get_location(at1a);
+  if(l->nexits==0)
+    return;
+  do
+    k=rnd()&0x07;
+  while(k>=l->nexits);
+  if(npc_try_exit(l,k+1)==0){
+    result10=0xFF;
+    return;
+  }
+  for(k=l->nexits;k>0;k--)
+    if(npc_try_exit(l,k)==0){
+      result10=0xFF;
+      return;
+    }
+  result10=0;
+}
+
+//Wanders off with a chance set by bits 0-3 of prop18, see $0D79
+void npc_maybe_wander(){
+  result10=rnd()&0x0F;
+  if( (prop18&0x0F)>=result10 )
+    npc_random_move();
+  else
+    result10=0;
+}
+
+//Follows the player's trail if on it, otherwise may wander, see $0D3D
+void npc_follow(){
+  UCHAR dest;
+  result10=0xFF;
+  if(at1a==loc1c)//Where the player was two turns ago: go where they were last turn
+    dest=loc14;
+  else if(at1a!=loc14){
+    npc_maybe_wander();
+    return;
+  } else//Where the player was last turn: go where they are now
+    dest=get_player_location_id();
+  if(dest==at1a){
+    result10=0;
+    return;
+  }
+  npc_try_dest(dest);//result10 stays $FF even if it can't go there
+}
+
+//Picks up the first weapon lying here that it can carry, see $0E99
+void npc_pickup(){
+  int x;
+  result10=0;
+  for(x=FIRSTWEAPON;x<ENDWEAPON;x++){
+    if(get_object(x)->location_id!=at1a)
+      continue;
+    if(transfer(x,CARRIED+npc16,pass15))
+      continue;
+    if( (pass15&0x80) && at1a==get_player_location_id() )
+      sentence("%s takes %s.\n",get_npc(npc16)->description,get_object(x)->description);
+    result10=0xFF;
+    return;
+  }
+}
+
+//Attacks the enemy found by find_enemy() with the first usable weapon,
+//usually hitting, sometimes throwing. With no weapon, picks one up. See $0E5B.
+void npc_attack(){
+  int x;
+  result10=0;
+  for(x=FIRSTWEAPON;x<ENDWEAPON;x++){
+    if( (UCHAR)(carrier_location(x)-CARRIED)!=npc16 )
+      continue;
+    int failed = rnd()>=0xC0 ? throw_attack(x,target17,pass15)
+                             : melee_attack(x,target17,pass15);
+    if(!failed){
+      result10=0xFF;
+      return;
+    }
+  }
+  npc_pickup();
+}
+
+//$0CDE: a living character takes its turn
+void npc_act(UCHAR x){
+  if(get_npc(x)->strength==0)
+    return;
+  npc_turn(x);
+}
+
+//Decides, and when acting carries out, what character x does, see $0CEE
+void npc_turn(UCHAR x){
+  struct character *c=get_npc(x);
+  npc16=x;
+  at1a=c->location_id;
+  prev13=status[x];
+  if(pass15&0x80)
+    status[x]&=0x7F;
+  align1b=c->classcode;
+  prop18=getbyte("2880",c->class);
+  prop19=getbyte("28A0",c->class);
+  if( (prop18|prop19)==0 ){//Never moves: fights or picks up weapons
+    if(find_enemy())
+      npc_attack();
+    else
+      npc_pickup();
+    return;
+  }
+  if(find_enemy()==0){//$0D6E: nobody to fight
+    npc_pickup();
+    if(result10)
+      return;
+    if(prop19)
+      npc_follow();
+    else
+      npc_maybe_wander();
+    return;
+  }
+  if(prop19){//A follower
+    if( (prev13&0x80)==0 ){//$0D55: didn't attack last turn
+      npc_attack();
+      if(result10)
+        return;
+      npc_follow();
+      if(result10)
+        return;
+      npc_random_move();
+      return;
+    }
+    npc_follow();
+    if(result10)
+      return;
+  }
+  npc_attack();//$0D36
+  if(result10==0){
+    npc_random_move();
+    return;
+  }
+  npc_follow();
 }
 
 struct character * get_player(){
