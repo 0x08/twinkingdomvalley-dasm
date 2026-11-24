@@ -111,7 +111,7 @@ function loop() {
   }
   if (state === 'input') { waiting = true; return; }
   if (testScript) timer = setTimeout(loop, 0);
-  else if (state === 'idle') timer = setTimeout(loop, 20);   // Polling for a key: no hurry
+  else if (state === 'idle') timer = setTimeout(loop, 10);   // Polling for a key or the clock
   else timer = setTimeout(loop, 0);
 }
 

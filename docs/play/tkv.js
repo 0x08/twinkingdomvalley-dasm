@@ -524,9 +524,14 @@ class Machine {
     this.cpu.a = this.keys.shift(); this.cpu.p &= ~FC;
     return true;
   }
+  // The game waits by polling the clock until it reaches an exact value
+  // ($2282, $3B20), which a real BBC polls fast enough never to miss. So the
+  // clock advances by at most one centisecond each time it's read.
   clock() {
     if (this.script) return ++this.ticks;
-    return Math.floor((performance.now() - this.started) / 10);
+    const now = Math.floor((performance.now() - this.started) / 10);
+    this.ticks = Math.min(now, this.ticks + 1);
+    return this.ticks;
   }
 
   // ---- *SAVE and *LOAD: OSFILE, kept in the browser's storage
