@@ -103,6 +103,7 @@ void free_action(UCHAR code, UCHAR *matches, int nmatches);
 void look(UCHAR *matches, int nmatches);
 void print_score();
 void player_move(UCHAR *matches, int nmatches);
+UCHAR place_direction(UCHAR *matches, int nmatches);
 void turn_start();
 void turn_end();
 void npcs_act(int here);
@@ -234,6 +235,7 @@ UCHAR magic00=0;     //$00: bit 7 set once the concealed doors are revealed
 #define FIRSTFREE 0x25   //$25-$2E are carried out without a turn passing, see $0C8E
 #define FIRSTNOUN 0x2F   //$2F onwards are objects, characters and places
 int verb83; //$83: the first verb-like word of the last input, or -1
+UCHAR placedir8c; //$8C: direction to a place named instead of a direction, see $3500
 
 int main(int argc, char *argv[]) {
   int i;
@@ -584,9 +586,13 @@ int get_command(UCHAR *matches, int *nmatches){
     if(r==EMPTY)
       continue;
     int verb=verb83;
-    if(verb<0){
-      process_output("I don't understand.\n");
-      continue;
+    if(verb<0){//No verb: perhaps a place next to here was named, $3500
+      placedir8c=place_direction(matches,*nmatches);
+      if(placedir8c==0){
+        process_output("I don't understand.\n");
+        continue;
+      }
+      verb=0;//Treated as a direction
     }
     if(verb<FIRSTFREE)
       return verb;
@@ -604,6 +610,7 @@ int read_command(UCHAR *matches, int *nmatches){
 
   *nmatches=0;
   verb83=-1;
+  placedir8c=0;
   do {
     c=getchar();
     line[i++]=c;
@@ -647,16 +654,31 @@ int read_command(UCHAR *matches, int *nmatches){
 }
 
 //Combines the direction words given and tries to move, see $23C3
+//$3500: if the words include the last word of the name of a place an exit
+//leads to, eg CABIN or INN, returns that exit's direction, otherwise 0
+UCHAR place_direction(UCHAR *matches, int nmatches){
+  struct location *l=get_player_location();
+  int i;
+  for(i=0;i<l->nexits;i++){
+    long addr=getlocationaddress(l->exits[i].destination);
+    UCHAR nwords=ctkv[addr+1]&0x1F;
+    if(nwords!=0 && count_word(ctkv[addr+1+nwords],matches,nmatches))
+      return ctkv[l->exits[i].addr]&0x3F;
+  }
+  return 0;
+}
+
 void player_move(UCHAR *matches, int nmatches){
   //These dirbytes are in $23B5-C3
   //Correspond to: N  S  E  W  U  D  NE NW NE NW SE SW SE SW
   UCHAR dirbytes[]={0x20, 0x10, 0x08, 0x04, 0x02, 0x01,
     0x28, 0x24, 0x28, 0x24, 0x18, 0x14, 0x18, 0x14};
   int i;
-  UCHAR dir=0;
-  for(i=0;i<nmatches;i++)//See $23CA
-    if(matches[i]<FIRSTCOMBAT)
-      dir=dir|dirbytes[matches[i]]; //Set bits for commanded direction
+  UCHAR dir=placedir8c;//$23C3: a named place gives the direction
+  if(dir==0)
+    for(i=0;i<nmatches;i++)//See $23CA
+      if(matches[i]<FIRSTCOMBAT)
+        dir=dir|dirbytes[matches[i]]; //Set bits for commanded direction
   for(i=0;i<0x0E;i++)   //Find index of commanded direction
     if(dir==dirbytes[i])
       break;
