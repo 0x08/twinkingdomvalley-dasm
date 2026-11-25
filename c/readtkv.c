@@ -145,8 +145,9 @@ void describeobject(char *scode){
   char line[MAXLINE];
   
   //printf("%s\n",scode);
-  if(id<0 || id>=42){
-    printf("There are only 42 objects so index must be 0-41 or $0-29.\n");
+  if(id>=getnumberofobjects()){
+    printf("There are only %d objects so index must be $00-$%02X.\n",
+           getnumberofobjects(),getnumberofobjects()-1);
     return;
   }
   

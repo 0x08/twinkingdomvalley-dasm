@@ -1,0 +1,65 @@
+<h2>Key</h2>
+<p class="key"><svg width="54" height="12"><line x1="2" y1="6" x2="52" y2="6" stroke="#6d5a40" stroke-width="2.2"/></svg>a way between two places, both ways</p>
+<p class="key"><svg width="54" height="12"><line x1="2" y1="6" x2="44" y2="6" stroke="#6d5a40" stroke-width="2.2"/><path d="M42,1 L52,6 L42,11 z" style="fill:#6d5a40"/></svg>one way only</p>
+<p class="key"><svg width="54" height="12"><line x1="2" y1="6" x2="52" y2="6" stroke="#6d5a40" stroke-width="2.2"/><circle cx="27" cy="6" r="5" style="fill:#d4a017" stroke="#5a4630"/></svg>a door or grate that locks, with the keys that fit (the master key fits them all)</p>
+<p class="key"><svg width="54" height="12"><line x1="2" y1="6" x2="52" y2="6" stroke="#a39a8a" stroke-width="2" stroke-dasharray="2 4"/></svg>can be seen through but not passed: a fence, a crack</p>
+<p class="key"><svg width="54" height="12"><line x1="2" y1="6" x2="52" y2="6" stroke="#7b3fa0" stroke-width="2.2" stroke-dasharray="8 4"/></svg>a secret door: only there once you have drunk from the magic pool at Watersmeet</p>
+<p class="key"><svg width="54" height="12"><line x1="2" y1="6" x2="44" y2="6" stroke="#c0392b" stroke-width="2" stroke-dasharray="6 4"/><path d="M42,1 L52,6 L42,11 z" style="fill:#c0392b"/></svg>the game moves you: a fall, a dive, an arrest</p>
+<p class="key"><svg width="54" height="12"><line x1="2" y1="6" x2="52" y2="6" stroke="#2a7fb8" stroke-width="2.4" stroke-dasharray="3 3"/></svg>only after you wave the rod</p>
+<p>A small label at the end of a line, eg <code>NE</code> or <code>S+up</code>, gives the direction to type when the
+line doesn't already point that way. Short arrows lead off to the other panels.</p>
+
+<h3>Things the game does itself</h3>
+<ul>
+<li><b>The fissure and the canyon.</b> Going over the edge sends you diving down a dangerous fall (33), to land
+below where you jumped: {FALLS}.</li>
+<li><b>The Crystal Bridge</b> (97). Wave the short wooden rod at either edge of the fissure (19 or 23) and the way
+across leads onto the bridge instead of over the edge; wave it again and it's gone.</li>
+<li><b>The waterfall.</b> North from the top of the waterfall is a dive (37) into the crocodile pool (1A), and you
+scramble out by the large rock (1B).</li>
+<li><b>The moat</b> (32). Every way towards the castle except the drawbridge goes into the moat, and you scramble
+out where you came from. Once you have crossed the drawbridge, it closes when you come back out to the desert
+by the castle (28), unless you carry the uniform, and north from there leads into the moat too.</li>
+<li><b>The magic pool</b> at Watersmeet (89). Drink from it to learn the secret of concealed doors: seven secret
+doors (purple) appear.</li>
+<li><b>The rock fall</b> in the small cave (93). The keeper of the mountains lets you east to the river of gold only
+when you bring the desert king's treasure chest.</li>
+<li><b>The Forest King</b> (6D). His guard arrest you (A9) until you pay. A gift worth enough frees you, with an
+amulet; anything less and you are thrown into the room full of bones. Gifts go to the strong room (B0). Free the
+princess (A8) wearing the amulet and the king gives you the silver key.</li>
+<li><b>The end of your life</b> (AF) is where you go when you die.</li>
+</ul>
+
+<h3>Quirks in the game's own data</h3>
+<ul>
+<li>76 of the exits are one way. Besides the mazes: the quarry (07) leads only to the road, though the scree and the
+rocks lead into it; the ways onto the high mountains at 11 from 12, 14, 31, 99, AB and AD can't be walked back;
+nor can the desert's paths up to the mountains at 30 (from 2A and 2F), or the corridor at 59 going SE to 5D.</li>
+<li>20 pairs of exits don't reverse each other, eg the small bedroom's SE leads to the small kitchen, but the way
+back is SW.</li>
+<li>The high mountains at 30 and 31 both have a way north that leads back to the same place.</li>
+</ul>
+
+<h3>Checked against the Electron User maps (1985)</h3>
+<p>Every box on the five magazine maps matches a place in the game, and almost every line, door, key and object
+on them does too. The differences:</p>
+<ul>
+<li><b>Map 1.</b> It joins the scree slope (06) straight to the stream (09); in the game both lead into the woods (0A)
+between them. It draws the quarry as two-way to the scree and the rocks; the quarry's only way out is the road.
+Missing: SE from the small stream (08) to the spring (03), and N from the road (99) to the high mountains (11).</li>
+<li><b>Map 2.</b> It draws the high mountains at 14 twice, east of the waterfall and south of AB, without joining
+them; in the game it's one place, which the waterfall leads into one way. Missing: the path between the dense
+forest (0F) and the woods (0E). Its "Gold" sits by the crocodile pool; the gold is in the high mountains (31),
+as map 3 says.</li>
+<li><b>Map 3.</b> Missing: the one-way mountain paths from the desert (2F) and east of the castle (2A) up to the
+high mountains (30).</li>
+<li><b>Map 4.</b> Its sloping maze shows shortest routes only, but it joins two rooms (90 and 92) that aren't joined:
+east from 90 leads to 8F. The "Brass" door from the cave (35) is a metal door that the bronze key opens too. The
+strong room (B0) starts empty, not with gold: it's where the Forest King puts your gift. The diamond ring starts
+with the dwarf in the small chamber (6B), not on the spiral staircase. Both twisting maze routes are right.</li>
+<li><b>Map 5.</b> There is no silver door between the corridor (5A) and the east tower (55); upstairs, the only silver
+door is to the west tower (52). The door from the large hall (48) to the dungeon (49) is brass, not
+bronze. The secret door from the royal bedroom (5B) is one way.</li>
+</ul>
+<p>Made from the game itself by <code>docs/map/tkvdata.py</code> and <code>make_map.py</code> in the
+disassembly project: github.com/0x08/twinkingdomvalley-dasm</p>

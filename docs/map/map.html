@@ -1,0 +1,1402 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Twin Kingdom Valley map</title>
+<style>
+@page { size: 5647px 2844px; margin: 0; }
+html, body { margin: 0; background: #f6f1e4; }
+body { width: 5647px; height: 2844px; position: relative; font-family: "DejaVu Sans", system-ui, sans-serif; color: #2c2418; }
+svg { position: absolute; left: 0; top: 0; }
+.panel { fill: #fffdf6; stroke: #cbbd9c; stroke-width: 2; }
+.ptitle { font: 600 30px "DejaVu Serif", Georgia, serif; fill: #6b2a1a; }
+.psub { font: 15px "DejaVu Sans", sans-serif; fill: #7c705c; }
+.cap { font: italic 600 17px "DejaVu Serif", Georgia, serif; fill: #9b7a4a; }
+.box rect { fill: #fff8dc; stroke: #5a4630; stroke-width: 1.6; }
+.box.dark rect { fill: #e9e3d4; }
+.box.special rect { fill: #fde6dc; stroke: #a8442c; stroke-dasharray: 5 3; }
+.id { font: 600 9.5px "DejaVu Sans Mono", monospace; fill: #8a7a62; }
+.name { font: 600 11.5px "DejaVu Sans", sans-serif; text-anchor: middle; fill: #2c2418; }
+.obj { font: italic 9px "DejaVu Sans", sans-serif; text-anchor: middle; fill: #2f5d2a; }
+.who { font: 9px "DejaVu Sans", sans-serif; text-anchor: middle; fill: #8a2c1c; }
+path, line { fill: none; }
+.path { stroke: #6d5a40; stroke-width: 2.2; }
+.door { stroke: #6d5a40; stroke-width: 2.2; }
+.doorm { fill: #d4a017; stroke: #5a4630; stroke-width: 1.2; }
+.blocked { stroke: #a39a8a; stroke-width: 2; stroke-dasharray: 2 4; }
+.secret { stroke: #7b3fa0; stroke-width: 2.2; stroke-dasharray: 8 4; }
+.fall { stroke: #c0392b; stroke-width: 2; stroke-dasharray: 6 4; }
+.wave { stroke: #2a7fb8; stroke-width: 2.4; stroke-dasharray: 3 3; }
+.stub { stroke: #6d5a40; stroke-width: 2; }
+.stub.blocked { stroke: #a39a8a; }
+.stubt { font: 9.5px "DejaVu Sans", sans-serif; fill: #4a3b2a; paint-order: stroke; stroke: #fffdf6; stroke-width: 3px; }
+.doort { font: 9px "DejaVu Sans", sans-serif; text-anchor: middle; fill: #7a5a10; paint-order: stroke; stroke: #fffdf6; stroke-width: 3.5px; }
+.doort.blocked { fill: #6f675a; }
+.doort.secret { fill: #7b3fa0; }
+.movet { font: italic 9.5px "DejaVu Sans", sans-serif; fill: #b03a2a; paint-order: stroke; stroke: #fffdf6; stroke-width: 3px; }
+.note { font: italic 9.5px "DejaVu Sans", sans-serif; fill: #6d5a40; }
+.dl rect { fill: #fffdf6; stroke: #b8a684; stroke-width: 0.8; }
+.dl text { font: 600 9px "DejaVu Sans Mono", monospace; fill: #6b2a1a; }
+h1 { position: absolute; left: 60px; top: 60px; margin: 0; font: 600 54px "DejaVu Serif", Georgia, serif; color: #6b2a1a; }
+.lede { position: absolute; left: 60px; top: 130px; margin: 0; font-size: 19px; color: #6d604c; max-width: 2400px; }
+.notes { position: absolute; left: 2399px; top: 2064px; width: 3188px; columns: 3; column-gap: 40px; font-size: 14.5px; line-height: 1.45; }
+.notes h2 { font: 600 21px "DejaVu Serif", Georgia, serif; color: #6b2a1a; margin: 0 0 6px; break-after: avoid; }
+.notes h3 { font: 600 16px "DejaVu Serif", Georgia, serif; color: #6b2a1a; margin: 14px 0 4px; break-after: avoid; }
+.notes p, .notes li { margin: 0 0 6px; }
+.notes ul { margin: 0 0 8px; padding-left: 18px; }
+.notes .key svg { position: static; vertical-align: middle; margin-right: 6px; }
+.notes code { font-family: "DejaVu Sans Mono", monospace; font-size: 13px; }
+</style></head><body>
+<h1>Twin Kingdom Valley</h1>
+<p class="lede">Every one of the game's 177 places and the ways between them, read from the game itself (the
+BBC Micro version of Trevor Hall's 1983 adventure); laid out after the Electron User maps of 1985.
+Hex numbers are the game's location numbers. Objects (<span style="color:#2f5d2a;font-style:italic">green</span>) and
+characters (<span style="color:#8a2c1c">red</span>) are where the game starts them; &#9733; marks treasure,
+&#9680; places that are dark without a lit lamp.</p>
+<svg width="5647" height="2844" viewBox="0 0 5647 2844" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:#6d5a40;stroke:none"/></marker>
+<marker id="arrowr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:#c0392b;stroke:none"/></marker>
+</defs>
+<rect x="60.0" y="210.0" width="2289.0" height="2366.4" rx="14" class="panel"/>
+<text x="84.0" y="252.0" class="ptitle">The valley</text>
+<text x="84.0" y="274.0" class="psub">South of the canyon, the canyon and the desert around the castle</text>
+<text x="130.0" y="355.0" class="cap">North of the canyon</text>
+<text x="130.0" y="1254.6" class="cap">The canyon</text>
+<text x="130.0" y="1473.0" class="cap">South of the canyon</text>
+<rect x="2399.0" y="210.0" width="1839.0" height="1659.2" rx="14" class="panel"/>
+<text x="2423.0" y="252.0" class="ptitle">Underground</text>
+<text x="2423.0" y="274.0" class="psub">Caves, the sloping maze, the twisting maze and the passages beneath</text>
+<text x="2469.0" y="355.0" class="cap">The sloping maze</text>
+<text x="3219.0" y="355.0" class="cap">Beneath the castle</text>
+<text x="3834.0" y="999.8" class="cap">Under the trail</text>
+<text x="3219.0" y="1395.0" class="cap">The twisting maze</text>
+<rect x="4288.0" y="210.0" width="1299.0" height="1804.8" rx="14" class="panel"/>
+<text x="4312.0" y="252.0" class="ptitle">The castle</text>
+<text x="4312.0" y="274.0" class="psub">Towers, ground floor, cellars and dungeons</text>
+<text x="4358.0" y="355.0" class="cap">Upper levels</text>
+<text x="4358.0" y="1114.2" class="cap">Ground level</text>
+<text x="4973.0" y="1332.6" class="cap">Below ground</text>
+<text x="4793.0" y="1701.8" class="cap">Lower levels</text>
+<path d="M 1467.0 2194.4 Q 1467.0 2211.4 1467.0 2228.4" class="path"/>
+<path d="M 1508.0 2228.4 Q 1564.5 2180.2 1621.0 2132.0" class="path"/>
+<path d="M 1529.0 2263.4 Q 1564.5 2263.4 1600.0 2263.4" class="path"/>
+<path d="M 1405.0 2263.4 Q 1392.0 2263.4 1379.0 2263.4" class="path"/>
+<line x1="1467.0" y1="2298.4" x2="1467.0" y2="2324.4" class="stub blocked" marker-end="url(#arrow)"/>
+<path d="M 1330.4 2228.4 Q 1364.4 2139.5 1424.3 2090.4" class="path"/>
+<path d="M 1255.0 2243.5 Q 984.0 2156.5 758.4 1965.6" class="path"/>
+<line x1="1317.0" y1="2298.4" x2="1317.0" y2="2324.4" class="stub blocked" marker-end="url(#arrow)"/>
+<path d="M 1765.0 2071.0 Q 1744.5 2076.2 1724.0 2081.4" class="path"/>
+<path d="M 1852.2 2020.4 Q 1872.0 1993.0 1891.8 1965.6" class="path"/>
+<path d="M 1765.0 2037.0 Q 1722.0 2024.2 1679.0 2011.4" class="path"/>
+<path d="M 1799.2 2090.4 Q 1744.5 2159.4 1689.8 2228.4" class="path"/>
+<path d="M 1646.9 2062.0 Q 1639.5 2045.0 1632.1 2028.0" class="path"/>
+<path d="M 1600.0 2083.8 Q 1564.5 2076.2 1529.0 2068.6" class="path"/>
+<path d="M 1467.0 2020.4 Q 1467.0 1993.0 1467.0 1965.6" class="path"/>
+<line x1="1432.0" y1="2090.4" x2="1413.6" y2="2108.8" class="stub" marker-end="url(#arrow)"/>
+<path d="M 805.0 1948.9 Q 792.0 1946.2 779.0 1943.5" class="path" marker-end="url(#arrow)"/>
+<path d="M 828.2 1926.8 Q 792.0 1894.2 755.8 1861.6" class="path"/>
+<path d="M 910.9 1926.8 Q 1017.0 1842.2 1123.1 1757.6" class="path"/>
+<path d="M 1555.0 1967.2 Q 1542.0 1961.8 1529.0 1956.4" class="path"/>
+<path d="M 1617.0 1958.0 Q 1617.0 1935.8 1617.0 1913.6" class="path"/>
+<path d="M 1467.0 1895.6 Q 1467.0 1878.6 1467.0 1861.6" class="path"/>
+<path d="M 1416.5 1895.6 Q 1317.0 1826.6 1217.5 1757.6" class="path"/>
+<path d="M 1167.0 1687.6 Q 1167.0 1670.6 1167.0 1653.6" class="path"/>
+<path d="M 1217.5 1687.6 Q 1242.0 1670.6 1266.5 1653.6" class="path"/>
+<path d="M 717.0 1861.6 Q 717.0 1878.6 717.0 1895.6" class="path" marker-end="url(#arrow)"/>
+<path d="M 717.0 1791.6 Q 717.0 1774.6 717.0 1757.6" class="path"/>
+<path d="M 655.0 1826.6 Q 642.0 1826.6 629.0 1826.6" class="path"/>
+<path d="M 1555.0 1857.1 Q 1542.0 1852.6 1529.0 1848.1" class="path"/>
+<path d="M 1617.0 1843.6 Q 1617.0 1821.4 1617.0 1799.2" class="path"/>
+<path d="M 1467.0 1791.6 Q 1467.0 1774.6 1467.0 1757.6" class="path"/>
+<path d="M 666.5 1757.6 Q 642.0 1774.6 617.5 1791.6" class="path"/>
+<path d="M 779.0 1708.3 Q 942.0 1670.6 1105.0 1632.9" class="path"/>
+<path d="M 717.0 1687.6 Q 717.0 1566.6 717.0 1445.6" class="path"/>
+<path d="M 505.0 1826.6 Q 417.0 1826.6 329.0 1826.6" class="path"/>
+<path d="M 554.0 1410.6 Q 604.5 1410.6 655.0 1410.6" class="path"/>
+<path d="M 430.0 1410.6 Q 379.5 1410.6 329.0 1410.6" class="path"/>
+<path d="M 1979.0 1930.6 Q 1992.0 1930.6 2005.0 1930.6" class="path"/>
+<path d="M 1555.0 1747.0 Q 1542.0 1743.4 1529.0 1739.8" class="path"/>
+<path d="M 1679.0 1798.6 Q 1767.0 1847.4 1855.0 1896.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 1467.0 1687.6 Q 1467.0 1670.6 1467.0 1653.6" class="path"/>
+<path d="M 1416.5 1687.6 Q 1392.0 1670.6 1367.5 1653.6" class="path"/>
+<path d="M 1654.4 1684.8 Q 1767.0 1790.2 1879.6 1895.6" class="path" marker-end="url(#arrow)"/>
+<path d="M 1667.5 1614.8 Q 1692.0 1597.8 1716.5 1580.8" class="path"/>
+<path d="M 1485.7 1583.6 Q 1504.5 1548.4 1523.3 1513.2" class="fall" marker-end="url(#arrowr)"/>
+<path d="M 1405.0 1618.6 Q 1392.0 1618.6 1379.0 1618.6" class="path"/>
+<path d="M 1529.0 1631.5 Q 1542.0 1634.2 1555.0 1636.9" class="path" marker-end="url(#arrow)"/>
+<path d="M 1317.0 1583.6 Q 1317.0 1462.6 1317.0 1341.6" class="fall" marker-end="url(#arrowr)"/>
+<path d="M 1255.0 1618.6 Q 1242.0 1618.6 1229.0 1618.6" class="path"/>
+<path d="M 1167.0 1583.6 Q 1167.0 1514.6 1167.0 1445.6" class="path"/>
+<path d="M 1105.0 1589.9 Q 942.0 1514.6 779.0 1439.3" class="path"/>
+<line x1="1167.0" y1="1445.6" x2="1167.0" y2="1471.6" class="stub" marker-end="url(#arrow)"/>
+<path d="M 1167.0 1375.6 Q 1167.0 1358.6 1167.0 1341.6" class="path"/>
+<path d="M 717.0 1375.6 Q 717.0 1358.6 717.0 1341.6" class="wave"/>
+<path d="M 767.5 1375.6 Q 792.0 1358.6 816.5 1341.6" class="fall" marker-end="url(#arrowr)"/>
+<path d="M 1529.0 1306.6 Q 1542.0 1306.6 1555.0 1306.6" class="path" marker-end="url(#arrow)"/>
+<path d="M 1405.0 1306.6 Q 1392.0 1306.6 1379.0 1306.6" class="path"/>
+<path d="M 1255.0 1306.6 Q 1242.0 1306.6 1229.0 1306.6" class="path"/>
+<path d="M 1105.0 1306.6 Q 1092.0 1306.6 1079.0 1306.6" class="path"/>
+<path d="M 955.0 1306.6 Q 942.0 1306.6 929.0 1306.6" class="path"/>
+<path d="M 841.3 1341.6 Q 717.0 1510.6 592.7 1341.6" class="path"/>
+<path d="M 1780.0 1208.7 Q 1645.4 1221.8 1529.0 1277.1" class="fall" marker-end="url(#arrowr)"/>
+<path d="M 1816.8 1167.6 Q 1804.5 1150.6 1792.2 1133.6" class="path"/>
+<path d="M 1780.0 1202.6 Q 1654.5 1202.6 1529.0 1202.6" class="path"/>
+<path d="M 1405.0 1210.2 Q 1305.9 1222.5 1224.8 1271.6" class="fall" marker-end="url(#arrowr)"/>
+<path d="M 1405.0 1202.6 Q 1317.0 1202.6 1229.0 1202.6" class="path"/>
+<path d="M 1467.0 1167.6 Q 1467.0 1150.6 1467.0 1133.6" class="path"/>
+<path d="M 1116.5 1237.6 Q 1092.0 1254.6 1067.5 1271.6" class="fall" marker-end="url(#arrowr)"/>
+<path d="M 1105.0 1202.6 Q 942.0 1202.6 779.0 1202.6" class="path"/>
+<path d="M 1217.5 1167.6 Q 1242.0 1150.6 1266.5 1133.6" class="path"/>
+<path d="M 717.0 1237.6 Q 717.0 1254.6 717.0 1271.6" class="wave"/>
+<path d="M 767.5 1237.6 Q 792.0 1254.6 816.5 1271.6" class="fall" marker-end="url(#arrowr)"/>
+<path d="M 750.7 1167.6 Q 867.0 1046.6 983.3 925.6" class="path"/>
+<path d="M 700.2 1167.6 Q 642.0 1046.6 583.8 925.6" class="path"/>
+<path d="M 1758.6 1063.6 Q 1729.5 942.6 1700.4 821.6" class="path"/>
+<path d="M 1705.0 1098.6 Q 1617.0 1098.6 1529.0 1098.6" class="path"/>
+<path d="M 1467.0 1063.6 Q 1467.0 1046.6 1467.0 1029.6" class="path"/>
+<path d="M 1405.0 1098.6 Q 1392.0 1098.6 1379.0 1098.6" class="path"/>
+<path d="M 1367.5 1063.6 Q 1392.0 1046.6 1416.5 1029.6" class="path"/>
+<path d="M 1266.5 1063.6 Q 1167.0 994.6 1067.5 925.6" class="path"/>
+<path d="M 1079.0 861.9 Q 1129.5 838.6 1180.0 815.3" class="path"/>
+<path d="M 1017.0 855.6 Q 1017.0 838.6 1017.0 821.6" class="path"/>
+<path d="M 955.0 890.6 Q 792.0 890.6 629.0 890.6" class="path"/>
+<path d="M 1467.0 959.6 Q 1467.0 942.6 1467.0 925.6" class="path"/>
+<path d="M 1429.1 959.6 Q 1354.5 890.6 1279.9 821.6" class="path"/>
+<path d="M 1504.9 959.6 Q 1579.5 890.6 1654.1 821.6" class="path"/>
+<line x1="1467.0" y1="855.6" x2="1467.0" y2="829.6" class="stub" marker-end="url(#arrow)"/>
+<path d="M 1630.0 782.3 Q 1579.5 778.8 1529.0 775.3" class="path" marker-end="url(#arrow)"/>
+<path d="M 1671.0 751.6 Q 1579.5 599.4 1488.0 447.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 1654.1 751.6 Q 1579.5 682.6 1504.9 613.6" class="path"/>
+<path d="M 1304.0 782.3 Q 1354.5 778.8 1405.0 775.3" class="path" marker-end="url(#arrow)"/>
+<path d="M 1279.9 751.6 Q 1354.5 682.6 1429.1 613.6" class="path"/>
+<path d="M 1180.0 786.6 Q 1129.5 786.6 1079.0 786.6" class="path"/>
+<path d="M 1017.0 751.6 Q 1017.0 682.6 1017.0 613.6" class="path"/>
+<path d="M 955.0 786.6 Q 792.0 786.6 629.0 786.6" class="path"/>
+<path d="M 567.0 855.6 Q 567.0 838.6 567.0 821.6" class="path"/>
+<path d="M 505.0 890.6 Q 492.0 890.6 479.0 890.6" class="path"/>
+<path d="M 1467.0 613.6 Q 1467.0 674.8 1467.0 736.0" class="path" marker-end="url(#arrow)"/>
+<path d="M 1405.0 578.6 Q 1242.0 578.6 1079.0 578.6" class="path"/>
+<path d="M 1467.0 543.6 Q 1467.0 495.4 1467.0 447.2" class="path"/>
+<path d="M 955.0 607.3 Q 792.0 682.6 629.0 757.9" class="path" marker-end="url(#arrow)"/>
+<path d="M 1079.0 555.7 Q 1242.0 495.4 1405.0 435.1" class="path" marker-end="url(#arrow)"/>
+<path d="M 1451.0 377.2 c -10.0 -30.0 42.0 -30.0 32.0 0.0" class="path" fill="none" marker-end="url(#arrow)"/>
+<path d="M 1405.0 413.6 Q 1017.0 422.6 629.0 431.6" class="path"/>
+<line x1="2129.0" y1="1348.2" x2="2155.0" y2="1348.2" class="stub" marker-end="url(#arrow)"/>
+<path d="M 2051.0 1313.2 c -10.0 -30.0 42.0 -30.0 32.0 0.0" class="path" fill="none" marker-end="url(#arrow)"/>
+<line x1="2032.0" y1="1383.2" x2="2013.6" y2="1401.6" class="stub" marker-end="url(#arrow)"/>
+<line x1="4645.0" y1="1240.4" x2="4645.0" y2="1214.4" class="stub" marker-end="url(#arrow)"/>
+<path d="M 4707.0 1275.4 Q 4720.0 1275.4 4733.0 1275.4" class="path"/>
+<path d="M 4667.8 1310.4 Q 4750.0 1436.6 4832.2 1562.8" class="path"/>
+<path d="M 4583.0 1275.4 Q 4570.0 1275.4 4557.0 1275.4" class="path"/>
+<line x1="4645.0" y1="1310.4" x2="4645.0" y2="1336.4" class="stub" marker-end="url(#arrow)"/>
+<path d="M 3568.0 1067.4 Q 3656.0 1067.4 3744.0 1067.4" class="door"/>
+<circle cx="3656.0" cy="1067.4" r="5.5" class="doorm"/>
+<line x1="3506.0" y1="1032.4" x2="3506.0" y2="1006.4" class="stub" marker-end="url(#arrow)"/>
+<path d="M 3528.9 1102.4 Q 3543.5 1124.6 3558.1 1146.8" class="path"/>
+<path d="M 3444.0 1067.4 Q 3431.0 1067.4 3418.0 1067.4" class="path"/>
+<path d="M 3956.0 1271.6 Q 3956.0 1244.2 3956.0 1216.8" class="path"/>
+<line x1="3956.0" y1="1341.6" x2="3956.0" y2="1367.6" class="stub" marker-end="url(#arrow)"/>
+<path d="M 4495.0 1240.4 Q 4495.0 1223.4 4495.0 1206.4" class="path"/>
+<path d="M 4744.5 1240.4 Q 4720.0 1223.4 4695.5 1206.4" class="path"/>
+<path d="M 4795.0 689.2 Q 4795.0 672.2 4795.0 655.2" class="path"/>
+<line x1="4760.0" y1="759.2" x2="4741.6" y2="777.6" class="stub" marker-end="url(#arrow)"/>
+<path d="M 4583.0 1171.4 Q 4570.0 1171.4 4557.0 1171.4" class="path"/>
+<path d="M 4917.0 1389.8 Q 4930.0 1389.8 4943.0 1389.8" class="path"/>
+<path d="M 5067.0 1389.8 Q 5080.0 1389.8 5093.0 1389.8" class="path"/>
+<path d="M 5005.0 1424.8 Q 5005.0 1441.8 5005.0 1458.8" class="path"/>
+<path d="M 4954.5 1528.8 Q 4930.0 1545.8 4905.5 1562.8" class="path"/>
+<path d="M 4917.0 1597.8 Q 4930.0 1597.8 4943.0 1597.8" class="path"/>
+<path d="M 5067.0 1597.8 Q 5080.0 1597.8 5093.0 1597.8" class="path"/>
+<path d="M 5217.0 1597.8 Q 5230.0 1597.8 5243.0 1597.8" class="path"/>
+<path d="M 5305.0 1632.8 Q 5305.0 1701.8 5305.0 1770.8" class="path"/>
+<path d="M 5404.5 1736.8 Q 5380.0 1753.8 5355.5 1770.8" class="path"/>
+<path d="M 5067.0 1805.8 Q 5080.0 1805.8 5093.0 1805.8" class="door"/>
+<circle cx="5080.0" cy="1805.8" r="5.5" class="doorm"/>
+<path d="M 5055.5 1840.8 Q 5080.0 1857.8 5104.5 1874.8" class="blocked"/>
+<path d="M 5217.0 1805.8 Q 5230.0 1805.8 5243.0 1805.8" class="path"/>
+<path d="M 5305.0 1840.8 Q 5305.0 1857.8 5305.0 1874.8" class="door"/>
+<circle cx="5305.0" cy="1857.8" r="5.5" class="doorm"/>
+<path d="M 5355.5 1840.8 Q 5380.0 1857.8 5404.5 1874.8" class="path"/>
+<path d="M 5254.5 1840.8 Q 5230.0 1857.8 5205.5 1874.8" class="path"/>
+<line x1="5420.0" y1="1944.8" x2="5401.6" y2="1963.2" class="stub" marker-end="url(#arrow)"/>
+<path d="M 3806.0 447.2 Q 3806.0 464.2 3806.0 481.2" class="door"/>
+<circle cx="3806.0" cy="464.2" r="5.5" class="doorm"/>
+<path d="M 3755.5 551.2 Q 3731.0 568.2 3706.5 585.2" class="path"/>
+<line x1="3841.0" y1="481.2" x2="3859.4" y2="462.8" class="stub" marker-end="url(#arrow)"/>
+<path d="M 3656.0 655.2 Q 3656.0 672.2 3656.0 689.2" class="door"/>
+<circle cx="3656.0" cy="672.2" r="5.5" class="doorm"/>
+<path d="M 3718.0 620.2 Q 3731.0 620.2 3744.0 620.2" class="path"/>
+<path d="M 4795.0 447.2 Q 4795.0 464.2 4795.0 481.2" class="path"/>
+<path d="M 4495.0 603.2 Q 4495.0 646.2 4495.0 689.2" class="path"/>
+<path d="M 4795.0 1001.2 Q 4795.0 984.2 4795.0 967.2" class="path"/>
+<path d="M 5095.0 603.2 Q 5095.0 646.2 5095.0 689.2" class="path"/>
+<path d="M 4557.0 724.2 Q 4570.0 724.2 4583.0 724.2" class="door"/>
+<circle cx="4570.0" cy="724.2" r="5.5" class="doorm"/>
+<path d="M 4795.0 551.2 Q 4795.0 568.2 4795.0 585.2" class="path"/>
+<path d="M 4795.0 897.2 Q 4795.0 880.2 4795.0 863.2" class="door"/>
+<circle cx="4795.0" cy="880.2" r="5.5" class="doorm"/>
+<path d="M 5033.0 724.2 Q 5020.0 724.2 5007.0 724.2" class="path"/>
+<path d="M 4645.0 655.2 Q 4645.0 672.2 4645.0 689.2" class="path"/>
+<path d="M 4945.0 655.2 Q 4945.0 672.2 4945.0 689.2" class="path"/>
+<path d="M 4845.5 655.2 Q 4870.0 672.2 4894.5 689.2" class="path"/>
+<path d="M 4744.5 655.2 Q 4720.0 672.2 4695.5 689.2" class="path"/>
+<path d="M 4695.5 759.2 Q 4720.0 776.2 4744.5 793.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 4945.0 759.2 Q 4945.0 776.2 4945.0 793.2" class="path"/>
+<path d="M 4894.5 759.2 Q 4870.0 776.2 4845.5 793.2" class="path"/>
+<path d="M 4707.0 828.2 Q 4720.0 828.2 4733.0 828.2" class="path"/>
+<path d="M 4645.0 793.2 Q 4645.0 776.2 4645.0 759.2" class="secret" marker-end="url(#arrow)"/>
+<path d="M 3406.5 793.2 Q 3431.0 776.2 3455.5 759.2" class="path"/>
+<path d="M 3418.0 845.4 Q 3431.0 849.0 3444.0 852.6" class="path"/>
+<path d="M 3294.0 833.9 Q 3071.0 854.2 2848.0 874.5" class="secret"/>
+<path d="M 3506.0 759.2 Q 3506.0 797.0 3506.0 834.8" class="path"/>
+<path d="M 3568.0 724.2 Q 3581.0 724.2 3594.0 724.2" class="secret"/>
+<path d="M 3656.0 759.2 Q 3656.0 786.6 3656.0 814.0" class="path"/>
+<path d="M 3656.0 884.0 Q 3656.0 906.2 3656.0 928.4" class="path"/>
+<path d="M 3656.0 998.4 Q 3656.0 1135.0 3656.0 1271.6" class="path"/>
+<path d="M 3635.0 1271.6 Q 3618.5 1244.2 3602.0 1216.8" class="path"/>
+<path d="M 3806.0 1102.4 Q 3806.0 1259.8 3806.0 1417.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3868.0 1067.4 Q 3881.0 1067.4 3894.0 1067.4" class="path"/>
+<path d="M 4018.0 1067.4 Q 4031.0 1067.4 4044.0 1067.4" class="door"/>
+<circle cx="4031.0" cy="1067.4" r="5.5" class="doorm"/>
+<path d="M 3956.0 1102.4 Q 3956.0 1124.6 3956.0 1146.8" class="path"/>
+<path d="M 4106.0 1102.4 Q 4106.0 1124.6 4106.0 1146.8" class="path"/>
+<path d="M 4106.0 1216.8 Q 4106.0 1244.2 4106.0 1271.6" class="path"/>
+<path d="M 3356.0 1102.4 Q 3356.0 1124.6 3356.0 1146.8" class="path"/>
+<path d="M 3381.2 1216.8 Q 3401.0 1244.2 3420.8 1271.6" class="path"/>
+<path d="M 3460.4 1341.6 Q 3476.0 1379.4 3491.6 1417.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3384.0 1306.6 Q 3356.0 1306.6 3328.0 1306.6" class="secret"/>
+<path d="M 3568.0 1452.2 Q 3581.0 1452.2 3594.0 1452.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3444.0 1452.2 Q 3431.0 1452.2 3418.0 1452.2" class="path"/>
+<path d="M 3806.0 1487.2 Q 3806.0 1504.2 3806.0 1521.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3754.5 1417.2 Q 3656.0 1350.2 3557.5 1417.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3356.0 1487.2 Q 3356.0 1504.2 3356.0 1521.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3706.5 1487.2 Q 3731.0 1504.2 3755.5 1521.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3718.0 1452.2 Q 3731.0 1452.2 3744.0 1452.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3744.0 1556.2 Q 3731.0 1556.2 3718.0 1556.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3418.0 1556.2 Q 3431.0 1556.2 3444.0 1556.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3406.5 1591.2 Q 3431.0 1608.2 3455.5 1625.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3568.0 1556.2 Q 3581.0 1556.2 3594.0 1556.2" class="path"/>
+<path d="M 3506.0 1591.2 Q 3506.0 1608.2 3506.0 1625.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3605.5 1591.2 Q 3581.0 1608.2 3556.5 1625.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3568.0 1660.2 Q 3581.0 1660.2 3594.0 1660.2" class="path"/>
+<path d="M 3444.0 1660.2 Q 3431.0 1660.2 3418.0 1660.2" class="path"/>
+<path d="M 3531.7 1625.2 Q 3656.0 1456.2 3780.3 1625.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3356.0 1695.2 Q 3356.0 1712.2 3356.0 1729.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3630.3 1695.2 Q 3506.0 1864.2 3381.7 1695.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3744.0 1660.2 Q 3731.0 1660.2 3718.0 1660.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3755.5 1695.2 Q 3731.0 1712.2 3706.5 1729.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3418.0 1764.2 Q 3431.0 1764.2 3444.0 1764.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3594.0 1764.2 Q 3581.0 1764.2 3568.0 1764.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3718.0 1764.2 Q 3731.0 1764.2 3744.0 1764.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3556.5 1729.2 Q 3581.0 1712.2 3605.5 1695.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3465.8 1729.2 Q 3273.7 1561.9 3422.4 1341.6" class="path" marker-end="url(#arrow)"/>
+<path d="M 3754.5 1799.2 Q 3656.0 1866.2 3557.5 1799.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3785.5 1729.2 Q 3602.0 1415.8 3785.5 1102.4" class="path" marker-end="url(#arrow)"/>
+<path d="M 567.0 751.6 Q 567.0 609.8 567.0 468.0" class="path"/>
+<path d="M 505.0 786.6 Q 492.0 786.6 479.0 786.6" class="path"/>
+<path d="M 417.0 855.6 Q 417.0 838.6 417.0 821.6" class="path"/>
+<path d="M 355.0 890.6 Q 342.0 890.6 329.0 890.6" class="path"/>
+<path d="M 355.0 786.6 Q 342.0 786.6 329.0 786.6" class="path"/>
+<path d="M 267.0 821.6 Q 267.0 838.6 267.0 855.6" class="path"/>
+<path d="M 267.0 1445.6 Q 267.0 1618.6 267.0 1791.6" class="path"/>
+<path d="M 315.9 1861.6 Q 717.0 2149.0 1118.1 2436.4" class="path"/>
+<path d="M 505.0 1306.6 Q 492.0 1306.6 479.0 1306.6" class="path"/>
+<path d="M 355.0 1306.6 Q 342.0 1306.6 329.0 1306.6" class="path"/>
+<line x1="417.0" y1="1271.6" x2="417.0" y2="1245.6" class="stub" marker-end="url(#arrow)"/>
+<line x1="567.0" y1="468.0" x2="567.0" y2="494.0" class="stub" marker-end="url(#arrow)"/>
+<path d="M 2735.5 845.2 Q 2696.0 817.8 2656.5 790.4" class="path" marker-end="url(#arrow)"/>
+<path d="M 2786.0 845.2 Q 2786.0 817.8 2786.0 790.4" class="path" marker-end="url(#arrow)"/>
+<line x1="2786.0" y1="915.2" x2="2786.0" y2="941.2" class="stub" marker-end="url(#arrow)"/>
+<path d="M 2668.0 755.4 Q 2696.0 755.4 2724.0 755.4" class="path" marker-end="url(#arrow)"/>
+<path d="M 2606.0 720.4 Q 2606.0 687.8 2606.0 655.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 2739.4 720.4 Q 2696.0 687.8 2652.6 655.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 2848.0 731.0 Q 3011.0 667.0 3174.0 603.0" class="path"/>
+<path d="M 2968.0 412.2 Q 2981.0 412.2 2994.0 412.2" class="path" marker-end="url(#arrow)"/>
+<line x1="2906.0" y1="377.2" x2="2906.0" y2="351.2" class="stub" marker-end="url(#arrow)"/>
+<path d="M 2855.5 447.2 Q 2831.0 464.2 2806.5 481.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3005.5 447.2 Q 2981.0 464.2 2956.5 481.2" class="path"/>
+<path d="M 3118.0 412.2 Q 3146.0 412.2 3174.0 412.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 2694.0 516.2 Q 2681.0 516.2 2668.0 516.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 2809.9 551.2 Q 2972.8 656.9 3044.1 447.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 2656.5 551.2 Q 2681.0 568.2 2705.5 585.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 2906.0 481.2 Q 2906.0 464.2 2906.0 447.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 2818.0 640.7 Q 2913.5 672.2 3009.0 703.7" class="blocked"/>
+<path d="M 2806.5 585.2 Q 2831.0 568.2 2855.5 551.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 2763.8 655.2 Q 2771.0 687.8 2778.2 720.4" class="path" marker-end="url(#arrow)"/>
+<path d="M 2668.0 620.2 Q 2681.0 620.2 2694.0 620.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 2606.0 585.2 Q 2606.0 568.2 2606.0 551.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 3190.1 447.2 Q 3011.0 583.8 2831.9 720.4" class="path" marker-end="url(#arrow)"/>
+<path d="M 3236.0 447.2 Q 3236.0 495.4 3236.0 543.6" class="path"/>
+<path d="M 3174.0 600.8 Q 2973.1 672.9 2817.6 845.2" class="path" marker-end="url(#arrow)"/>
+<path d="M 1724.0 2263.4 Q 1744.5 2263.4 1765.0 2263.4" class="path"/>
+<path d="M 1662.0 2298.4 Q 1662.0 2315.4 1662.0 2332.4" class="path"/>
+<path d="M 1889.0 2263.4 Q 1909.5 2263.4 1930.0 2263.4" class="path"/>
+<path d="M 1827.0 2298.4 Q 1827.0 2315.4 1827.0 2332.4" class="path"/>
+<path d="M 1853.1 2228.4 Q 1937.6 2114.8 1920.9 1965.6" class="path" marker-end="url(#arrow)"/>
+<path d="M 1724.0 2367.4 Q 1744.5 2367.4 1765.0 2367.4" class="path"/>
+<path d="M 1717.5 2402.4 Q 1744.5 2419.4 1771.5 2436.4" class="path"/>
+<path d="M 1600.0 2367.4 Q 1564.5 2367.4 1529.0 2367.4" class="path"/>
+<path d="M 2054.0 2263.4 Q 2074.5 2263.4 2095.0 2263.4" class="path"/>
+<path d="M 1992.0 2298.4 Q 1992.0 2315.4 1992.0 2332.4" class="path"/>
+<path d="M 2013.0 2228.4 Q 2029.5 2201.0 2046.0 2173.6" class="path"/>
+<path d="M 1889.0 2367.4 Q 1909.5 2367.4 1930.0 2367.4" class="path"/>
+<path d="M 1827.0 2402.4 Q 1827.0 2419.4 1827.0 2436.4" class="path"/>
+<path d="M 1992.0 2402.4 Q 1992.0 2419.4 1992.0 2436.4" class="path"/>
+<path d="M 2067.0 2103.6 Q 2067.0 2034.6 2067.0 1965.6" class="path"/>
+<path d="M 2129.0 2138.6 Q 2142.0 2138.6 2155.0 2138.6" class="path"/>
+<path d="M 2092.2 1965.6 Q 2142.0 2034.6 2191.8 2103.6" class="path"/>
+<path d="M 2224.2 2173.6 Q 2251.0 2305.0 2224.2 2436.4" class="path"/>
+<path d="M 2155.0 2471.4 Q 2104.5 2471.4 2054.0 2471.4" class="path"/>
+<path d="M 1930.0 2471.4 Q 1909.5 2471.4 1889.0 2471.4" class="path"/>
+<path d="M 1467.0 2402.4 Q 1467.0 2419.4 1467.0 2436.4" class="path"/>
+<path d="M 1467.0 2332.4 Q 1467.0 2315.4 1467.0 2298.4" class="blocked" marker-end="url(#arrow)"/>
+<path d="M 1765.0 2471.4 Q 1647.0 2471.4 1529.0 2471.4" class="path"/>
+<path d="M 1229.0 2471.4 Q 1317.0 2471.4 1405.0 2471.4" class="path"/>
+<path d="M 3894.0 620.2 Q 3881.0 620.2 3868.0 620.2" class="door"/>
+<circle cx="3881.0" cy="620.2" r="5.5" class="doorm"/>
+<path d="M 1829.0 1520.0 Q 1842.0 1514.6 1855.0 1509.2" class="path"/>
+<path d="M 1767.0 1510.8 Q 1767.0 1478.2 1767.0 1445.6" class="path"/>
+<path d="M 1780.6 1580.8 Q 1842.0 1738.2 1903.4 1895.6" class="path" marker-end="url(#arrow)"/>
+<path d="M 1829.0 1397.7 Q 1917.0 1379.4 2005.0 1361.1" class="path" marker-end="url(#arrow)"/>
+<path d="M 1829.0 1440.7 Q 1842.0 1447.0 1855.0 1453.3" class="path"/>
+<path d="M 1917.0 1518.4 Q 1917.0 1707.0 1917.0 1895.6" class="path" marker-end="url(#arrow)"/>
+<line x1="3036.0" y1="759.2" x2="3017.6" y2="777.6" class="stub blocked" marker-end="url(#arrow)"/>
+<path d="M 1557.3 1443.2 Q 1579.5 1392.4 1601.7 1341.6" class="fall" marker-end="url(#arrowr)"/>
+<path d="M 1555.0 1306.6 Q 1542.0 1306.6 1529.0 1306.6" class="fall" marker-end="url(#arrowr)"/>
+<path d="M 3294.0 1092.0 Q 3251.0 1109.0 3208.0 1126.0" class="fall" marker-end="url(#arrowr)"/>
+<path d="M 3169.9 1115.6 Q 3287.7 943.4 3444.4 1032.4" class="fall" marker-end="url(#arrowr)"/>
+<path d="M 3208.0 1182.8 Q 3296.0 1228.6 3384.0 1274.4" class="fall" marker-end="url(#arrowr)"/>
+<g class="box"><rect x="505.0" y="398.0" width="124" height="70" rx="5"/>
+<text x="510.0" y="409.0" class="id">8A</text>
+<text x="567.0" y="435.0" class="name">West mountains</text>
+</g>
+<g class="box"><rect x="1405.0" y="377.2" width="124" height="70" rx="5"/>
+<text x="1410.0" y="388.2" class="id">30</text>
+<text x="1467.0" y="414.2" class="name">High mountains</text>
+</g>
+<g class="box"><rect x="955.0" y="543.6" width="124" height="70" rx="5"/>
+<text x="960.0" y="554.6" class="id">2F</text>
+<text x="1017.0" y="580.6" class="name">Arid desert</text>
+</g>
+<g class="box"><rect x="1405.0" y="543.6" width="124" height="70" rx="5"/>
+<text x="1410.0" y="554.6" class="id">2E</text>
+<text x="1467.0" y="580.6" class="name">Back of the castle</text>
+</g>
+<g class="box"><rect x="205.0" y="751.6" width="124" height="70" rx="5"/>
+<text x="210.0" y="762.6" class="id">83</text>
+<text x="267.0" y="774.6" class="name">Cliff top</text>
+<text x="267.0" y="785.6" class="who">sand lurker (mace), sand</text>
+<text x="267.0" y="795.6" class="who">lurker (bag of silver ★),</text>
+<text x="267.0" y="805.6" class="who">sand lurker</text>
+</g>
+<g class="box"><rect x="355.0" y="751.6" width="124" height="70" rx="5"/>
+<text x="360.0" y="762.6" class="id">82</text>
+<text x="417.0" y="788.6" class="name">Arid desert</text>
+</g>
+<g class="box"><rect x="505.0" y="751.6" width="124" height="70" rx="5"/>
+<text x="510.0" y="762.6" class="id">80</text>
+<text x="567.0" y="788.6" class="name">Arid desert</text>
+</g>
+<g class="box"><rect x="955.0" y="751.6" width="124" height="70" rx="5"/>
+<text x="960.0" y="762.6" class="id">2C</text>
+<text x="1017.0" y="788.6" class="name">Arid desert</text>
+</g>
+<g class="box"><rect x="1180.0" y="751.6" width="124" height="70" rx="5"/>
+<text x="1185.0" y="762.6" class="id">2B</text>
+<text x="1242.0" y="788.6" class="name">Arid desert</text>
+</g>
+<g class="box special"><rect x="1405.0" y="736.0" width="124" height="70" rx="5"/>
+<text x="1410.0" y="747.0" class="id">32</text>
+<text x="1467.0" y="773.0" class="name">The moat</text>
+</g>
+<g class="box"><rect x="1630.0" y="751.6" width="124" height="70" rx="5"/>
+<text x="1635.0" y="762.6" class="id">2A</text>
+<text x="1692.0" y="788.6" class="name">Arid desert</text>
+</g>
+<g class="box"><rect x="205.0" y="855.6" width="124" height="70" rx="5"/>
+<text x="210.0" y="866.6" class="id">84</text>
+<text x="267.0" y="892.6" class="name">Cliff top</text>
+</g>
+<g class="box"><rect x="355.0" y="855.6" width="124" height="70" rx="5"/>
+<text x="360.0" y="866.6" class="id">81</text>
+<text x="417.0" y="892.6" class="name">Arid desert</text>
+</g>
+<g class="box"><rect x="505.0" y="855.6" width="124" height="70" rx="5"/>
+<text x="510.0" y="866.6" class="id">2D</text>
+<text x="567.0" y="892.6" class="name">Arid desert</text>
+</g>
+<g class="box"><rect x="955.0" y="855.6" width="124" height="70" rx="5"/>
+<text x="960.0" y="866.6" class="id">27</text>
+<text x="1017.0" y="892.6" class="name">Arid desert</text>
+</g>
+<g class="box"><rect x="1405.0" y="855.6" width="124" height="70" rx="5"/>
+<text x="1410.0" y="866.6" class="id">29</text>
+<text x="1467.0" y="892.6" class="name">Draw bridge</text>
+</g>
+<g class="box"><rect x="1405.0" y="959.6" width="124" height="70" rx="5"/>
+<text x="1410.0" y="970.6" class="id">28</text>
+<text x="1467.0" y="990.6" class="name">Desert around the</text>
+<text x="1467.0" y="1003.6" class="name">castle</text>
+</g>
+<g class="box"><rect x="1255.0" y="1063.6" width="124" height="70" rx="5"/>
+<text x="1260.0" y="1074.6" class="id">26</text>
+<text x="1317.0" y="1100.6" class="name">Arid desert</text>
+</g>
+<g class="box"><rect x="1405.0" y="1063.6" width="124" height="70" rx="5"/>
+<text x="1410.0" y="1074.6" class="id">25</text>
+<text x="1467.0" y="1100.6" class="name">Arid desert</text>
+</g>
+<g class="box"><rect x="1705.0" y="1063.6" width="124" height="70" rx="5"/>
+<text x="1710.0" y="1074.6" class="id">24</text>
+<text x="1767.0" y="1100.6" class="name">Arid desert</text>
+</g>
+<g class="box"><rect x="655.0" y="1167.6" width="124" height="70" rx="5"/>
+<text x="660.0" y="1178.6" class="id">23</text>
+<text x="717.0" y="1204.6" class="name">Edge of the fissure</text>
+</g>
+<g class="box"><rect x="1105.0" y="1167.6" width="124" height="70" rx="5"/>
+<text x="1110.0" y="1178.6" class="id">22</text>
+<text x="1167.0" y="1204.6" class="name">Cliff top</text>
+</g>
+<g class="box"><rect x="1405.0" y="1167.6" width="124" height="70" rx="5"/>
+<text x="1410.0" y="1178.6" class="id">21</text>
+<text x="1467.0" y="1204.6" class="name">North of the canyon</text>
+</g>
+<g class="box"><rect x="1780.0" y="1167.6" width="124" height="70" rx="5"/>
+<text x="1785.0" y="1178.6" class="id">20</text>
+<text x="1842.0" y="1204.6" class="name">Cliff top</text>
+</g>
+<g class="box"><rect x="205.0" y="1271.6" width="124" height="70" rx="5"/>
+<text x="210.0" y="1282.6" class="id">89</text>
+<text x="267.0" y="1308.6" class="name">Watersmeet</text>
+</g>
+<g class="box"><rect x="355.0" y="1271.6" width="124" height="70" rx="5"/>
+<text x="360.0" y="1282.6" class="id">88</text>
+<text x="417.0" y="1308.6" class="name">Narrow fissure</text>
+</g>
+<g class="box"><rect x="505.0" y="1271.6" width="124" height="70" rx="5"/>
+<text x="510.0" y="1282.6" class="id">87</text>
+<text x="567.0" y="1308.6" class="name">Narrow fissure</text>
+</g>
+<g class="box"><rect x="655.0" y="1271.6" width="124" height="70" rx="5"/>
+<text x="660.0" y="1282.6" class="id">97</text>
+<text x="717.0" y="1308.6" class="name">The Crystal Bridge</text>
+</g>
+<g class="box"><rect x="805.0" y="1271.6" width="124" height="70" rx="5"/>
+<text x="810.0" y="1282.6" class="id">1F</text>
+<text x="867.0" y="1308.6" class="name">Very narrow fissure</text>
+</g>
+<g class="box"><rect x="955.0" y="1271.6" width="124" height="70" rx="5"/>
+<text x="960.0" y="1282.6" class="id">1E</text>
+<text x="1017.0" y="1294.6" class="name">West end of the</text>
+<text x="1017.0" y="1307.6" class="name">canyon</text>
+<text x="1017.0" y="1318.6" class="who">2 elves, elf (axe)</text>
+</g>
+<g class="box"><rect x="1105.0" y="1271.6" width="124" height="70" rx="5"/>
+<text x="1110.0" y="1282.6" class="id">1D</text>
+<text x="1167.0" y="1308.6" class="name">Canyon floor</text>
+</g>
+<g class="box"><rect x="1255.0" y="1271.6" width="124" height="70" rx="5"/>
+<text x="1260.0" y="1282.6" class="id">1C</text>
+<text x="1317.0" y="1308.6" class="name">Deep canyon</text>
+</g>
+<g class="box"><rect x="1405.0" y="1271.6" width="124" height="70" rx="5"/>
+<text x="1410.0" y="1282.6" class="id">1B</text>
+<text x="1467.0" y="1302.6" class="name">Large rock on the</text>
+<text x="1467.0" y="1315.6" class="name">canyon floor</text>
+</g>
+<g class="box special"><rect x="1555.0" y="1271.6" width="124" height="70" rx="5"/>
+<text x="1560.0" y="1282.6" class="id">1A</text>
+<text x="1617.0" y="1308.6" class="name">Crocodile pool</text>
+</g>
+<g class="box"><rect x="205.0" y="1375.6" width="124" height="70" rx="5"/>
+<text x="210.0" y="1386.6" class="id">85</text>
+<text x="267.0" y="1404.6" class="name">Cliff top</text>
+<text x="267.0" y="1415.6" class="who">troll (broad sword)</text>
+</g>
+<g class="box"><rect x="430.0" y="1375.6" width="124" height="70" rx="5"/>
+<text x="435.0" y="1386.6" class="id">10</text>
+<text x="492.0" y="1412.6" class="name">Dense forest</text>
+</g>
+<g class="box"><rect x="655.0" y="1375.6" width="124" height="70" rx="5"/>
+<text x="660.0" y="1386.6" class="id">19</text>
+<text x="717.0" y="1406.6" class="name">South edge of the</text>
+<text x="717.0" y="1419.6" class="name">fissure</text>
+</g>
+<g class="box"><rect x="1105.0" y="1375.6" width="124" height="70" rx="5"/>
+<text x="1110.0" y="1386.6" class="id">18</text>
+<text x="1167.0" y="1406.6" class="name">Steeply sloping</text>
+<text x="1167.0" y="1419.6" class="name">trail</text>
+</g>
+<g class="box"><rect x="1705.0" y="1375.6" width="124" height="70" rx="5"/>
+<text x="1710.0" y="1386.6" class="id">AC</text>
+<text x="1767.0" y="1412.6" class="name">High mountains</text>
+</g>
+<g class="box"><rect x="2005.0" y="1313.2" width="124" height="70" rx="5"/>
+<text x="2010.0" y="1324.2" class="id">31</text>
+<text x="2067.0" y="1342.2" class="name">High mountains</text>
+<text x="2067.0" y="1353.2" class="obj">bag of gold ★</text>
+</g>
+<g class="box"><rect x="1855.0" y="1448.4" width="124" height="70" rx="5"/>
+<text x="1860.0" y="1459.4" class="id">AD</text>
+<text x="1917.0" y="1485.4" class="name">High mountains</text>
+</g>
+<g class="box"><rect x="1705.0" y="1510.8" width="124" height="70" rx="5"/>
+<text x="1710.0" y="1521.8" class="id">AB</text>
+<text x="1767.0" y="1547.8" class="name">High mountains</text>
+</g>
+<g class="box"><rect x="1105.0" y="1583.6" width="124" height="70" rx="5"/>
+<text x="1110.0" y="1594.6" class="id">17</text>
+<text x="1167.0" y="1614.6" class="name">End of a winding</text>
+<text x="1167.0" y="1627.6" class="name">trail</text>
+</g>
+<g class="box"><rect x="1255.0" y="1583.6" width="124" height="70" rx="5"/>
+<text x="1260.0" y="1594.6" class="id">16</text>
+<text x="1317.0" y="1620.6" class="name">Cliff top</text>
+</g>
+<g class="box"><rect x="1405.0" y="1583.6" width="124" height="70" rx="5"/>
+<text x="1410.0" y="1594.6" class="id">15</text>
+<text x="1467.0" y="1612.6" class="name">Top of a waterfall</text>
+<text x="1467.0" y="1623.6" class="who">3 × gorilla (wooden club),</text>
+<text x="1467.0" y="1633.6" class="who">2 gorillas</text>
+</g>
+<g class="box"><rect x="1555.0" y="1614.8" width="124" height="70" rx="5"/>
+<text x="1560.0" y="1625.8" class="id">14</text>
+<text x="1617.0" y="1651.8" class="name">High mountains</text>
+</g>
+<g class="box"><rect x="655.0" y="1687.6" width="124" height="70" rx="5"/>
+<text x="660.0" y="1698.6" class="id">0E</text>
+<text x="717.0" y="1716.6" class="name">Woods</text>
+<text x="717.0" y="1727.6" class="obj">axe</text>
+</g>
+<g class="box"><rect x="1105.0" y="1687.6" width="124" height="70" rx="5"/>
+<text x="1110.0" y="1698.6" class="id">0A</text>
+<text x="1167.0" y="1724.6" class="name">Woods</text>
+</g>
+<g class="box"><rect x="1405.0" y="1687.6" width="124" height="70" rx="5"/>
+<text x="1410.0" y="1698.6" class="id">13</text>
+<text x="1467.0" y="1724.6" class="name">Deep river</text>
+</g>
+<g class="box"><rect x="1555.0" y="1729.2" width="124" height="70" rx="5"/>
+<text x="1560.0" y="1740.2" class="id">12</text>
+<text x="1617.0" y="1766.2" class="name">Pleasant wood</text>
+</g>
+<g class="box"><rect x="205.0" y="1791.6" width="124" height="70" rx="5"/>
+<text x="210.0" y="1802.6" class="id">86</text>
+<text x="267.0" y="1828.6" class="name">Cliff top</text>
+</g>
+<g class="box"><rect x="505.0" y="1791.6" width="124" height="70" rx="5"/>
+<text x="510.0" y="1802.6" class="id">0F</text>
+<text x="567.0" y="1828.6" class="name">Dense forest</text>
+</g>
+<g class="box"><rect x="655.0" y="1791.6" width="124" height="70" rx="5"/>
+<text x="660.0" y="1802.6" class="id">0B</text>
+<text x="717.0" y="1822.6" class="name">Pile of jagged</text>
+<text x="717.0" y="1835.6" class="name">rocks</text>
+</g>
+<g class="box"><rect x="1405.0" y="1791.6" width="124" height="70" rx="5"/>
+<text x="1410.0" y="1802.6" class="id">0D</text>
+<text x="1467.0" y="1828.6" class="name">Narrow river</text>
+</g>
+<g class="box"><rect x="1555.0" y="1843.6" width="124" height="70" rx="5"/>
+<text x="1560.0" y="1854.6" class="id">0C</text>
+<text x="1617.0" y="1880.6" class="name">Woods</text>
+</g>
+<g class="box"><rect x="655.0" y="1895.6" width="124" height="70" rx="5"/>
+<text x="660.0" y="1906.6" class="id">07</text>
+<text x="717.0" y="1918.6" class="name">Disused flint</text>
+<text x="717.0" y="1931.6" class="name">quarry</text>
+<text x="717.0" y="1942.6" class="obj">small flint stone</text>
+</g>
+<g class="box"><rect x="805.0" y="1926.8" width="124" height="70" rx="5"/>
+<text x="810.0" y="1937.8" class="id">06</text>
+<text x="867.0" y="1957.8" class="name">Top of a steep</text>
+<text x="867.0" y="1970.8" class="name">scree slope</text>
+</g>
+<g class="box"><rect x="1405.0" y="1895.6" width="124" height="70" rx="5"/>
+<text x="1410.0" y="1906.6" class="id">09</text>
+<text x="1467.0" y="1932.6" class="name">Stream</text>
+</g>
+<g class="box"><rect x="1555.0" y="1958.0" width="124" height="70" rx="5"/>
+<text x="1560.0" y="1969.0" class="id">08</text>
+<text x="1617.0" y="1995.0" class="name">Small stream</text>
+</g>
+<g class="box"><rect x="1855.0" y="1895.6" width="124" height="70" rx="5"/>
+<text x="1860.0" y="1906.6" class="id">11</text>
+<text x="1917.0" y="1932.6" class="name">High mountains</text>
+</g>
+<g class="box"><rect x="2005.0" y="1895.6" width="124" height="70" rx="5"/>
+<text x="2010.0" y="1906.6" class="id">A0</text>
+<text x="2067.0" y="1932.6" class="name">High mountains</text>
+</g>
+<g class="box"><rect x="1405.0" y="2020.4" width="124" height="70" rx="5"/>
+<text x="1410.0" y="2031.4" class="id">05</text>
+<text x="1467.0" y="2057.4" class="name">Clearing</text>
+</g>
+<g class="box"><rect x="1600.0" y="2062.0" width="124" height="70" rx="5"/>
+<text x="1605.0" y="2073.0" class="id">04</text>
+<text x="1662.0" y="2099.0" class="name">Babbling brook</text>
+</g>
+<g class="box"><rect x="1765.0" y="2020.4" width="124" height="70" rx="5"/>
+<text x="1770.0" y="2031.4" class="id">03</text>
+<text x="1827.0" y="2057.4" class="name">Spring</text>
+</g>
+<g class="box"><rect x="1405.0" y="2124.4" width="124" height="70" rx="5"/>
+<text x="1410.0" y="2135.4" class="id">00</text>
+<text x="1467.0" y="2153.4" class="name">Wooden cabin</text>
+<text x="1467.0" y="2164.4" class="obj">unlit oil lamp, brass key,</text>
+<text x="1467.0" y="2174.4" class="obj">empty stone jug</text>
+</g>
+<g class="box"><rect x="2005.0" y="2103.6" width="124" height="70" rx="5"/>
+<text x="2010.0" y="2114.6" class="id">9F</text>
+<text x="2067.0" y="2140.6" class="name">Moor</text>
+</g>
+<g class="box"><rect x="2155.0" y="2103.6" width="124" height="70" rx="5"/>
+<text x="2160.0" y="2114.6" class="id">A1</text>
+<text x="2217.0" y="2140.6" class="name">High mountains</text>
+</g>
+<g class="box"><rect x="1255.0" y="2228.4" width="124" height="70" rx="5"/>
+<text x="1260.0" y="2239.4" class="id">02</text>
+<text x="1317.0" y="2265.4" class="name">Road</text>
+</g>
+<g class="box"><rect x="1405.0" y="2228.4" width="124" height="70" rx="5"/>
+<text x="1410.0" y="2239.4" class="id">01</text>
+<text x="1467.0" y="2265.4" class="name">Road</text>
+</g>
+<g class="box"><rect x="1600.0" y="2228.4" width="124" height="70" rx="5"/>
+<text x="1605.0" y="2239.4" class="id">98</text>
+<text x="1662.0" y="2265.4" class="name">Road</text>
+</g>
+<g class="box"><rect x="1765.0" y="2228.4" width="124" height="70" rx="5"/>
+<text x="1770.0" y="2239.4" class="id">99</text>
+<text x="1827.0" y="2265.4" class="name">Road</text>
+</g>
+<g class="box"><rect x="1930.0" y="2228.4" width="124" height="70" rx="5"/>
+<text x="1935.0" y="2239.4" class="id">9B</text>
+<text x="1992.0" y="2265.4" class="name">End of the road</text>
+</g>
+<g class="box"><rect x="2095.0" y="2228.4" width="124" height="70" rx="5"/>
+<text x="2100.0" y="2239.4" class="id">9D</text>
+<text x="2157.0" y="2257.4" class="name">The Sword Inn</text>
+<text x="2157.0" y="2268.4" class="obj">beer</text>
+<text x="2157.0" y="2278.4" class="who">inn keeper, strong elf</text>
+</g>
+<g class="box"><rect x="1405.0" y="2332.4" width="124" height="70" rx="5"/>
+<text x="1410.0" y="2343.4" class="id">A4</text>
+<text x="1467.0" y="2369.4" class="name">Woods</text>
+</g>
+<g class="box"><rect x="1600.0" y="2332.4" width="124" height="70" rx="5"/>
+<text x="1605.0" y="2343.4" class="id">9A</text>
+<text x="1662.0" y="2369.4" class="name">Woods</text>
+</g>
+<g class="box"><rect x="1765.0" y="2332.4" width="124" height="70" rx="5"/>
+<text x="1770.0" y="2343.4" class="id">9C</text>
+<text x="1827.0" y="2369.4" class="name">Moor</text>
+</g>
+<g class="box"><rect x="1930.0" y="2332.4" width="124" height="70" rx="5"/>
+<text x="1935.0" y="2343.4" class="id">9E</text>
+<text x="1992.0" y="2369.4" class="name">Moor</text>
+</g>
+<g class="box special"><rect x="1480.0" y="1443.2" width="124" height="70" rx="5"/>
+<text x="1485.0" y="1454.2" class="id">37</text>
+<text x="1542.0" y="1474.2" class="name">Diving down a large</text>
+<text x="1542.0" y="1487.2" class="name">waterfall</text>
+</g>
+<g class="box special"><rect x="2065.0" y="1001.2" width="124" height="70" rx="5"/>
+<text x="2070.0" y="1012.2" class="id">33</text>
+<text x="2127.0" y="1032.2" class="name">Diving down a</text>
+<text x="2127.0" y="1045.2" class="name">dangerous fall</text>
+</g>
+<g class="box special"><rect x="2065.0" y="834.8" width="124" height="70" rx="5"/>
+<text x="2070.0" y="845.8" class="id">AF</text>
+<text x="2127.0" y="865.8" class="name">The end of your</text>
+<text x="2127.0" y="878.8" class="name">life</text>
+</g>
+<g class="box"><rect x="1105.0" y="2436.4" width="124" height="70" rx="5"/>
+<text x="1110.0" y="2447.4" class="id">A6</text>
+<text x="1167.0" y="2473.4" class="name">High mountains</text>
+</g>
+<g class="box"><rect x="1405.0" y="2436.4" width="124" height="70" rx="5"/>
+<text x="1410.0" y="2447.4" class="id">A7</text>
+<text x="1467.0" y="2473.4" class="name">High mountains</text>
+</g>
+<g class="box"><rect x="1765.0" y="2436.4" width="124" height="70" rx="5"/>
+<text x="1770.0" y="2447.4" class="id">A5</text>
+<text x="1827.0" y="2473.4" class="name">High mountains</text>
+</g>
+<g class="box"><rect x="1930.0" y="2436.4" width="124" height="70" rx="5"/>
+<text x="1935.0" y="2447.4" class="id">A3</text>
+<text x="1992.0" y="2473.4" class="name">High mountains</text>
+</g>
+<g class="box"><rect x="2155.0" y="2436.4" width="124" height="70" rx="5"/>
+<text x="2160.0" y="2447.4" class="id">A2</text>
+<text x="2217.0" y="2473.4" class="name">High mountains</text>
+</g>
+<g class="box dark"><rect x="2844.0" y="377.2" width="124" height="70" rx="5"/>
+<text x="2849.0" y="388.2" class="id">8E ◐</text>
+<text x="2906.0" y="414.2" class="name">Cave</text>
+</g>
+<g class="box dark"><rect x="2994.0" y="377.2" width="124" height="70" rx="5"/>
+<text x="2999.0" y="388.2" class="id">8F ◐</text>
+<text x="3056.0" y="414.2" class="name">Sloping maze</text>
+</g>
+<g class="box dark"><rect x="3174.0" y="377.2" width="124" height="70" rx="5"/>
+<text x="3179.0" y="388.2" class="id">95 ◐</text>
+<text x="3236.0" y="414.2" class="name">Sloping maze</text>
+</g>
+<g class="box dark"><rect x="2544.0" y="481.2" width="124" height="70" rx="5"/>
+<text x="2549.0" y="492.2" class="id">91 ◐</text>
+<text x="2606.0" y="518.2" class="name">Sloping maze</text>
+</g>
+<g class="box dark"><rect x="2694.0" y="481.2" width="124" height="70" rx="5"/>
+<text x="2699.0" y="492.2" class="id">90 ◐</text>
+<text x="2756.0" y="518.2" class="name">Sloping maze</text>
+</g>
+<g class="box dark"><rect x="2844.0" y="481.2" width="124" height="70" rx="5"/>
+<text x="2849.0" y="492.2" class="id">92 ◐</text>
+<text x="2906.0" y="518.2" class="name">Sloping maze</text>
+</g>
+<g class="box dark"><rect x="2544.0" y="585.2" width="124" height="70" rx="5"/>
+<text x="2549.0" y="596.2" class="id">94 ◐</text>
+<text x="2606.0" y="622.2" class="name">Sloping maze</text>
+</g>
+<g class="box dark"><rect x="2694.0" y="585.2" width="124" height="70" rx="5"/>
+<text x="2699.0" y="596.2" class="id">93 ◐</text>
+<text x="2756.0" y="616.2" class="name">Small cave in the</text>
+<text x="2756.0" y="629.2" class="name">west mountains</text>
+</g>
+<g class="box"><rect x="3009.0" y="689.2" width="124" height="70" rx="5"/>
+<text x="3014.0" y="700.2" class="id">AE</text>
+<text x="3071.0" y="718.2" class="name">River of gold</text>
+<text x="3071.0" y="729.2" class="obj">secret of life ★</text>
+</g>
+<g class="box dark"><rect x="3174.0" y="543.6" width="124" height="70" rx="5"/>
+<text x="3179.0" y="554.6" class="id">96 ◐</text>
+<text x="3236.0" y="580.6" class="name">Sloping maze</text>
+</g>
+<g class="box dark"><rect x="2544.0" y="720.4" width="124" height="70" rx="5"/>
+<text x="2549.0" y="731.4" class="id">8C ◐</text>
+<text x="2606.0" y="757.4" class="name">Sloping maze</text>
+</g>
+<g class="box dark"><rect x="2724.0" y="720.4" width="124" height="70" rx="5"/>
+<text x="2729.0" y="731.4" class="id">8D ◐</text>
+<text x="2786.0" y="749.4" class="name">Sloping maze</text>
+<text x="2786.0" y="760.4" class="obj">small holdall</text>
+</g>
+<g class="box dark"><rect x="2724.0" y="845.2" width="124" height="70" rx="5"/>
+<text x="2729.0" y="856.2" class="id">8B ◐</text>
+<text x="2786.0" y="874.2" class="name">Cave</text>
+<text x="2786.0" y="885.2" class="obj">large cut diamond ★</text>
+</g>
+<g class="box dark"><rect x="3744.0" y="377.2" width="124" height="70" rx="5"/>
+<text x="3749.0" y="388.2" class="id">4B ◐</text>
+<text x="3806.0" y="406.2" class="name">Dungeon</text>
+<text x="3806.0" y="417.2" class="who">ill giant</text>
+</g>
+<g class="box dark"><rect x="3744.0" y="481.2" width="124" height="70" rx="5"/>
+<text x="3749.0" y="492.2" class="id">4C ◐</text>
+<text x="3806.0" y="518.2" class="name">Damp hall</text>
+</g>
+<g class="box dark"><rect x="3594.0" y="585.2" width="124" height="70" rx="5"/>
+<text x="3599.0" y="596.2" class="id">4D ◐</text>
+<text x="3656.0" y="622.2" class="name">Room</text>
+</g>
+<g class="box dark"><rect x="3744.0" y="585.2" width="124" height="70" rx="5"/>
+<text x="3749.0" y="596.2" class="id">AA ◐</text>
+<text x="3806.0" y="622.2" class="name">Short passage</text>
+</g>
+<g class="box dark"><rect x="3894.0" y="585.2" width="124" height="70" rx="5"/>
+<text x="3899.0" y="596.2" class="id">A8 ◐</text>
+<text x="3956.0" y="622.2" class="name">Dungeon</text>
+</g>
+<g class="box dark"><rect x="3444.0" y="689.2" width="124" height="70" rx="5"/>
+<text x="3449.0" y="700.2" class="id">5F ◐</text>
+<text x="3506.0" y="726.2" class="name">Small sitting room</text>
+</g>
+<g class="box dark"><rect x="3594.0" y="689.2" width="124" height="70" rx="5"/>
+<text x="3599.0" y="700.2" class="id">61 ◐</text>
+<text x="3656.0" y="726.2" class="name">Long dry passage</text>
+</g>
+<g class="box dark"><rect x="3294.0" y="793.2" width="124" height="70" rx="5"/>
+<text x="3299.0" y="804.2" class="id">5E ◐</text>
+<text x="3356.0" y="830.2" class="name">Small bedroom</text>
+</g>
+<g class="box dark"><rect x="3444.0" y="834.8" width="124" height="70" rx="5"/>
+<text x="3449.0" y="845.8" class="id">60 ◐</text>
+<text x="3506.0" y="863.8" class="name">Small kitchen</text>
+<text x="3506.0" y="874.8" class="obj">gold key ★</text>
+</g>
+<g class="box dark"><rect x="3594.0" y="814.0" width="124" height="70" rx="5"/>
+<text x="3599.0" y="825.0" class="id">62 ◐</text>
+<text x="3656.0" y="851.0" class="name">Wet passage</text>
+</g>
+<g class="box dark"><rect x="3594.0" y="928.4" width="124" height="70" rx="5"/>
+<text x="3599.0" y="939.4" class="id">63 ◐</text>
+<text x="3656.0" y="965.4" class="name">Dank musty passage</text>
+</g>
+<g class="box dark"><rect x="3294.0" y="1032.4" width="124" height="70" rx="5"/>
+<text x="3299.0" y="1043.4" class="id">6D ◐</text>
+<text x="3356.0" y="1063.4" class="name">Hall of the Forest</text>
+<text x="3356.0" y="1076.4" class="name">King</text>
+</g>
+<g class="box dark"><rect x="3444.0" y="1032.4" width="124" height="70" rx="5"/>
+<text x="3449.0" y="1043.4" class="id">35 ◐</text>
+<text x="3506.0" y="1069.4" class="name">Cave</text>
+</g>
+<g class="box dark"><rect x="3744.0" y="1032.4" width="124" height="70" rx="5"/>
+<text x="3749.0" y="1043.4" class="id">67 ◐</text>
+<text x="3806.0" y="1061.4" class="name">Passage</text>
+<text x="3806.0" y="1072.4" class="obj">short wooden rod</text>
+</g>
+<g class="box dark"><rect x="3894.0" y="1032.4" width="124" height="70" rx="5"/>
+<text x="3899.0" y="1043.4" class="id">68 ◐</text>
+<text x="3956.0" y="1061.4" class="name">Room</text>
+<text x="3956.0" y="1072.4" class="obj">short dagger</text>
+</g>
+<g class="box dark"><rect x="4044.0" y="1032.4" width="124" height="70" rx="5"/>
+<text x="4049.0" y="1043.4" class="id">69 ◐</text>
+<text x="4106.0" y="1069.4" class="name">Landing</text>
+</g>
+<g class="box dark"><rect x="3294.0" y="1146.8" width="124" height="70" rx="5"/>
+<text x="3299.0" y="1157.8" class="id">6E ◐</text>
+<text x="3356.0" y="1183.8" class="name">Narrow shaft</text>
+</g>
+<g class="box dark"><rect x="3519.0" y="1146.8" width="124" height="70" rx="5"/>
+<text x="3524.0" y="1157.8" class="id">66 ◐</text>
+<text x="3581.0" y="1183.8" class="name">Narrow shaft</text>
+</g>
+<g class="box dark"><rect x="3894.0" y="1146.8" width="124" height="70" rx="5"/>
+<text x="3899.0" y="1157.8" class="id">6C ◐</text>
+<text x="3956.0" y="1175.8" class="name">Room</text>
+<text x="3956.0" y="1186.8" class="obj">crystal ball</text>
+</g>
+<g class="box dark"><rect x="4044.0" y="1146.8" width="124" height="70" rx="5"/>
+<text x="4049.0" y="1157.8" class="id">6A ◐</text>
+<text x="4106.0" y="1183.8" class="name">Spiral staircase</text>
+</g>
+<g class="box special"><rect x="3084.0" y="1115.6" width="124" height="70" rx="5"/>
+<text x="3089.0" y="1126.6" class="id">A9</text>
+<text x="3146.0" y="1138.6" class="name">Locked up in a</text>
+<text x="3146.0" y="1151.6" class="name">dungeon</text>
+<text x="3146.0" y="1162.6" class="who">large guard</text>
+</g>
+<g class="box dark"><rect x="3204.0" y="1271.6" width="124" height="70" rx="5"/>
+<text x="3209.0" y="1282.6" class="id">B0 ◐</text>
+<text x="3266.0" y="1308.6" class="name">Strong room</text>
+</g>
+<g class="box dark"><rect x="3384.0" y="1271.6" width="124" height="70" rx="5"/>
+<text x="3389.0" y="1282.6" class="id">6F ◐</text>
+<text x="3446.0" y="1308.6" class="name">Room full of bones</text>
+</g>
+<g class="box dark"><rect x="3594.0" y="1271.6" width="124" height="70" rx="5"/>
+<text x="3599.0" y="1282.6" class="id">64 ◐</text>
+<text x="3656.0" y="1300.6" class="name">Damp hollow chamber</text>
+<text x="3656.0" y="1311.6" class="obj">short dagger</text>
+</g>
+<g class="box dark"><rect x="3894.0" y="1271.6" width="124" height="70" rx="5"/>
+<text x="3899.0" y="1282.6" class="id">36 ◐</text>
+<text x="3956.0" y="1308.6" class="name">Narrow passage</text>
+</g>
+<g class="box dark"><rect x="4044.0" y="1271.6" width="124" height="70" rx="5"/>
+<text x="4049.0" y="1282.6" class="id">6B ◐</text>
+<text x="4106.0" y="1300.6" class="name">Small chamber</text>
+<text x="4106.0" y="1311.6" class="obj">bag of gold ★</text>
+<text x="4106.0" y="1321.6" class="who">dwarf (diamond ring ★)</text>
+</g>
+<g class="box dark"><rect x="3294.0" y="1417.2" width="124" height="70" rx="5"/>
+<text x="3299.0" y="1428.2" class="id">72 ◐</text>
+<text x="3356.0" y="1448.2" class="name">Little turny twisty</text>
+<text x="3356.0" y="1461.2" class="name">maze of passages</text>
+</g>
+<g class="box dark"><rect x="3444.0" y="1417.2" width="124" height="70" rx="5"/>
+<text x="3449.0" y="1428.2" class="id">70 ◐</text>
+<text x="3506.0" y="1448.2" class="name">Twisty turny little</text>
+<text x="3506.0" y="1461.2" class="name">maze of passages</text>
+</g>
+<g class="box dark"><rect x="3594.0" y="1417.2" width="124" height="70" rx="5"/>
+<text x="3599.0" y="1428.2" class="id">73 ◐</text>
+<text x="3656.0" y="1448.2" class="name">Little twisty turny</text>
+<text x="3656.0" y="1461.2" class="name">maze of passages</text>
+</g>
+<g class="box dark"><rect x="3744.0" y="1417.2" width="124" height="70" rx="5"/>
+<text x="3749.0" y="1428.2" class="id">71 ◐</text>
+<text x="3806.0" y="1448.2" class="name">Turny twisty little</text>
+<text x="3806.0" y="1461.2" class="name">maze of passages</text>
+</g>
+<g class="box dark"><rect x="3294.0" y="1521.2" width="124" height="70" rx="5"/>
+<text x="3299.0" y="1532.2" class="id">75 ◐</text>
+<text x="3356.0" y="1552.2" class="name">Maze of turny</text>
+<text x="3356.0" y="1565.2" class="name">twisty little</text>
+<text x="3356.0" y="1578.2" class="name">passages</text>
+</g>
+<g class="box dark"><rect x="3444.0" y="1521.2" width="124" height="70" rx="5"/>
+<text x="3449.0" y="1532.2" class="id">76 ◐</text>
+<text x="3506.0" y="1552.2" class="name">Maze of little</text>
+<text x="3506.0" y="1565.2" class="name">twisty turny</text>
+<text x="3506.0" y="1578.2" class="name">passages</text>
+</g>
+<g class="box dark"><rect x="3594.0" y="1521.2" width="124" height="70" rx="5"/>
+<text x="3599.0" y="1532.2" class="id">77 ◐</text>
+<text x="3656.0" y="1552.2" class="name">Maze of little</text>
+<text x="3656.0" y="1565.2" class="name">turny twisty</text>
+<text x="3656.0" y="1578.2" class="name">passages</text>
+</g>
+<g class="box dark"><rect x="3744.0" y="1521.2" width="124" height="70" rx="5"/>
+<text x="3749.0" y="1532.2" class="id">74 ◐</text>
+<text x="3806.0" y="1552.2" class="name">Maze of twisty</text>
+<text x="3806.0" y="1565.2" class="name">turny little</text>
+<text x="3806.0" y="1578.2" class="name">passages</text>
+</g>
+<g class="box dark"><rect x="3294.0" y="1625.2" width="124" height="70" rx="5"/>
+<text x="3299.0" y="1636.2" class="id">79 ◐</text>
+<text x="3356.0" y="1656.2" class="name">Twisty turny</text>
+<text x="3356.0" y="1669.2" class="name">passage in a maze</text>
+</g>
+<g class="box dark"><rect x="3444.0" y="1625.2" width="124" height="70" rx="5"/>
+<text x="3449.0" y="1636.2" class="id">78 ◐</text>
+<text x="3506.0" y="1648.2" class="name">Twisty little</text>
+<text x="3506.0" y="1661.2" class="name">passage in a maze</text>
+<text x="3506.0" y="1672.2" class="who">witch (bronze key)</text>
+</g>
+<g class="box dark"><rect x="3594.0" y="1625.2" width="124" height="70" rx="5"/>
+<text x="3599.0" y="1636.2" class="id">7A ◐</text>
+<text x="3656.0" y="1656.2" class="name">Little twisty</text>
+<text x="3656.0" y="1669.2" class="name">passage in a maze</text>
+</g>
+<g class="box dark"><rect x="3744.0" y="1625.2" width="124" height="70" rx="5"/>
+<text x="3749.0" y="1636.2" class="id">7B ◐</text>
+<text x="3806.0" y="1656.2" class="name">Little turny</text>
+<text x="3806.0" y="1669.2" class="name">passage in a maze</text>
+</g>
+<g class="box dark"><rect x="3294.0" y="1729.2" width="124" height="70" rx="5"/>
+<text x="3299.0" y="1740.2" class="id">7C ◐</text>
+<text x="3356.0" y="1760.2" class="name">Turny twisty</text>
+<text x="3356.0" y="1773.2" class="name">passage in a maze</text>
+</g>
+<g class="box dark"><rect x="3444.0" y="1729.2" width="124" height="70" rx="5"/>
+<text x="3449.0" y="1740.2" class="id">7E ◐</text>
+<text x="3506.0" y="1760.2" class="name">Passage in a twisty</text>
+<text x="3506.0" y="1773.2" class="name">turny maze</text>
+</g>
+<g class="box dark"><rect x="3594.0" y="1729.2" width="124" height="70" rx="5"/>
+<text x="3599.0" y="1740.2" class="id">7D ◐</text>
+<text x="3656.0" y="1760.2" class="name">Turny little</text>
+<text x="3656.0" y="1773.2" class="name">passage in a maze</text>
+</g>
+<g class="box dark"><rect x="3744.0" y="1729.2" width="124" height="70" rx="5"/>
+<text x="3749.0" y="1740.2" class="id">7F ◐</text>
+<text x="3806.0" y="1760.2" class="name">Passage in a turny</text>
+<text x="3806.0" y="1773.2" class="name">twisty maze</text>
+</g>
+<g class="box"><rect x="4733.0" y="377.2" width="124" height="70" rx="5"/>
+<text x="4738.0" y="388.2" class="id">4E</text>
+<text x="4795.0" y="406.2" class="name">North turret</text>
+<text x="4795.0" y="417.2" class="who">dragon (master key)</text>
+</g>
+<g class="box"><rect x="4733.0" y="481.2" width="124" height="70" rx="5"/>
+<text x="4738.0" y="492.2" class="id">53</text>
+<text x="4795.0" y="518.2" class="name">North tower</text>
+</g>
+<g class="box"><rect x="4433.0" y="533.2" width="124" height="70" rx="5"/>
+<text x="4438.0" y="544.2" class="id">4F</text>
+<text x="4495.0" y="562.2" class="name">West turret</text>
+<text x="4495.0" y="573.2" class="obj">long wooden staff</text>
+</g>
+<g class="box"><rect x="5033.0" y="533.2" width="124" height="70" rx="5"/>
+<text x="5038.0" y="544.2" class="id">51</text>
+<text x="5095.0" y="562.2" class="name">East turret</text>
+<text x="5095.0" y="573.2" class="who">witch (knife, staff of</text>
+<text x="5095.0" y="583.2" class="who">gold ★)</text>
+</g>
+<g class="box"><rect x="4583.0" y="585.2" width="124" height="70" rx="5"/>
+<text x="4588.0" y="596.2" class="id">56</text>
+<text x="4645.0" y="622.2" class="name">Room</text>
+</g>
+<g class="box"><rect x="4733.0" y="585.2" width="124" height="70" rx="5"/>
+<text x="4738.0" y="596.2" class="id">58</text>
+<text x="4795.0" y="614.2" class="name">Landing</text>
+<text x="4795.0" y="625.2" class="who">castle guard (knife, bag</text>
+<text x="4795.0" y="635.2" class="who">of silver ★)</text>
+</g>
+<g class="box"><rect x="4883.0" y="585.2" width="124" height="70" rx="5"/>
+<text x="4888.0" y="596.2" class="id">57</text>
+<text x="4945.0" y="608.2" class="name">Throne room</text>
+<text x="4945.0" y="619.2" class="obj">ball of gold ★</text>
+<text x="4945.0" y="629.2" class="who">desert king (jewelled gold</text>
+<text x="4945.0" y="639.2" class="who">crown ★)</text>
+</g>
+<g class="box"><rect x="4433.0" y="689.2" width="124" height="70" rx="5"/>
+<text x="4438.0" y="700.2" class="id">52</text>
+<text x="4495.0" y="726.2" class="name">West tower</text>
+</g>
+<g class="box"><rect x="4583.0" y="689.2" width="124" height="70" rx="5"/>
+<text x="4588.0" y="700.2" class="id">59</text>
+<text x="4645.0" y="726.2" class="name">Corridor</text>
+</g>
+<g class="box"><rect x="4733.0" y="689.2" width="124" height="70" rx="5"/>
+<text x="4738.0" y="700.2" class="id">3A</text>
+<text x="4795.0" y="726.2" class="name">Grand Staircase</text>
+</g>
+<g class="box"><rect x="4883.0" y="689.2" width="124" height="70" rx="5"/>
+<text x="4888.0" y="700.2" class="id">5A</text>
+<text x="4945.0" y="726.2" class="name">Corridor</text>
+</g>
+<g class="box"><rect x="5033.0" y="689.2" width="124" height="70" rx="5"/>
+<text x="5038.0" y="700.2" class="id">55</text>
+<text x="5095.0" y="718.2" class="name">East tower</text>
+<text x="5095.0" y="729.2" class="who">castle guard (mace),</text>
+<text x="5095.0" y="739.2" class="who">castle guard</text>
+</g>
+<g class="box"><rect x="4583.0" y="793.2" width="124" height="70" rx="5"/>
+<text x="4588.0" y="804.2" class="id">5B</text>
+<text x="4645.0" y="822.2" class="name">Royal bedroom</text>
+<text x="4645.0" y="833.2" class="obj">broad sword</text>
+</g>
+<g class="box"><rect x="4733.0" y="793.2" width="124" height="70" rx="5"/>
+<text x="4738.0" y="804.2" class="id">5D</text>
+<text x="4795.0" y="830.2" class="name">Corridor</text>
+</g>
+<g class="box"><rect x="4883.0" y="793.2" width="124" height="70" rx="5"/>
+<text x="4888.0" y="804.2" class="id">5C</text>
+<text x="4945.0" y="830.2" class="name">Bedroom</text>
+</g>
+<g class="box"><rect x="4733.0" y="897.2" width="124" height="70" rx="5"/>
+<text x="4738.0" y="908.2" class="id">54</text>
+<text x="4795.0" y="934.2" class="name">South tower</text>
+</g>
+<g class="box"><rect x="4733.0" y="1001.2" width="124" height="70" rx="5"/>
+<text x="4738.0" y="1012.2" class="id">50</text>
+<text x="4795.0" y="1030.2" class="name">South turret</text>
+<text x="4795.0" y="1041.2" class="obj">wooden treasure chest ★</text>
+</g>
+<g class="box"><rect x="4433.0" y="1136.4" width="124" height="70" rx="5"/>
+<text x="4438.0" y="1147.4" class="id">3C</text>
+<text x="4495.0" y="1165.4" class="name">Workshop</text>
+<text x="4495.0" y="1176.4" class="obj">hammer, cauldron of oil</text>
+</g>
+<g class="box"><rect x="4583.0" y="1136.4" width="124" height="70" rx="5"/>
+<text x="4588.0" y="1147.4" class="id">3B</text>
+<text x="4645.0" y="1173.4" class="name">Kitchen</text>
+</g>
+<g class="box"><rect x="4433.0" y="1240.4" width="124" height="70" rx="5"/>
+<text x="4438.0" y="1251.4" class="id">38</text>
+<text x="4495.0" y="1277.4" class="name">Study</text>
+</g>
+<g class="box"><rect x="4583.0" y="1240.4" width="124" height="70" rx="5"/>
+<text x="4588.0" y="1251.4" class="id">34</text>
+<text x="4645.0" y="1277.4" class="name">Entrance hall</text>
+</g>
+<g class="box"><rect x="4733.0" y="1240.4" width="124" height="70" rx="5"/>
+<text x="4738.0" y="1251.4" class="id">39</text>
+<text x="4795.0" y="1277.4" class="name">Dining hall</text>
+</g>
+<g class="box dark"><rect x="4793.0" y="1354.8" width="124" height="70" rx="5"/>
+<text x="4798.0" y="1365.8" class="id">3D ◐</text>
+<text x="4855.0" y="1391.8" class="name">Store room</text>
+</g>
+<g class="box dark"><rect x="4943.0" y="1354.8" width="124" height="70" rx="5"/>
+<text x="4948.0" y="1365.8" class="id">3E ◐</text>
+<text x="5005.0" y="1391.8" class="name">Passage</text>
+</g>
+<g class="box dark"><rect x="5093.0" y="1354.8" width="124" height="70" rx="5"/>
+<text x="5098.0" y="1365.8" class="id">3F ◐</text>
+<text x="5155.0" y="1373.8" class="name">Cellar</text>
+<text x="5155.0" y="1384.8" class="obj">beer</text>
+<text x="5155.0" y="1394.8" class="who">castle guard (knife),</text>
+<text x="5155.0" y="1404.8" class="who">castle guard (bag of</text>
+<text x="5155.0" y="1414.8" class="who">silver ★)</text>
+</g>
+<g class="box dark"><rect x="4943.0" y="1458.8" width="124" height="70" rx="5"/>
+<text x="4948.0" y="1469.8" class="id">40 ◐</text>
+<text x="5005.0" y="1495.8" class="name">Passage</text>
+</g>
+<g class="box dark"><rect x="4793.0" y="1562.8" width="124" height="70" rx="5"/>
+<text x="4798.0" y="1573.8" class="id">41 ◐</text>
+<text x="4855.0" y="1599.8" class="name">Passage</text>
+</g>
+<g class="box dark"><rect x="4943.0" y="1562.8" width="124" height="70" rx="5"/>
+<text x="4948.0" y="1573.8" class="id">42 ◐</text>
+<text x="5005.0" y="1599.8" class="name">Narrow passage</text>
+</g>
+<g class="box dark"><rect x="5093.0" y="1562.8" width="124" height="70" rx="5"/>
+<text x="5098.0" y="1573.8" class="id">43 ◐</text>
+<text x="5155.0" y="1599.8" class="name">Very narrow passage</text>
+</g>
+<g class="box dark"><rect x="5243.0" y="1562.8" width="124" height="70" rx="5"/>
+<text x="5248.0" y="1573.8" class="id">44 ◐</text>
+<text x="5305.0" y="1599.8" class="name">Small room</text>
+</g>
+<g class="box dark"><rect x="5393.0" y="1666.8" width="124" height="70" rx="5"/>
+<text x="5398.0" y="1677.8" class="id">45 ◐</text>
+<text x="5455.0" y="1689.8" class="name">Guard room</text>
+<text x="5455.0" y="1700.8" class="obj">uniform</text>
+<text x="5455.0" y="1710.8" class="who">castle guard (knife),</text>
+<text x="5455.0" y="1720.8" class="who">castle guard (mace)</text>
+</g>
+<g class="box dark"><rect x="4943.0" y="1770.8" width="124" height="70" rx="5"/>
+<text x="4948.0" y="1781.8" class="id">46 ◐</text>
+<text x="5005.0" y="1799.8" class="name">Armoury</text>
+<text x="5005.0" y="1810.8" class="obj">broad sword, 2 knives,</text>
+<text x="5005.0" y="1820.8" class="obj">axe, hammer</text>
+</g>
+<g class="box dark"><rect x="5093.0" y="1770.8" width="124" height="70" rx="5"/>
+<text x="5098.0" y="1781.8" class="id">47 ◐</text>
+<text x="5155.0" y="1799.8" class="name">Passage</text>
+<text x="5155.0" y="1810.8" class="who">large guard (knife)</text>
+</g>
+<g class="box dark"><rect x="5243.0" y="1770.8" width="124" height="70" rx="5"/>
+<text x="5248.0" y="1781.8" class="id">48 ◐</text>
+<text x="5305.0" y="1807.8" class="name">Large hall</text>
+</g>
+<g class="box dark"><rect x="5093.0" y="1874.8" width="124" height="70" rx="5"/>
+<text x="5098.0" y="1885.8" class="id">65 ◐</text>
+<text x="5155.0" y="1911.8" class="name">Dungeon</text>
+</g>
+<g class="box dark"><rect x="5243.0" y="1874.8" width="124" height="70" rx="5"/>
+<text x="5248.0" y="1885.8" class="id">49 ◐</text>
+<text x="5305.0" y="1903.8" class="name">Musty dungeon</text>
+<text x="5305.0" y="1914.8" class="who">5 elves, troll</text>
+</g>
+<g class="box dark"><rect x="5393.0" y="1874.8" width="124" height="70" rx="5"/>
+<text x="5398.0" y="1885.8" class="id">4A ◐</text>
+<text x="5455.0" y="1911.8" class="name">Pokey anteroom</text>
+</g>
+<g class="dl"><rect x="1602.2" y="2134.7" width="14.8" height="13" rx="3"/><text x="1609.6" y="2145.2" text-anchor="middle">S</text></g>
+<text x="1475.0" y="2309.4" class="stubt" text-anchor="start">S: Woods (0A)</text>
+<text x="1475.0" y="2320.4" class="stubt" text-anchor="start">wooden fence</text>
+<g class="dl"><rect x="1405.3" y="2092.9" width="14.8" height="13" rx="3"/><text x="1412.7" y="2103.4" text-anchor="middle">S</text></g>
+<text x="1325.0" y="2309.4" class="stubt" text-anchor="start">S: Woods (0A)</text>
+<text x="1325.0" y="2320.4" class="stubt" text-anchor="start">wooden fence</text>
+<g class="dl"><rect x="1884.1" y="2000.0" width="14.8" height="13" rx="3"/><text x="1891.5" y="2010.5" text-anchor="middle">N</text></g>
+<g class="dl"><rect x="1845.1" y="1972.0" width="14.8" height="13" rx="3"/><text x="1852.5" y="1982.5" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="1739.8" y="2025.7" width="21.6" height="13" rx="3"/><text x="1750.6" y="2036.2" text-anchor="middle">NW</text></g>
+<g class="dl"><rect x="1682.6" y="2008.7" width="21.6" height="13" rx="3"/><text x="1693.4" y="2019.2" text-anchor="middle">SE</text></g>
+<g class="dl"><rect x="1782.5" y="2095.2" width="14.8" height="13" rx="3"/><text x="1789.9" y="2105.7" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="1691.7" y="2209.6" width="14.8" height="13" rx="3"/><text x="1699.1" y="2220.1" text-anchor="middle">N</text></g>
+<text x="1409.4" y="2123.0" class="stubt" text-anchor="end">down: Narrow passage (36), underground</text>
+<text x="1409.4" y="2134.0" class="stubt" text-anchor="end">locked brass grate: brass key</text>
+<g class="dl"><rect x="809.6" y="1909.8" width="14.8" height="13" rx="3"/><text x="817.0" y="1920.3" text-anchor="middle">N</text></g>
+<g class="dl"><rect x="759.6" y="1864.6" width="14.8" height="13" rx="3"/><text x="767.0" y="1875.1" text-anchor="middle">E</text></g>
+<g class="dl"><rect x="1396.8" y="1880.1" width="14.8" height="13" rx="3"/><text x="1404.2" y="1890.6" text-anchor="middle">W</text></g>
+<g class="dl"><rect x="1222.4" y="1759.1" width="14.8" height="13" rx="3"/><text x="1229.8" y="1769.6" text-anchor="middle">E</text></g>
+<g class="dl"><rect x="782.8" y="1697.9" width="21.6" height="13" rx="3"/><text x="793.6" y="1708.4" text-anchor="middle">NE</text></g>
+<g class="dl"><rect x="1079.6" y="1629.3" width="21.6" height="13" rx="3"/><text x="1090.4" y="1639.8" text-anchor="middle">SW</text></g>
+<g class="dl"><rect x="1684.7" y="1798.9" width="14.8" height="13" rx="3"/><text x="1692.1" y="1809.4" text-anchor="middle">E</text></g>
+<g class="dl"><rect x="1698.3" y="1610.5" width="14.8" height="13" rx="3"/><text x="1705.7" y="1621.0" text-anchor="middle">N</text></g>
+<g class="dl"><rect x="1670.9" y="1571.1" width="14.8" height="13" rx="3"/><text x="1678.3" y="1581.6" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="1309.6" y="1561.6" width="14.8" height="13" rx="3"/><text x="1317.0" y="1572.1" text-anchor="middle">N</text></g>
+<g class="dl"><rect x="1142.6" y="1561.6" width="48.8" height="13" rx="3"/><text x="1167.0" y="1572.1" text-anchor="middle">N+down</text></g>
+<g class="dl"><rect x="1149.4" y="1453.6" width="35.2" height="13" rx="3"/><text x="1167.0" y="1464.1" text-anchor="middle">E+up</text></g>
+<text x="1175.0" y="1461.6" class="stubt" text-anchor="start">S: Cave (35), underground</text>
+<g class="dl"><rect x="1166.6" y="1351.6" width="48.8" height="13" rx="3"/><text x="1191.0" y="1362.1" text-anchor="middle">N+down</text></g>
+<g class="dl"><rect x="1125.4" y="1351.6" width="35.2" height="13" rx="3"/><text x="1143.0" y="1362.1" text-anchor="middle">S+up</text></g>
+<g class="dl"><rect x="709.6" y="1353.6" width="14.8" height="13" rx="3"/><text x="717.0" y="1364.1" text-anchor="middle">N</text></g>
+<g class="dl"><rect x="772.4" y="1360.1" width="14.8" height="13" rx="3"/><text x="779.8" y="1370.6" text-anchor="middle">N</text></g>
+<g class="dl"><rect x="825.0" y="1346.7" width="14.8" height="13" rx="3"/><text x="832.4" y="1357.2" text-anchor="middle">W</text></g>
+<g class="dl"><rect x="594.2" y="1346.7" width="14.8" height="13" rx="3"/><text x="601.6" y="1357.2" text-anchor="middle">E</text></g>
+<g class="dl"><rect x="1757.7" y="1203.1" width="14.8" height="13" rx="3"/><text x="1765.1" y="1213.6" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="1382.7" y="1205.1" width="14.8" height="13" rx="3"/><text x="1390.1" y="1215.6" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="1096.8" y="1239.1" width="14.8" height="13" rx="3"/><text x="1104.2" y="1249.6" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="1248.3" y="1163.3" width="14.8" height="13" rx="3"/><text x="1255.7" y="1173.8" text-anchor="middle">N</text></g>
+<g class="dl"><rect x="709.6" y="1245.6" width="14.8" height="13" rx="3"/><text x="717.0" y="1256.1" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="772.4" y="1239.1" width="14.8" height="13" rx="3"/><text x="779.8" y="1249.6" text-anchor="middle">S</text></g>
+<text x="1475.0" y="845.6" class="stubt" text-anchor="start">N: Entrance hall (34), the castle</text>
+<g class="dl"><rect x="1655.8" y="731.7" width="14.8" height="13" rx="3"/><text x="1663.2" y="742.2" text-anchor="middle">E</text></g>
+<g class="dl"><rect x="1442.6" y="455.2" width="48.8" height="13" rx="3"/><text x="1467.0" y="465.7" text-anchor="middle">S+down</text></g>
+<g class="dl"><rect x="1085.7" y="543.5" width="14.8" height="13" rx="3"/><text x="1093.1" y="554.0" text-anchor="middle">N</text></g>
+<text x="1493.0" y="351.2" class="note" text-anchor="start">N: round in circles</text>
+<text x="2161.0" y="1352.2" class="stubt" text-anchor="start">E: High mountains (11)</text>
+<text x="2093.0" y="1287.2" class="note" text-anchor="start">N: round in circles</text>
+<text x="2009.4" y="1415.8" class="stubt" text-anchor="end">SW: High mountains (30)</text>
+<text x="4653.0" y="1230.4" class="stubt" text-anchor="start">N+up: Grand Staircase (3A)</text>
+<g class="dl"><rect x="4658.4" y="1316.0" width="35.2" height="13" rx="3"/><text x="4676.0" y="1326.5" text-anchor="middle">down</text></g>
+<g class="dl"><rect x="4813.2" y="1543.2" width="21.6" height="13" rx="3"/><text x="4824.0" y="1553.7" text-anchor="middle">up</text></g>
+<text x="4653.0" y="1326.4" class="stubt" text-anchor="start">S: Draw bridge (29), the valley</text>
+<text x="3656.0" y="1058.4" class="doort door" text-anchor="middle">locked metal door: bronze or brass key</text>
+<text x="3514.0" y="1022.4" class="stubt" text-anchor="start">N: Steeply sloping trail (18), the valley</text>
+<g class="dl"><rect x="3505.8" y="1130.8" width="35.2" height="13" rx="3"/><text x="3523.4" y="1141.3" text-anchor="middle">down</text></g>
+<g class="dl"><rect x="3552.8" y="1104.4" width="21.6" height="13" rx="3"/><text x="3563.6" y="1114.9" text-anchor="middle">up</text></g>
+<g class="dl"><rect x="3955.6" y="1237.2" width="48.8" height="13" rx="3"/><text x="3980.0" y="1247.7" text-anchor="middle">N+down</text></g>
+<g class="dl"><rect x="3914.4" y="1237.2" width="35.2" height="13" rx="3"/><text x="3932.0" y="1247.7" text-anchor="middle">S+up</text></g>
+<text x="3964.0" y="1352.6" class="stubt" text-anchor="start">S+up: Clearing (05), the valley</text>
+<text x="3964.0" y="1363.6" class="stubt" text-anchor="start">locked brass grate: brass key</text>
+<g class="dl"><rect x="4808.2" y="665.2" width="21.6" height="13" rx="3"/><text x="4819.0" y="675.7" text-anchor="middle">up</text></g>
+<g class="dl"><rect x="4753.4" y="665.2" width="35.2" height="13" rx="3"/><text x="4771.0" y="675.7" text-anchor="middle">down</text></g>
+<text x="4737.4" y="791.8" class="stubt" text-anchor="end">down: Entrance hall (34)</text>
+<g class="dl"><rect x="4908.9" y="1519.1" width="14.8" height="13" rx="3"/><text x="4916.3" y="1529.6" text-anchor="middle">W</text></g>
+<g class="dl"><rect x="4936.3" y="1558.5" width="14.8" height="13" rx="3"/><text x="4943.7" y="1569.0" text-anchor="middle">N</text></g>
+<g class="dl"><rect x="5287.4" y="1640.8" width="35.2" height="13" rx="3"/><text x="5305.0" y="1651.3" text-anchor="middle">down</text></g>
+<g class="dl"><rect x="5294.2" y="1748.8" width="21.6" height="13" rx="3"/><text x="5305.0" y="1759.3" text-anchor="middle">up</text></g>
+<g class="dl"><rect x="5358.9" y="1727.1" width="14.8" height="13" rx="3"/><text x="5366.3" y="1737.6" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="5386.3" y="1766.5" width="14.8" height="13" rx="3"/><text x="5393.7" y="1777.0" text-anchor="middle">N</text></g>
+<text x="5080.0" y="1765.8" class="doort door" text-anchor="middle">locked silver door: silver key</text>
+<g class="dl"><rect x="5086.3" y="1831.1" width="14.8" height="13" rx="3"/><text x="5093.7" y="1841.6" text-anchor="middle">W</text></g>
+<text x="5080.0" y="1873.8" class="doort blocked" text-anchor="middle">narrow crack</text>
+<text x="5295.0" y="1860.8" class="doort door" text-anchor="end">locked brass door: brass key</text>
+<text x="5397.4" y="1977.4" class="stubt" text-anchor="end">down: Damp hall (4C), underground</text>
+<text x="3796.0" y="467.2" class="doort door" text-anchor="end">locked bronze door: bronze key</text>
+<g class="dl"><rect x="3709.9" y="541.5" width="14.8" height="13" rx="3"/><text x="3717.3" y="552.0" text-anchor="middle">W</text></g>
+<g class="dl"><rect x="3737.3" y="580.9" width="14.8" height="13" rx="3"/><text x="3744.7" y="591.4" text-anchor="middle">N</text></g>
+<text x="3863.6" y="455.6" class="stubt" text-anchor="start">up: Pokey anteroom (4A), the castle</text>
+<text x="3646.0" y="675.2" class="doort door" text-anchor="end">locked gold door: gold key</text>
+<g class="dl"><rect x="4753.4" y="457.2" width="35.2" height="13" rx="3"/><text x="4771.0" y="467.7" text-anchor="middle">down</text></g>
+<g class="dl"><rect x="4808.2" y="457.2" width="21.6" height="13" rx="3"/><text x="4819.0" y="467.7" text-anchor="middle">up</text></g>
+<g class="dl"><rect x="4477.4" y="611.2" width="35.2" height="13" rx="3"/><text x="4495.0" y="621.7" text-anchor="middle">down</text></g>
+<g class="dl"><rect x="4484.2" y="667.2" width="21.6" height="13" rx="3"/><text x="4495.0" y="677.7" text-anchor="middle">up</text></g>
+<g class="dl"><rect x="4801.4" y="977.2" width="35.2" height="13" rx="3"/><text x="4819.0" y="987.7" text-anchor="middle">down</text></g>
+<g class="dl"><rect x="4760.2" y="977.2" width="21.6" height="13" rx="3"/><text x="4771.0" y="987.7" text-anchor="middle">up</text></g>
+<g class="dl"><rect x="5077.4" y="611.2" width="35.2" height="13" rx="3"/><text x="5095.0" y="621.7" text-anchor="middle">down</text></g>
+<g class="dl"><rect x="5084.2" y="667.2" width="21.6" height="13" rx="3"/><text x="5095.0" y="677.7" text-anchor="middle">up</text></g>
+<text x="4570.0" y="684.2" class="doort door" text-anchor="middle">locked silver door: silver key</text>
+<text x="4785.0" y="883.2" class="doort door" text-anchor="end">locked door: master key</text>
+<text x="4635.0" y="779.2" class="doort secret" text-anchor="end">stone secret door, once you know</text>
+<g class="dl"><rect x="3409.9" y="749.5" width="14.8" height="13" rx="3"/><text x="3417.3" y="760.0" text-anchor="middle">W</text></g>
+<g class="dl"><rect x="3413.8" y="865.1" width="21.6" height="13" rx="3"/><text x="3424.6" y="875.6" text-anchor="middle">SE</text></g>
+<g class="dl"><rect x="3426.6" y="818.9" width="21.6" height="13" rx="3"/><text x="3437.4" y="829.4" text-anchor="middle">SW</text></g>
+<text x="3071.0" y="845.2" class="doort secret" text-anchor="middle">secret door, once you know</text>
+<text x="3581.0" y="684.2" class="doort secret" text-anchor="middle">secret door, once you know</text>
+<g class="dl"><rect x="3628.3" y="1224.8" width="21.6" height="13" rx="3"/><text x="3639.1" y="1235.3" text-anchor="middle">up</text></g>
+<g class="dl"><rect x="3580.3" y="1249.6" width="35.2" height="13" rx="3"/><text x="3597.9" y="1260.1" text-anchor="middle">down</text></g>
+<g class="dl"><rect x="3781.6" y="1110.4" width="48.8" height="13" rx="3"/><text x="3806.0" y="1120.9" text-anchor="middle">S+down</text></g>
+<text x="4031.0" y="1027.4" class="doort door" text-anchor="middle">locked bronze door: bronze key</text>
+<g class="dl"><rect x="4064.4" y="1117.6" width="35.2" height="13" rx="3"/><text x="4082.0" y="1128.1" text-anchor="middle">down</text></g>
+<g class="dl"><rect x="4119.2" y="1117.6" width="21.6" height="13" rx="3"/><text x="4130.0" y="1128.1" text-anchor="middle">up</text></g>
+<g class="dl"><rect x="4064.4" y="1237.2" width="35.2" height="13" rx="3"/><text x="4082.0" y="1247.7" text-anchor="middle">down</text></g>
+<g class="dl"><rect x="4119.2" y="1237.2" width="21.6" height="13" rx="3"/><text x="4130.0" y="1247.7" text-anchor="middle">up</text></g>
+<g class="dl"><rect x="3307.6" y="1117.6" width="48.8" height="13" rx="3"/><text x="3332.0" y="1128.1" text-anchor="middle">S+down</text></g>
+<g class="dl"><rect x="3362.4" y="1117.6" width="35.2" height="13" rx="3"/><text x="3380.0" y="1128.1" text-anchor="middle">N+up</text></g>
+<g class="dl"><rect x="3363.9" y="1251.2" width="35.2" height="13" rx="3"/><text x="3381.5" y="1261.7" text-anchor="middle">down</text></g>
+<g class="dl"><rect x="3409.7" y="1223.2" width="21.6" height="13" rx="3"/><text x="3420.5" y="1233.7" text-anchor="middle">up</text></g>
+<text x="3356.0" y="1266.6" class="doort secret" text-anchor="middle">silver secret door: silver key, once you know</text>
+<g class="dl"><rect x="3573.6" y="1469.2" width="14.8" height="13" rx="3"/><text x="3581.0" y="1479.7" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="3774.6" y="1497.2" width="14.8" height="13" rx="3"/><text x="3782.0" y="1507.7" text-anchor="middle">N</text></g>
+<g class="dl"><rect x="3734.7" y="1401.8" width="14.8" height="13" rx="3"/><text x="3742.1" y="1412.3" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="3709.9" y="1516.9" width="14.8" height="13" rx="3"/><text x="3717.3" y="1527.4" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="3723.6" y="1469.2" width="14.8" height="13" rx="3"/><text x="3731.0" y="1479.7" text-anchor="middle">N</text></g>
+<g class="dl"><rect x="3723.6" y="1525.2" width="14.8" height="13" rx="3"/><text x="3731.0" y="1535.7" text-anchor="middle">E</text></g>
+<g class="dl"><rect x="3423.6" y="1573.2" width="14.8" height="13" rx="3"/><text x="3431.0" y="1583.7" text-anchor="middle">N</text></g>
+<g class="dl"><rect x="3409.9" y="1620.9" width="14.8" height="13" rx="3"/><text x="3417.3" y="1631.4" text-anchor="middle">E</text></g>
+<g class="dl"><rect x="3573.6" y="1573.2" width="14.8" height="13" rx="3"/><text x="3581.0" y="1583.7" text-anchor="middle">N</text></g>
+<g class="dl"><rect x="3573.6" y="1525.2" width="14.8" height="13" rx="3"/><text x="3581.0" y="1535.7" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="3559.9" y="1581.5" width="14.8" height="13" rx="3"/><text x="3567.3" y="1592.0" text-anchor="middle">W</text></g>
+<g class="dl"><rect x="3573.6" y="1677.2" width="14.8" height="13" rx="3"/><text x="3581.0" y="1687.7" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="3573.6" y="1629.2" width="14.8" height="13" rx="3"/><text x="3581.0" y="1639.7" text-anchor="middle">E</text></g>
+<g class="dl"><rect x="3423.6" y="1677.2" width="14.8" height="13" rx="3"/><text x="3431.0" y="1687.7" text-anchor="middle">N</text></g>
+<g class="dl"><rect x="3533.2" y="1606.1" width="14.8" height="13" rx="3"/><text x="3540.6" y="1616.6" text-anchor="middle">E</text></g>
+<g class="dl"><rect x="3324.6" y="1705.2" width="14.8" height="13" rx="3"/><text x="3332.0" y="1715.7" text-anchor="middle">W</text></g>
+<g class="dl"><rect x="3614.0" y="1700.3" width="14.8" height="13" rx="3"/><text x="3621.4" y="1710.8" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="3723.6" y="1629.2" width="14.8" height="13" rx="3"/><text x="3731.0" y="1639.7" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="3709.9" y="1685.5" width="14.8" height="13" rx="3"/><text x="3717.3" y="1696.0" text-anchor="middle">E</text></g>
+<g class="dl"><rect x="3423.6" y="1781.2" width="14.8" height="13" rx="3"/><text x="3431.0" y="1791.7" text-anchor="middle">W</text></g>
+<g class="dl"><rect x="3723.6" y="1781.2" width="14.8" height="13" rx="3"/><text x="3731.0" y="1791.7" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="3587.3" y="1724.9" width="14.8" height="13" rx="3"/><text x="3594.7" y="1735.4" text-anchor="middle">N</text></g>
+<g class="dl"><rect x="3447.1" y="1712.3" width="14.8" height="13" rx="3"/><text x="3454.5" y="1722.8" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="3734.7" y="1800.6" width="14.8" height="13" rx="3"/><text x="3742.1" y="1811.1" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="3770.5" y="1709.3" width="14.8" height="13" rx="3"/><text x="3777.9" y="1719.8" text-anchor="middle">N</text></g>
+<g class="dl"><rect x="549.4" y="729.6" width="35.2" height="13" rx="3"/><text x="567.0" y="740.1" text-anchor="middle">N+up</text></g>
+<g class="dl"><rect x="320.6" y="1863.3" width="14.8" height="13" rx="3"/><text x="328.0" y="1873.8" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="1098.6" y="2420.7" width="14.8" height="13" rx="3"/><text x="1106.0" y="2431.2" text-anchor="middle">N</text></g>
+<text x="425.0" y="1261.6" class="stubt" text-anchor="start">N+down: Cave (8B), underground</text>
+<text x="575.0" y="484.0" class="stubt" text-anchor="start">S+down: Cave (8E), underground</text>
+<g class="dl"><rect x="2715.8" y="829.7" width="14.8" height="13" rx="3"/><text x="2723.2" y="840.2" text-anchor="middle">W</text></g>
+<text x="2794.0" y="931.2" class="stubt" text-anchor="start">S+up: Narrow fissure (88), the valley</text>
+<g class="dl"><rect x="2668.2" y="772.4" width="55.6" height="13" rx="3"/><text x="2696.0" y="782.9" text-anchor="middle">SE+down</text></g>
+<g class="dl"><rect x="2609.0" y="680.8" width="42.0" height="13" rx="3"/><text x="2630.0" y="691.3" text-anchor="middle">NW+up</text></g>
+<g class="dl"><rect x="2706.4" y="704.4" width="42.0" height="13" rx="3"/><text x="2727.4" y="714.9" text-anchor="middle">NW+up</text></g>
+<g class="dl"><rect x="2851.2" y="718.6" width="21.6" height="13" rx="3"/><text x="2862.0" y="729.1" text-anchor="middle">SE</text></g>
+<g class="dl"><rect x="3152.6" y="601.4" width="14.8" height="13" rx="3"/><text x="3160.0" y="611.9" text-anchor="middle">E</text></g>
+<text x="2914.0" y="367.2" class="stubt" text-anchor="start">N+up: West mountains (8A), the valley</text>
+<g class="dl"><rect x="2977.1" y="476.9" width="35.2" height="13" rx="3"/><text x="2994.7" y="487.4" text-anchor="middle">S+up</text></g>
+<g class="dl"><rect x="2653.2" y="485.2" width="55.6" height="13" rx="3"/><text x="2681.0" y="495.7" text-anchor="middle">NW+down</text></g>
+<g class="dl"><rect x="2815.1" y="552.4" width="14.8" height="13" rx="3"/><text x="2822.5" y="562.9" text-anchor="middle">E</text></g>
+<g class="dl"><rect x="2639.5" y="580.9" width="55.6" height="13" rx="3"/><text x="2667.3" y="591.4" text-anchor="middle">SE+down</text></g>
+<text x="2913.5" y="688.2" class="doort blocked" text-anchor="middle">rock fall: opens when you bring the treasure chest</text>
+<g class="dl"><rect x="2827.1" y="580.9" width="35.2" height="13" rx="3"/><text x="2844.7" y="591.4" text-anchor="middle">E+up</text></g>
+<g class="dl"><rect x="2719.8" y="686.0" width="55.6" height="13" rx="3"/><text x="2747.6" y="696.5" text-anchor="middle">SW+down</text></g>
+<g class="dl"><rect x="2656.6" y="637.2" width="48.8" height="13" rx="3"/><text x="2681.0" y="647.7" text-anchor="middle">E+down</text></g>
+<g class="dl"><rect x="2612.4" y="561.2" width="35.2" height="13" rx="3"/><text x="2630.0" y="571.7" text-anchor="middle">W+up</text></g>
+<g class="dl"><rect x="3170.8" y="449.3" width="14.8" height="13" rx="3"/><text x="3178.2" y="459.8" text-anchor="middle">W</text></g>
+<g class="dl"><rect x="3218.4" y="455.2" width="35.2" height="13" rx="3"/><text x="3236.0" y="465.7" text-anchor="middle">S+up</text></g>
+<g class="dl"><rect x="3211.6" y="521.6" width="48.8" height="13" rx="3"/><text x="3236.0" y="532.1" text-anchor="middle">N+down</text></g>
+<g class="dl"><rect x="1854.6" y="2209.4" width="14.8" height="13" rx="3"/><text x="1862.0" y="2219.9" text-anchor="middle">N</text></g>
+<g class="dl"><rect x="1724.3" y="2432.7" width="14.8" height="13" rx="3"/><text x="1731.7" y="2443.2" text-anchor="middle">S</text></g>
+<g class="dl"><rect x="2042.7" y="2206.4" width="14.8" height="13" rx="3"/><text x="2050.1" y="2216.9" text-anchor="middle">N</text></g>
+<g class="dl"><rect x="2001.5" y="2181.6" width="14.8" height="13" rx="3"/><text x="2008.9" y="2192.1" text-anchor="middle">S</text></g>
+<text x="1457.0" y="2318.4" class="doort blocked" text-anchor="end">wooden fence</text>
+<text x="3881.0" y="580.2" class="doort door" text-anchor="middle">locked bronze door: bronze key</text>
+<g class="dl"><rect x="1836.3" y="1387.6" width="14.8" height="13" rx="3"/><text x="1843.7" y="1398.1" text-anchor="middle">N</text></g>
+<g class="dl"><rect x="1906.2" y="1526.4" width="21.6" height="13" rx="3"/><text x="1917.0" y="1536.9" text-anchor="middle">SE</text></g>
+<text x="3013.4" y="791.8" class="stubt" text-anchor="end">SW: Watersmeet (89), the valley</text>
+<text x="3013.4" y="802.8" class="stubt" text-anchor="end">narrow crack</text>
+<text x="1585.5" y="1388.4" class="movet" text-anchor="start">you land in the pool</text>
+<text x="1548.0" y="1302.6" class="movet" text-anchor="start">you scramble out</text>
+<text x="3257.0" y="1105.0" class="movet" text-anchor="start">arrested, without a gift</text>
+<text x="3303.4" y="1004.7" class="movet" text-anchor="start">freed, for a gift</text>
+<text x="3302.0" y="1224.6" class="movet" text-anchor="start">thrown out, for no gift</text>
+</svg>
+<div class="notes"><h2>Key</h2>
+<p class="key"><svg width="54" height="12"><line x1="2" y1="6" x2="52" y2="6" stroke="#6d5a40" stroke-width="2.2"/></svg>a way between two places, both ways</p>
+<p class="key"><svg width="54" height="12"><line x1="2" y1="6" x2="44" y2="6" stroke="#6d5a40" stroke-width="2.2"/><path d="M42,1 L52,6 L42,11 z" style="fill:#6d5a40"/></svg>one way only</p>
+<p class="key"><svg width="54" height="12"><line x1="2" y1="6" x2="52" y2="6" stroke="#6d5a40" stroke-width="2.2"/><circle cx="27" cy="6" r="5" style="fill:#d4a017" stroke="#5a4630"/></svg>a door or grate that locks, with the keys that fit (the master key fits them all)</p>
+<p class="key"><svg width="54" height="12"><line x1="2" y1="6" x2="52" y2="6" stroke="#a39a8a" stroke-width="2" stroke-dasharray="2 4"/></svg>can be seen through but not passed: a fence, a crack</p>
+<p class="key"><svg width="54" height="12"><line x1="2" y1="6" x2="52" y2="6" stroke="#7b3fa0" stroke-width="2.2" stroke-dasharray="8 4"/></svg>a secret door: only there once you have drunk from the magic pool at Watersmeet</p>
+<p class="key"><svg width="54" height="12"><line x1="2" y1="6" x2="44" y2="6" stroke="#c0392b" stroke-width="2" stroke-dasharray="6 4"/><path d="M42,1 L52,6 L42,11 z" style="fill:#c0392b"/></svg>the game moves you: a fall, a dive, an arrest</p>
+<p class="key"><svg width="54" height="12"><line x1="2" y1="6" x2="52" y2="6" stroke="#2a7fb8" stroke-width="2.4" stroke-dasharray="3 3"/></svg>only after you wave the rod</p>
+<p>A small label at the end of a line, eg <code>NE</code> or <code>S+up</code>, gives the direction to type when the
+line doesn't already point that way. Short arrows lead off to the other panels.</p>
+
+<h3>Things the game does itself</h3>
+<ul>
+<li><b>The fissure and the canyon.</b> Going over the edge sends you diving down a dangerous fall (33), to land
+below where you jumped: Cliff top (16) to Deep canyon (1C), South edge of the fissure (19) to Very narrow fissure (1F), Cliff top (20) to Large rock on the canyon floor (1B), North of the canyon (21) to Canyon floor (1D), Cliff top (22) to West end of the canyon (1E), Edge of the fissure (23) to Very narrow fissure (1F).</li>
+<li><b>The Crystal Bridge</b> (97). Wave the short wooden rod at either edge of the fissure (19 or 23) and the way
+across leads onto the bridge instead of over the edge; wave it again and it's gone.</li>
+<li><b>The waterfall.</b> North from the top of the waterfall is a dive (37) into the crocodile pool (1A), and you
+scramble out by the large rock (1B).</li>
+<li><b>The moat</b> (32). Every way towards the castle except the drawbridge goes into the moat, and you scramble
+out where you came from. Once you have crossed the drawbridge, it closes when you come back out to the desert
+by the castle (28), unless you carry the uniform, and north from there leads into the moat too.</li>
+<li><b>The magic pool</b> at Watersmeet (89). Drink from it to learn the secret of concealed doors: seven secret
+doors (purple) appear.</li>
+<li><b>The rock fall</b> in the small cave (93). The keeper of the mountains lets you east to the river of gold only
+when you bring the desert king's treasure chest.</li>
+<li><b>The Forest King</b> (6D). His guard arrest you (A9) until you pay. A gift worth enough frees you, with an
+amulet; anything less and you are thrown into the room full of bones. Gifts go to the strong room (B0). Free the
+princess (A8) wearing the amulet and the king gives you the silver key.</li>
+<li><b>The end of your life</b> (AF) is where you go when you die.</li>
+</ul>
+
+<h3>Quirks in the game's own data</h3>
+<ul>
+<li>76 of the exits are one way. Besides the mazes: the quarry (07) leads only to the road, though the scree and the
+rocks lead into it; the ways onto the high mountains at 11 from 12, 14, 31, 99, AB and AD can't be walked back;
+nor can the desert's paths up to the mountains at 30 (from 2A and 2F), or the corridor at 59 going SE to 5D.</li>
+<li>20 pairs of exits don't reverse each other, eg the small bedroom's SE leads to the small kitchen, but the way
+back is SW.</li>
+<li>The high mountains at 30 and 31 both have a way north that leads back to the same place.</li>
+</ul>
+
+<h3>Checked against the Electron User maps (1985)</h3>
+<p>Every box on the five magazine maps matches a place in the game, and almost every line, door, key and object
+on them does too. The differences:</p>
+<ul>
+<li><b>Map 1.</b> It joins the scree slope (06) straight to the stream (09); in the game both lead into the woods (0A)
+between them. It draws the quarry as two-way to the scree and the rocks; the quarry's only way out is the road.
+Missing: SE from the small stream (08) to the spring (03), and N from the road (99) to the high mountains (11).</li>
+<li><b>Map 2.</b> It draws the high mountains at 14 twice, east of the waterfall and south of AB, without joining
+them; in the game it's one place, which the waterfall leads into one way. Missing: the path between the dense
+forest (0F) and the woods (0E). Its "Gold" sits by the crocodile pool; the gold is in the high mountains (31),
+as map 3 says.</li>
+<li><b>Map 3.</b> Missing: the one-way mountain paths from the desert (2F) and east of the castle (2A) up to the
+high mountains (30).</li>
+<li><b>Map 4.</b> Its sloping maze shows shortest routes only, but it joins two rooms (90 and 92) that aren't joined:
+east from 90 leads to 8F. The "Brass" door from the cave (35) is a metal door that the bronze key opens too. The
+strong room (B0) starts empty, not with gold: it's where the Forest King puts your gift. The diamond ring starts
+with the dwarf in the small chamber (6B), not on the spiral staircase. Both twisting maze routes are right.</li>
+<li><b>Map 5.</b> There is no silver door between the corridor (5A) and the east tower (55); upstairs, the only silver
+door is to the west tower (52). The door from the large hall (48) to the dungeon (49) is brass, not
+bronze. The secret door from the royal bedroom (5B) is one way.</li>
+</ul>
+<p>Made from the game itself by <code>docs/map/tkvdata.py</code> and <code>make_map.py</code> in the
+disassembly project: github.com/0x08/twinkingdomvalley-dasm</p>
+</div>
+</body></html>

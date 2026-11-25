@@ -1,0 +1,4993 @@
+{
+ "special": [
+  {
+   "from": 51,
+   "to": [
+    27,
+    28,
+    29,
+    30,
+    31
+   ],
+   "why": "falling into the canyon lands below where you jumped",
+   "falls": {
+    "19": 31,
+    "23": 31,
+    "22": 30,
+    "21": 29,
+    "20": 27,
+    "16": 28
+   }
+  },
+  {
+   "from": 55,
+   "to": [
+    26
+   ],
+   "why": "diving down the waterfall lands in the crocodile pool"
+  },
+  {
+   "from": 26,
+   "to": [
+    27
+   ],
+   "why": "you scramble out of the pool"
+  },
+  {
+   "from": 50,
+   "to": [],
+   "why": "you scramble out of the moat back where you came from"
+  },
+  {
+   "from": 109,
+   "to": [
+    169
+   ],
+   "why": "without a gift, the forest king's guard arrest you"
+  },
+  {
+   "from": 169,
+   "to": [
+    53,
+    111
+   ],
+   "why": "a good enough gift frees you to the cave; otherwise you are thrown into the room full of bones"
+  }
+ ],
+ "bridge": {
+  "ends": [
+   25,
+   35
+  ],
+  "to": [
+   151,
+   51
+  ]
+ },
+ "secret": [
+  139,
+  94,
+  91,
+  97,
+  95,
+  111,
+  176
+ ],
+ "locations": [
+  {
+   "id": 0,
+   "name": "inside a wooden cabin",
+   "flags": 8,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 1,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 1,
+   "name": "on a road",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 0,
+     "open": true
+    },
+    {
+     "dir": "NE",
+     "to": 4,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "E",
+     "to": 152,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 2,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 10,
+     "open": false,
+     "door": 70,
+     "text": "wooden fence"
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "name": "on a road",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 1,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 5,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "W",
+     "to": 7,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 10,
+     "open": false,
+     "door": 70,
+     "text": "wooden fence"
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "name": "by a spring",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 4,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 17,
+     "open": true,
+     "door": 8,
+     "text": "mountain path"
+    },
+    {
+     "dir": "NW",
+     "to": 8,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "S",
+     "to": 152,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "name": "by a babbling brook",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 8,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 1,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "E",
+     "to": 3,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 5,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "name": "in a clearing",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 9,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "E",
+     "to": 4,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "S",
+     "to": 2,
+     "open": true
+    },
+    {
+     "dir": "D",
+     "to": 54,
+     "open": false,
+     "door": 161,
+     "text": "brass grate",
+     "lockable": true,
+     "keys": [
+      "master",
+      "brass"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "name": "at the top of a steep scree slope",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 7,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 11,
+     "open": true
+    },
+    {
+     "dir": "NE",
+     "to": 10,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "name": "in a disused flint quarry , large blocks of stone dwarf the twisty road",
+   "flags": 9,
+   "type": 1,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "SE",
+     "to": 2,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "name": "by a small stream",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 9,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 4,
+     "open": true
+    },
+    {
+     "dir": "SE",
+     "to": 3,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "N",
+     "to": 12,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "name": "by a stream",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 13,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 8,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 5,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "W",
+     "to": 10,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    }
+   ]
+  },
+  {
+   "id": 10,
+   "name": "wandering through the woods, paths lead",
+   "flags": 4,
+   "type": 4,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 23,
+     "open": true
+    },
+    {
+     "dir": "SW",
+     "to": 6,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 9,
+     "open": true
+    },
+    {
+     "dir": "NE",
+     "to": 22,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 11,
+   "name": "on a pile of jagged rocks",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 7,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 6,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 14,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "W",
+     "to": 15,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    }
+   ]
+  },
+  {
+   "id": 12,
+   "name": "wandering through the woods, paths lead",
+   "flags": 4,
+   "type": 4,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 8,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 13,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 18,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 13,
+   "name": "by a narrow river",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 19,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 9,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 12,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    }
+   ]
+  },
+  {
+   "id": 14,
+   "name": "wandering through the woods, paths lead",
+   "flags": 4,
+   "type": 4,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "SW",
+     "to": 15,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 11,
+     "open": true
+    },
+    {
+     "dir": "NE",
+     "to": 23,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 25,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 15,
+   "name": "wandering through dense forest, paths lead",
+   "flags": 5,
+   "type": 5,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 134,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 11,
+     "open": true
+    },
+    {
+     "dir": "NE",
+     "to": 14,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 16,
+   "name": "wandering through dense forest, paths lead",
+   "flags": 5,
+   "type": 5,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 25,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 133,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 17,
+   "name": "wandering through high mountains, paths lead",
+   "flags": 3,
+   "type": 3,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 160,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 3,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 18,
+   "name": "in a pleasant wood",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 19,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "E",
+     "to": 17,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 12,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    }
+   ]
+  },
+  {
+   "id": 19,
+   "name": "by a deep river",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 21,
+     "open": true
+    },
+    {
+     "dir": "NW",
+     "to": 22,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "S",
+     "to": 13,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 18,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    }
+   ]
+  },
+  {
+   "id": 20,
+   "name": "wandering through high mountains, paths lead",
+   "flags": 3,
+   "type": 3,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "SE",
+     "to": 17,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 171,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 21,
+   "name": "at the top of a waterfall",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 55,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 22,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 19,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 20,
+     "open": true,
+     "door": 8,
+     "text": "mountain path"
+    }
+   ]
+  },
+  {
+   "id": 22,
+   "name": "by a cliff top",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 51,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 23,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "SW",
+     "to": 10,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "SE",
+     "to": 19,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "E",
+     "to": 21,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 23,
+   "name": "at the end of a winding trail",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 10,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "ND",
+     "to": 24,
+     "open": true
+    },
+    {
+     "dir": "NW",
+     "to": 25,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "SW",
+     "to": 14,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "E",
+     "to": 22,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 24,
+   "name": "on a steeply sloping trail",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 53,
+     "open": true
+    },
+    {
+     "dir": "EU",
+     "to": 23,
+     "open": true
+    },
+    {
+     "dir": "ND",
+     "to": 29,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 25,
+   "name": "on the south edge of a deep fissure",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 51,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 16,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "S",
+     "to": 14,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    },
+    {
+     "dir": "SE",
+     "to": 23,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    }
+   ]
+  },
+  {
+   "id": 26,
+   "name": "in a deep crocodile infested pool",
+   "flags": 64,
+   "type": 0,
+   "dark": false,
+   "picture": false,
+   "exits": []
+  },
+  {
+   "id": 27,
+   "name": "close by a large rock , sitting on the canyon floor",
+   "flags": 2,
+   "type": 2,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 26,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 28,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 28,
+   "name": "in a deep canyon , to the east is a grand view of a waterfall",
+   "flags": 2,
+   "type": 2,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 27,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 29,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 29,
+   "name": "on the canyon floor",
+   "flags": 2,
+   "type": 2,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 30,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 28,
+     "open": true
+    },
+    {
+     "dir": "SU",
+     "to": 24,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 30,
+   "name": "at the west end of the canyon",
+   "flags": 2,
+   "type": 2,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 31,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 29,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 31,
+   "name": "in a very narrow fissure",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 30,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 135,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 32,
+   "name": "by a cliff top",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 51,
+     "open": true
+    },
+    {
+     "dir": "NW",
+     "to": 36,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 33,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 33,
+   "name": "to the north of a deep canyon",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 51,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 32,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 34,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 37,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 34,
+   "name": "by a cliff top",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 51,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 33,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 35,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 38,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 35,
+   "name": "on the edge of a deep fissure",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 51,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 34,
+     "open": true
+    },
+    {
+     "dir": "NE",
+     "to": 39,
+     "open": true
+    },
+    {
+     "dir": "NW",
+     "to": 45,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 36,
+   "name": "in an arid desert",
+   "flags": 7,
+   "type": 7,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 42,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 37,
+     "open": true
+    },
+    {
+     "dir": "SE",
+     "to": 32,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 37,
+   "name": "in an arid desert",
+   "flags": 7,
+   "type": 7,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 40,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 38,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 36,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 33,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 38,
+   "name": "in an arid desert",
+   "flags": 7,
+   "type": 7,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "NE",
+     "to": 40,
+     "open": true
+    },
+    {
+     "dir": "NW",
+     "to": 39,
+     "open": true
+    },
+    {
+     "dir": "SW",
+     "to": 34,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 37,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 39,
+   "name": "in an arid desert",
+   "flags": 7,
+   "type": 7,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "NE",
+     "to": 43,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 44,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 45,
+     "open": true
+    },
+    {
+     "dir": "SW",
+     "to": 35,
+     "open": true
+    },
+    {
+     "dir": "SE",
+     "to": 38,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 40,
+   "name": "in the desert which surrounds the castle",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 41,
+     "open": true
+    },
+    {
+     "dir": "NW",
+     "to": 43,
+     "open": true
+    },
+    {
+     "dir": "SW",
+     "to": 38,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 37,
+     "open": true
+    },
+    {
+     "dir": "NE",
+     "to": 42,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 41,
+   "name": "on the draw bridge",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 52,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 40,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 42,
+   "name": "in an arid desert",
+   "flags": 7,
+   "type": 7,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 50,
+     "open": true
+    },
+    {
+     "dir": "SW",
+     "to": 40,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 36,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 48,
+     "open": true,
+     "door": 8,
+     "text": "mountain path"
+    },
+    {
+     "dir": "NW",
+     "to": 46,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 43,
+   "name": "in an arid desert",
+   "flags": 7,
+   "type": 7,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 50,
+     "open": true
+    },
+    {
+     "dir": "NE",
+     "to": 46,
+     "open": true
+    },
+    {
+     "dir": "SE",
+     "to": 40,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 44,
+     "open": true
+    },
+    {
+     "dir": "SW",
+     "to": 39,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 44,
+   "name": "in an arid desert",
+   "flags": 7,
+   "type": 7,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 43,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 47,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 128,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 39,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 45,
+   "name": "in an arid desert",
+   "flags": 7,
+   "type": 7,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 128,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 129,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 35,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 39,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 46,
+   "name": "at the back of the castle",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 50,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 47,
+     "open": true
+    },
+    {
+     "dir": "SW",
+     "to": 43,
+     "open": true
+    },
+    {
+     "dir": "SE",
+     "to": 42,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 48,
+     "open": true,
+     "door": 8,
+     "text": "mountain path"
+    }
+   ]
+  },
+  {
+   "id": 47,
+   "name": "in an arid desert",
+   "flags": 7,
+   "type": 7,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 46,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 128,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 44,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 48,
+     "open": true,
+     "door": 8,
+     "text": "mountain path"
+    }
+   ]
+  },
+  {
+   "id": 48,
+   "name": "wandering through high mountains, paths lead",
+   "flags": 3,
+   "type": 3,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 48,
+     "open": true
+    },
+    {
+     "dir": "SD",
+     "to": 46,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 138,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 49,
+   "name": "wandering through high mountains, paths lead",
+   "flags": 3,
+   "type": 3,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 17,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 49,
+     "open": true
+    },
+    {
+     "dir": "SW",
+     "to": 48,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 50,
+   "name": "in the moat",
+   "flags": 96,
+   "type": 0,
+   "dark": false,
+   "picture": false,
+   "exits": []
+  },
+  {
+   "id": 51,
+   "name": "diving down a dangerous fall",
+   "flags": 96,
+   "type": 0,
+   "dark": false,
+   "picture": false,
+   "exits": []
+  },
+  {
+   "id": 52,
+   "name": "in the castle entrance hall",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "NU",
+     "to": 58,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 57,
+     "open": true,
+     "door": 71,
+     "text": "stone archway"
+    },
+    {
+     "dir": "D",
+     "to": 65,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 56,
+     "open": true,
+     "door": 71,
+     "text": "stone archway"
+    },
+    {
+     "dir": "S",
+     "to": 41,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 53,
+   "name": "in a cave",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 103,
+     "open": false,
+     "door": 195,
+     "text": "metal door",
+     "lockable": true,
+     "keys": [
+      "master",
+      "bronze",
+      "brass"
+     ]
+    },
+    {
+     "dir": "N",
+     "to": 24,
+     "open": true
+    },
+    {
+     "dir": "D",
+     "to": 102,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 109,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 54,
+   "name": "in a narrow passage",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "ND",
+     "to": 108,
+     "open": true
+    },
+    {
+     "dir": "SU",
+     "to": 5,
+     "open": false,
+     "door": 161,
+     "text": "brass grate",
+     "lockable": true,
+     "keys": [
+      "master",
+      "brass"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 55,
+   "name": "diving down a large water fall",
+   "flags": 96,
+   "type": 0,
+   "dark": false,
+   "picture": false,
+   "exits": []
+  },
+  {
+   "id": 56,
+   "name": "in the study",
+   "flags": 8,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 60,
+     "open": true,
+     "door": 78,
+     "text": "wooden door way"
+    },
+    {
+     "dir": "E",
+     "to": 52,
+     "open": true,
+     "door": 71,
+     "text": "stone archway"
+    }
+   ]
+  },
+  {
+   "id": 57,
+   "name": "in the dining hall",
+   "flags": 8,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 52,
+     "open": true,
+     "door": 71,
+     "text": "stone archway"
+    },
+    {
+     "dir": "NW",
+     "to": 59,
+     "open": true,
+     "door": 78,
+     "text": "wooden door way"
+    }
+   ]
+  },
+  {
+   "id": 58,
+   "name": "on the Grand Staircase",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "U",
+     "to": 88,
+     "open": true
+    },
+    {
+     "dir": "D",
+     "to": 52,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 59,
+   "name": "in a kitchen",
+   "flags": 8,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "SE",
+     "to": 57,
+     "open": true,
+     "door": 78,
+     "text": "wooden door way"
+    },
+    {
+     "dir": "W",
+     "to": 60,
+     "open": true,
+     "door": 78,
+     "text": "wooden door way"
+    }
+   ]
+  },
+  {
+   "id": 60,
+   "name": "in a workshop",
+   "flags": 8,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 59,
+     "open": true,
+     "door": 78,
+     "text": "wooden door way"
+    },
+    {
+     "dir": "S",
+     "to": 56,
+     "open": true,
+     "door": 78,
+     "text": "wooden door way"
+    }
+   ]
+  },
+  {
+   "id": 61,
+   "name": "in the store room",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 62,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 62,
+   "name": "in a passage",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 63,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 61,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 64,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 63,
+   "name": "in the cellar",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 62,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 64,
+   "name": "in a passage",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 62,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 65,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 65,
+   "name": "in a passage",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 66,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 64,
+     "open": true
+    },
+    {
+     "dir": "U",
+     "to": 52,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 66,
+   "name": "in a narrow passage",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 67,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 65,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 67,
+   "name": "in a very narrow passage",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 66,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 68,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 68,
+   "name": "in a small room",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 67,
+     "open": true
+    },
+    {
+     "dir": "D",
+     "to": 72,
+     "open": true,
+     "door": 16,
+     "text": "spiral staircase"
+    }
+   ]
+  },
+  {
+   "id": 69,
+   "name": "in the guard room",
+   "flags": 136,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 72,
+     "open": true,
+     "door": 78,
+     "text": "wooden door way"
+    }
+   ]
+  },
+  {
+   "id": 70,
+   "name": "in the armoury",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 71,
+     "open": false,
+     "door": 196,
+     "text": "silver door",
+     "lockable": true,
+     "keys": [
+      "master",
+      "silver"
+     ]
+    },
+    {
+     "dir": "SE",
+     "to": 101,
+     "open": false,
+     "door": 72,
+     "text": "narrow crack"
+    }
+   ]
+  },
+  {
+   "id": 71,
+   "name": "in a passage",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 70,
+     "open": false,
+     "door": 196,
+     "text": "silver door",
+     "lockable": true,
+     "keys": [
+      "master",
+      "silver"
+     ]
+    },
+    {
+     "dir": "E",
+     "to": 72,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 72,
+   "name": "in a large hall",
+   "flags": 136,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 71,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 69,
+     "open": true,
+     "door": 78,
+     "text": "wooden door way"
+    },
+    {
+     "dir": "S",
+     "to": 73,
+     "open": false,
+     "door": 193,
+     "text": "brass door",
+     "lockable": true,
+     "keys": [
+      "master",
+      "brass"
+     ]
+    },
+    {
+     "dir": "U",
+     "to": 68,
+     "open": true,
+     "door": 16,
+     "text": "spiral staircase"
+    },
+    {
+     "dir": "SE",
+     "to": 74,
+     "open": true
+    },
+    {
+     "dir": "SW",
+     "to": 101,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 73,
+   "name": "in a musty dungeon",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 72,
+     "open": false,
+     "door": 193,
+     "text": "brass door",
+     "lockable": true,
+     "keys": [
+      "master",
+      "brass"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 74,
+   "name": "in a pokey anteroom",
+   "flags": 136,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "NW",
+     "to": 72,
+     "open": true
+    },
+    {
+     "dir": "D",
+     "to": 76,
+     "open": true,
+     "door": 30,
+     "text": "wooden trap door"
+    }
+   ]
+  },
+  {
+   "id": 75,
+   "name": "in a dungeon",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 76,
+     "open": false,
+     "door": 194,
+     "text": "bronze door",
+     "lockable": true,
+     "keys": [
+      "master",
+      "bronze"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 76,
+   "name": "in a damp hall",
+   "flags": 136,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 75,
+     "open": false,
+     "door": 194,
+     "text": "bronze door",
+     "lockable": true,
+     "keys": [
+      "master",
+      "bronze"
+     ]
+    },
+    {
+     "dir": "W",
+     "to": 77,
+     "open": true
+    },
+    {
+     "dir": "U",
+     "to": 74,
+     "open": true,
+     "door": 30,
+     "text": "wooden trap door"
+    }
+   ]
+  },
+  {
+   "id": 77,
+   "name": "in a room",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 97,
+     "open": false,
+     "door": 197,
+     "text": "gold door",
+     "lockable": true,
+     "keys": [
+      "master",
+      "gold"
+     ]
+    },
+    {
+     "dir": "E",
+     "to": 170,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 76,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 78,
+   "name": "in the north turret",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "D",
+     "to": 83,
+     "open": true,
+     "door": 16,
+     "text": "spiral staircase"
+    }
+   ]
+  },
+  {
+   "id": 79,
+   "name": "in the west turret",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "D",
+     "to": 82,
+     "open": true,
+     "door": 16,
+     "text": "spiral staircase"
+    }
+   ]
+  },
+  {
+   "id": 80,
+   "name": "in the south turret",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "D",
+     "to": 84,
+     "open": true,
+     "door": 16,
+     "text": "spiral staircase"
+    }
+   ]
+  },
+  {
+   "id": 81,
+   "name": "in the east turret",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "D",
+     "to": 85,
+     "open": true,
+     "door": 16,
+     "text": "spiral staircase"
+    }
+   ]
+  },
+  {
+   "id": 82,
+   "name": "in the west tower",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "U",
+     "to": 79,
+     "open": true,
+     "door": 16,
+     "text": "spiral staircase"
+    },
+    {
+     "dir": "E",
+     "to": 89,
+     "open": false,
+     "door": 196,
+     "text": "silver door",
+     "lockable": true,
+     "keys": [
+      "master",
+      "silver"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 83,
+   "name": "in the north tower",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "U",
+     "to": 78,
+     "open": true,
+     "door": 16,
+     "text": "spiral staircase"
+    },
+    {
+     "dir": "S",
+     "to": 88,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 84,
+   "name": "in the south tower",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "U",
+     "to": 80,
+     "open": true,
+     "door": 16,
+     "text": "spiral staircase"
+    },
+    {
+     "dir": "N",
+     "to": 93,
+     "open": false,
+     "door": 192,
+     "text": "door",
+     "lockable": true,
+     "keys": [
+      "master"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 85,
+   "name": "in the east tower",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "U",
+     "to": 81,
+     "open": true,
+     "door": 16,
+     "text": "spiral staircase"
+    },
+    {
+     "dir": "W",
+     "to": 90,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 86,
+   "name": "in a room",
+   "flags": 8,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 89,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 87,
+   "name": "in the throne room",
+   "flags": 8,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 90,
+     "open": true,
+     "door": 72,
+     "text": "door way"
+    }
+   ]
+  },
+  {
+   "id": 88,
+   "name": "on the landing",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 83,
+     "open": true
+    },
+    {
+     "dir": "SE",
+     "to": 90,
+     "open": true
+    },
+    {
+     "dir": "SW",
+     "to": 89,
+     "open": true
+    },
+    {
+     "dir": "D",
+     "to": 58,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 89,
+   "name": "in a corridor",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 82,
+     "open": false,
+     "door": 196,
+     "text": "silver door",
+     "lockable": true,
+     "keys": [
+      "master",
+      "silver"
+     ]
+    },
+    {
+     "dir": "N",
+     "to": 86,
+     "open": true,
+     "door": 78,
+     "text": "wooden door way"
+    },
+    {
+     "dir": "NE",
+     "to": 88,
+     "open": true
+    },
+    {
+     "dir": "SE",
+     "to": 93,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 90,
+   "name": "in a corridor",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 85,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 87,
+     "open": true,
+     "door": 72,
+     "text": "door way"
+    },
+    {
+     "dir": "S",
+     "to": 92,
+     "open": true,
+     "door": 78,
+     "text": "wooden door way"
+    },
+    {
+     "dir": "NW",
+     "to": 88,
+     "open": true
+    },
+    {
+     "dir": "SW",
+     "to": 93,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 91,
+   "name": "in the royal bedroom",
+   "flags": 8,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 93,
+     "open": true,
+     "door": 78,
+     "text": "wooden door way"
+    },
+    {
+     "dir": "N",
+     "to": 89,
+     "open": true,
+     "door": 39,
+     "text": "stone secret door",
+     "secret": true
+    }
+   ]
+  },
+  {
+   "id": 92,
+   "name": "in a bedroom",
+   "flags": 8,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 90,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 93,
+   "name": "in a corridor",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 84,
+     "open": false,
+     "door": 192,
+     "text": "door",
+     "lockable": true,
+     "keys": [
+      "master"
+     ]
+    },
+    {
+     "dir": "W",
+     "to": 91,
+     "open": true,
+     "door": 78,
+     "text": "wooden door way"
+    },
+    {
+     "dir": "NE",
+     "to": 90,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 94,
+   "name": "in a small bedroom",
+   "flags": 136,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "NE",
+     "to": 95,
+     "open": true
+    },
+    {
+     "dir": "SE",
+     "to": 96,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 139,
+     "open": true,
+     "door": 32,
+     "text": "secret door",
+     "secret": true
+    }
+   ]
+  },
+  {
+   "id": 95,
+   "name": "in a small sitting room",
+   "flags": 136,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 94,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 96,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 97,
+     "open": true,
+     "door": 32,
+     "text": "secret door",
+     "secret": true
+    }
+   ]
+  },
+  {
+   "id": 96,
+   "name": "in a small kitchen",
+   "flags": 136,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 95,
+     "open": true
+    },
+    {
+     "dir": "SW",
+     "to": 94,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 97,
+   "name": "in a long dry passage",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 77,
+     "open": false,
+     "door": 197,
+     "text": "gold door",
+     "lockable": true,
+     "keys": [
+      "master",
+      "gold"
+     ]
+    },
+    {
+     "dir": "S",
+     "to": 98,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 95,
+     "open": true,
+     "door": 32,
+     "text": "secret door",
+     "secret": true
+    }
+   ]
+  },
+  {
+   "id": 98,
+   "name": "in a wet passage",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 97,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 99,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 99,
+   "name": "in a dank musty passage",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 100,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 98,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 100,
+   "name": "in a damp hollow chamber",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 99,
+     "open": true
+    },
+    {
+     "dir": "U",
+     "to": 102,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 101,
+   "name": "in a dungeon",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "NE",
+     "to": 72,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 70,
+     "open": false,
+     "door": 72,
+     "text": "narrow crack"
+    }
+   ]
+  },
+  {
+   "id": 102,
+   "name": "in a narrow shaft",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "U",
+     "to": 53,
+     "open": true
+    },
+    {
+     "dir": "D",
+     "to": 100,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 103,
+   "name": "in a passage",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 53,
+     "open": false,
+     "door": 195,
+     "text": "metal door",
+     "lockable": true,
+     "keys": [
+      "master",
+      "bronze",
+      "brass"
+     ]
+    },
+    {
+     "dir": "SD",
+     "to": 113,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 104,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 104,
+   "name": "in a room",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 105,
+     "open": false,
+     "door": 194,
+     "text": "bronze door",
+     "lockable": true,
+     "keys": [
+      "master",
+      "bronze"
+     ]
+    },
+    {
+     "dir": "W",
+     "to": 103,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 108,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 105,
+   "name": "on a landing",
+   "flags": 136,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "D",
+     "to": 106,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 104,
+     "open": false,
+     "door": 194,
+     "text": "bronze door",
+     "lockable": true,
+     "keys": [
+      "master",
+      "bronze"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 106,
+   "name": "on a spiral staircase",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "U",
+     "to": 105,
+     "open": true
+    },
+    {
+     "dir": "D",
+     "to": 107,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 107,
+   "name": "in a small chamber",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "U",
+     "to": 106,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 108,
+   "name": "in a room",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "SU",
+     "to": 54,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 104,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 109,
+   "name": "in The Hall Of The Forest King",
+   "flags": 136,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "SD",
+     "to": 110,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 53,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 110,
+   "name": "in a narrow shaft",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "NU",
+     "to": 109,
+     "open": true
+    },
+    {
+     "dir": "D",
+     "to": 111,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 111,
+   "name": "in a room full of bones",
+   "flags": 136,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "U",
+     "to": 110,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 112,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 176,
+     "open": false,
+     "door": 204,
+     "text": "silver secret door",
+     "lockable": true,
+     "keys": [
+      "master",
+      "silver"
+     ],
+     "secret": true
+    }
+   ]
+  },
+  {
+   "id": 112,
+   "name": "in a twisty turny little maze of passages",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 115,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 114,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 113,
+   "name": "in a turny twisty little maze of passages",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 116,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 112,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 114,
+   "name": "in a little turny twisty maze of passages",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 117,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 112,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 115,
+   "name": "in a little twisty turny maze of passages",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 116,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 113,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 116,
+   "name": "in a maze of twisty turny little passages",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 119,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 117,
+   "name": "in a maze of turny twisty little passages",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 118,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 120,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 118,
+   "name": "in a maze of little twisty turny passages",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 119,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 120,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 119,
+   "name": "in a maze of little turny twisty passages",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 118,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 120,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 120,
+   "name": "in a twisty little passage in a maze",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 122,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 121,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 123,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 121,
+   "name": "in a twisty turny passage in a maze",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 120,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 124,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 122,
+   "name": "in a little twisty passage in a maze",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 121,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 120,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 123,
+   "name": "in a little turny passage in a maze",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 122,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 125,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 124,
+   "name": "in a turny twisty passage in a maze",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 126,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 125,
+   "name": "in a turny little passage in a maze",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 126,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 127,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 126,
+   "name": "in a passage in a twisty turny maze",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 122,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 111,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 127,
+   "name": "in a passage in a turny twisty maze",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 126,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 103,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 128,
+   "name": "in an arid desert",
+   "flags": 7,
+   "type": 7,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "NU",
+     "to": 138,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 130,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 45,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 44,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 129,
+   "name": "in an arid desert",
+   "flags": 7,
+   "type": 7,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 130,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 132,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 45,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 130,
+   "name": "in an arid desert",
+   "flags": 15,
+   "type": 7,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 131,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 129,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 128,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 131,
+   "name": "on a cliff top",
+   "flags": 8,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 132,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 130,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 132,
+   "name": "on a cliff top",
+   "flags": 8,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 129,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 131,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 133,
+   "name": "on a cliff top",
+   "flags": 8,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "S",
+     "to": 134,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 16,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 134,
+   "name": "on a cliff top",
+   "flags": 8,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 15,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 133,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 166,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 135,
+   "name": "in a narrow fissure",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 31,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 136,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 136,
+   "name": "in a narrow fissure",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 137,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 135,
+     "open": true
+    },
+    {
+     "dir": "ND",
+     "to": 139,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 137,
+   "name": "at Watersmeet",
+   "flags": 8,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 136,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 138,
+   "name": "wandering up the west mountains",
+   "flags": 3,
+   "type": 3,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 48,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 128,
+     "open": true
+    },
+    {
+     "dir": "SD",
+     "to": 142,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 139,
+   "name": "in a cave",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 140,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 141,
+     "open": true
+    },
+    {
+     "dir": "SU",
+     "to": 136,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 94,
+     "open": true,
+     "door": 32,
+     "text": "secret door",
+     "secret": true
+    }
+   ]
+  },
+  {
+   "id": 140,
+   "name": "in a sloping maze",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "SED",
+     "to": 141,
+     "open": true
+    },
+    {
+     "dir": "NWU",
+     "to": 148,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 141,
+   "name": "in a sloping maze",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "NWU",
+     "to": 148,
+     "open": true
+    },
+    {
+     "dir": "SE",
+     "to": 150,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 142,
+   "name": "in a cave",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 143,
+     "open": true
+    },
+    {
+     "dir": "NU",
+     "to": 138,
+     "open": true
+    },
+    {
+     "dir": "SW",
+     "to": 144,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 143,
+   "name": "in a sloping maze",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "SW",
+     "to": 146,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 149,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 144,
+   "name": "in a sloping maze",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "NWD",
+     "to": 145,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 143,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 145,
+   "name": "in a sloping maze",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "SED",
+     "to": 147,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 146,
+   "name": "in a sloping maze",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "SU",
+     "to": 143,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 142,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 147,
+   "name": "in a small cave in the west mountains",
+   "flags": 192,
+   "type": 0,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 174,
+     "open": false,
+     "door": 0,
+     "text": "rock fall"
+    },
+    {
+     "dir": "EU",
+     "to": 146,
+     "open": true
+    },
+    {
+     "dir": "SWD",
+     "to": 141,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 148,
+   "name": "in a sloping maze",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "ED",
+     "to": 147,
+     "open": true
+    },
+    {
+     "dir": "WU",
+     "to": 145,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 149,
+   "name": "in a sloping maze",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 141,
+     "open": true
+    },
+    {
+     "dir": "SU",
+     "to": 150,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 150,
+   "name": "in a sloping maze",
+   "flags": 230,
+   "type": 6,
+   "dark": true,
+   "picture": false,
+   "exits": [
+    {
+     "dir": "SW",
+     "to": 139,
+     "open": true
+    },
+    {
+     "dir": "ND",
+     "to": 149,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 141,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 151,
+   "name": "on The Crystal Bridge",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 35,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 25,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 152,
+   "name": "on a road",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 153,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 154,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 1,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 3,
+     "open": true,
+     "door": 0,
+     "text": "forest path"
+    }
+   ]
+  },
+  {
+   "id": 153,
+   "name": "on a road",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 155,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 156,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 152,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 17,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 154,
+   "name": "wandering through the woods, paths lead",
+   "flags": 4,
+   "type": 4,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 152,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 156,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 165,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 164,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 155,
+   "name": "at the end of the road",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 157,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 158,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 153,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 159,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 156,
+   "name": "on a moor",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 158,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 165,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 154,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 153,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 157,
+   "name": "in The Sword Inn",
+   "flags": 8,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 155,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 158,
+   "name": "on a moor",
+   "flags": 0,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 156,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 155,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 163,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 159,
+   "name": "on a moor",
+   "flags": 8,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 160,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 161,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 155,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 160,
+   "name": "wandering through high mountains, paths lead",
+   "flags": 3,
+   "type": 3,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 17,
+     "open": true
+    },
+    {
+     "dir": "SE",
+     "to": 161,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 159,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 161,
+   "name": "wandering through high mountains, paths lead",
+   "flags": 3,
+   "type": 3,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 159,
+     "open": true
+    },
+    {
+     "dir": "NW",
+     "to": 160,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 162,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 162,
+   "name": "wandering through high mountains, paths lead",
+   "flags": 3,
+   "type": 3,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 163,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 161,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 163,
+   "name": "wandering through high mountains, paths lead",
+   "flags": 3,
+   "type": 3,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 162,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 158,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 165,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 164,
+   "name": "in the woods",
+   "flags": 4,
+   "type": 4,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 154,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 167,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 1,
+     "open": false,
+     "door": 70,
+     "text": "wooden fence"
+    }
+   ]
+  },
+  {
+   "id": 165,
+   "name": "wandering through high mountains, paths lead",
+   "flags": 3,
+   "type": 3,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 163,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 156,
+     "open": true
+    },
+    {
+     "dir": "NW",
+     "to": 154,
+     "open": true
+    },
+    {
+     "dir": "W",
+     "to": 167,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 166,
+   "name": "wandering through high mountains, paths lead",
+   "flags": 3,
+   "type": 3,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 134,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 167,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 167,
+   "name": "wandering through high mountains, paths lead",
+   "flags": 3,
+   "type": 3,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 166,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 164,
+     "open": true
+    },
+    {
+     "dir": "E",
+     "to": 165,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 168,
+   "name": "in a dungeon",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "W",
+     "to": 170,
+     "open": false,
+     "door": 194,
+     "text": "bronze door",
+     "lockable": true,
+     "keys": [
+      "master",
+      "bronze"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 169,
+   "name": "locked up in a dungeon",
+   "flags": 104,
+   "type": 0,
+   "dark": false,
+   "picture": false,
+   "exits": []
+  },
+  {
+   "id": 170,
+   "name": "in a short passage",
+   "flags": 128,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 168,
+     "open": false,
+     "door": 194,
+     "text": "bronze door",
+     "lockable": true,
+     "keys": [
+      "master",
+      "bronze"
+     ]
+    },
+    {
+     "dir": "W",
+     "to": 77,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 171,
+   "name": "wandering through high mountains, paths lead",
+   "flags": 3,
+   "type": 3,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "NE",
+     "to": 173,
+     "open": true
+    },
+    {
+     "dir": "N",
+     "to": 172,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 20,
+     "open": true
+    },
+    {
+     "dir": "SE",
+     "to": 17,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 172,
+   "name": "wandering through high mountains, paths lead",
+   "flags": 3,
+   "type": 3,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "N",
+     "to": 49,
+     "open": true
+    },
+    {
+     "dir": "SE",
+     "to": 173,
+     "open": true
+    },
+    {
+     "dir": "S",
+     "to": 171,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 173,
+   "name": "wandering through high mountains, paths lead",
+   "flags": 3,
+   "type": 3,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "SE",
+     "to": 17,
+     "open": true
+    },
+    {
+     "dir": "SW",
+     "to": 171,
+     "open": true
+    },
+    {
+     "dir": "NW",
+     "to": 172,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 174,
+   "name": "in a large hollow chamber , a river of gold flows through the chamber to the north",
+   "flags": 8,
+   "type": 0,
+   "dark": false,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "SW",
+     "to": 137,
+     "open": false,
+     "door": 72,
+     "text": "narrow crack"
+    },
+    {
+     "dir": "W",
+     "to": 147,
+     "open": true
+    }
+   ]
+  },
+  {
+   "id": 175,
+   "name": "at the end of your life here",
+   "flags": 96,
+   "type": 0,
+   "dark": false,
+   "picture": false,
+   "exits": []
+  },
+  {
+   "id": 176,
+   "name": "in the strong room",
+   "flags": 136,
+   "type": 0,
+   "dark": true,
+   "picture": true,
+   "exits": [
+    {
+     "dir": "E",
+     "to": 111,
+     "open": false,
+     "door": 204,
+     "text": "silver secret door",
+     "lockable": true,
+     "keys": [
+      "master",
+      "silver"
+     ],
+     "secret": true
+    }
+   ]
+  }
+ ],
+ "objects": [
+  {
+   "id": 0,
+   "name": "a small holdall",
+   "at": 141,
+   "code": 20,
+   "value": 0
+  },
+  {
+   "id": 1,
+   "name": "an unlit oil lamp",
+   "at": 0,
+   "code": 1,
+   "value": 0
+  },
+  {
+   "id": 2,
+   "name": "the master key",
+   "at": 209,
+   "code": 2,
+   "value": 0
+  },
+  {
+   "id": 3,
+   "name": "a gold key",
+   "at": 96,
+   "code": 3,
+   "value": 15
+  },
+  {
+   "id": 4,
+   "name": "a silver key",
+   "at": 199,
+   "code": 4,
+   "value": 12
+  },
+  {
+   "id": 5,
+   "name": "a bronze key",
+   "at": 216,
+   "code": 5,
+   "value": 0
+  },
+  {
+   "id": 6,
+   "name": "a brass key",
+   "at": 0,
+   "code": 6,
+   "value": 0
+  },
+  {
+   "id": 7,
+   "name": "a short wooden rod",
+   "at": 103,
+   "code": 7,
+   "value": 0
+  },
+  {
+   "id": 8,
+   "name": "a crystal ball",
+   "at": 108,
+   "code": 8,
+   "value": 0
+  },
+  {
+   "id": 9,
+   "name": "an empty stone jug",
+   "at": 0,
+   "code": 10,
+   "value": 0
+  },
+  {
+   "id": 10,
+   "name": "a small flint stone",
+   "at": 7,
+   "code": 21,
+   "value": 0
+  },
+  {
+   "id": 11,
+   "name": "a long wooden staff",
+   "at": 79,
+   "code": 22,
+   "value": 0
+  },
+  {
+   "id": 12,
+   "name": "a short dagger",
+   "at": 104,
+   "code": 14,
+   "value": 0
+  },
+  {
+   "id": 13,
+   "name": "a short dagger",
+   "at": 100,
+   "code": 14,
+   "value": 0
+  },
+  {
+   "id": 14,
+   "name": "a broad sword",
+   "at": 91,
+   "code": 15,
+   "value": 0
+  },
+  {
+   "id": 15,
+   "name": "a broad sword",
+   "at": 70,
+   "code": 15,
+   "value": 0
+  },
+  {
+   "id": 16,
+   "name": "a knife",
+   "at": 70,
+   "code": 16,
+   "value": 0
+  },
+  {
+   "id": 17,
+   "name": "a knife",
+   "at": 70,
+   "code": 16,
+   "value": 0
+  },
+  {
+   "id": 18,
+   "name": "an axe",
+   "at": 70,
+   "code": 17,
+   "value": 0
+  },
+  {
+   "id": 19,
+   "name": "an axe",
+   "at": 14,
+   "code": 17,
+   "value": 0
+  },
+  {
+   "id": 20,
+   "name": "a hammer",
+   "at": 60,
+   "code": 18,
+   "value": 0
+  },
+  {
+   "id": 21,
+   "name": "a hammer",
+   "at": 70,
+   "code": 18,
+   "value": 0
+  },
+  {
+   "id": 22,
+   "name": "a knife",
+   "at": 201,
+   "code": 16,
+   "value": 0
+  },
+  {
+   "id": 23,
+   "name": "a knife",
+   "at": 208,
+   "code": 16,
+   "value": 0
+  },
+  {
+   "id": 24,
+   "name": "a knife",
+   "at": 212,
+   "code": 16,
+   "value": 0
+  },
+  {
+   "id": 25,
+   "name": "a mace",
+   "at": 205,
+   "code": 24,
+   "value": 0
+  },
+  {
+   "id": 26,
+   "name": "an axe",
+   "at": 224,
+   "code": 17,
+   "value": 0
+  },
+  {
+   "id": 27,
+   "name": "a mace",
+   "at": 221,
+   "code": 24,
+   "value": 0
+  },
+  {
+   "id": 28,
+   "name": "a wooden club",
+   "at": 219,
+   "code": 25,
+   "value": 0
+  },
+  {
+   "id": 29,
+   "name": "a wooden club",
+   "at": 227,
+   "code": 25,
+   "value": 0
+  },
+  {
+   "id": 30,
+   "name": "a wooden club",
+   "at": 229,
+   "code": 25,
+   "value": 0
+  },
+  {
+   "id": 31,
+   "name": "a knife",
+   "at": 232,
+   "code": 16,
+   "value": 0
+  },
+  {
+   "id": 32,
+   "name": "a knife",
+   "at": 215,
+   "code": 16,
+   "value": 0
+  },
+  {
+   "id": 33,
+   "name": "a mace",
+   "at": 233,
+   "code": 24,
+   "value": 0
+  },
+  {
+   "id": 34,
+   "name": "a broad sword",
+   "at": 234,
+   "code": 15,
+   "value": 0
+  },
+  {
+   "id": 35,
+   "name": "some beer",
+   "at": 63,
+   "code": 29,
+   "value": 0
+  },
+  {
+   "id": 36,
+   "name": "some beer",
+   "at": 157,
+   "code": 29,
+   "value": 0
+  },
+  {
+   "id": 37,
+   "name": "a bag of silver",
+   "at": 214,
+   "code": 30,
+   "value": 25
+  },
+  {
+   "id": 38,
+   "name": "a diamond ring",
+   "at": 217,
+   "code": 31,
+   "value": 12
+  },
+  {
+   "id": 39,
+   "name": "a bag of silver",
+   "at": 223,
+   "code": 30,
+   "value": 25
+  },
+  {
+   "id": 40,
+   "name": "a metal amulet",
+   "at": 199,
+   "code": 32,
+   "value": 0
+  },
+  {
+   "id": 41,
+   "name": "a uniform",
+   "at": 69,
+   "code": 33,
+   "value": 0
+  },
+  {
+   "id": 42,
+   "name": "a large cut diamond",
+   "at": 139,
+   "code": 19,
+   "value": 80
+  },
+  {
+   "id": 43,
+   "name": "a wooden treasure chest",
+   "at": 80,
+   "code": 9,
+   "value": 175
+  },
+  {
+   "id": 44,
+   "name": "a cauldron of oil",
+   "at": 60,
+   "code": 23,
+   "value": 0
+  },
+  {
+   "id": 45,
+   "name": "a bag of gold",
+   "at": 107,
+   "code": 13,
+   "value": 50
+  },
+  {
+   "id": 46,
+   "name": "a bag of silver",
+   "at": 232,
+   "code": 30,
+   "value": 25
+  },
+  {
+   "id": 47,
+   "name": "a staff of gold",
+   "at": 215,
+   "code": 34,
+   "value": 100
+  },
+  {
+   "id": 48,
+   "name": "a ball of gold",
+   "at": 87,
+   "code": 35,
+   "value": 65
+  },
+  {
+   "id": 49,
+   "name": "the secret of life",
+   "at": 174,
+   "code": 36,
+   "value": 200
+  },
+  {
+   "id": 50,
+   "name": "a bag of gold",
+   "at": 49,
+   "code": 13,
+   "value": 50
+  },
+  {
+   "id": 51,
+   "name": "a jewelled gold crown",
+   "at": 207,
+   "code": 26,
+   "value": 90
+  }
+ ],
+ "characters": [
+  {
+   "id": 0,
+   "name": "you",
+   "at": 1
+  },
+  {
+   "id": 1,
+   "name": "a castle guard",
+   "at": 69
+  },
+  {
+   "id": 2,
+   "name": "an ill giant",
+   "at": 75
+  },
+  {
+   "id": 3,
+   "name": "an elf",
+   "at": 73
+  },
+  {
+   "id": 4,
+   "name": "an elf",
+   "at": 73
+  },
+  {
+   "id": 5,
+   "name": "a castle guard",
+   "at": 69
+  },
+  {
+   "id": 6,
+   "name": "an elf",
+   "at": 73
+  },
+  {
+   "id": 7,
+   "name": "the desert king",
+   "at": 87
+  },
+  {
+   "id": 8,
+   "name": "a large guard",
+   "at": 71
+  },
+  {
+   "id": 9,
+   "name": "a dragon",
+   "at": 78
+  },
+  {
+   "id": 10,
+   "name": "an elf",
+   "at": 73
+  },
+  {
+   "id": 11,
+   "name": "a troll",
+   "at": 73
+  },
+  {
+   "id": 12,
+   "name": "a castle guard",
+   "at": 63
+  },
+  {
+   "id": 13,
+   "name": "an elf",
+   "at": 73
+  },
+  {
+   "id": 14,
+   "name": "a castle guard",
+   "at": 63
+  },
+  {
+   "id": 15,
+   "name": "a witch",
+   "at": 81
+  },
+  {
+   "id": 16,
+   "name": "a witch",
+   "at": 120
+  },
+  {
+   "id": 17,
+   "name": "a dwarf",
+   "at": 107
+  },
+  {
+   "id": 18,
+   "name": "the inn keeper",
+   "at": 157
+  },
+  {
+   "id": 19,
+   "name": "a gorilla",
+   "at": 21
+  },
+  {
+   "id": 20,
+   "name": "an elf",
+   "at": 30
+  },
+  {
+   "id": 21,
+   "name": "a sand lurker",
+   "at": 131
+  },
+  {
+   "id": 22,
+   "name": "an elf",
+   "at": 30
+  },
+  {
+   "id": 23,
+   "name": "a sand lurker",
+   "at": 131
+  },
+  {
+   "id": 24,
+   "name": "an elf",
+   "at": 30
+  },
+  {
+   "id": 25,
+   "name": "a sand lurker",
+   "at": 131
+  },
+  {
+   "id": 26,
+   "name": "a large guard",
+   "at": 169
+  },
+  {
+   "id": 27,
+   "name": "a gorilla",
+   "at": 21
+  },
+  {
+   "id": 28,
+   "name": "a gorilla",
+   "at": 21
+  },
+  {
+   "id": 29,
+   "name": "a gorilla",
+   "at": 21
+  },
+  {
+   "id": 30,
+   "name": "a strong elf",
+   "at": 157
+  },
+  {
+   "id": 31,
+   "name": "a gorilla",
+   "at": 21
+  },
+  {
+   "id": 32,
+   "name": "a castle guard",
+   "at": 88
+  },
+  {
+   "id": 33,
+   "name": "a castle guard",
+   "at": 85
+  },
+  {
+   "id": 34,
+   "name": "a troll",
+   "at": 133
+  },
+  {
+   "id": 35,
+   "name": "a castle guard",
+   "at": 85
+  }
+ ]
+}

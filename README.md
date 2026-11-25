@@ -84,3 +84,6 @@ picture code's flood fill goes.
 - `tkv_notes.txt`, `tkv_routines.txt`, `tkv_memmap.txt`,
   `0C00_structure.txt` – notes on the code and data.
 - `docs/` – the picture gallery; `docs/make_gallery.py` rebuilds it.
+- `docs/map/` – a map of every location as one PDF (`map.pdf`), drawn from
+  the game data: `tkvdata.py` reads it, `make_map.py` draws it after
+  `layout.py`, and the notes on it compare it with the Electron User maps.
