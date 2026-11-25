@@ -10,7 +10,8 @@ which did the groundwork: the disk images, the disassembly and notes, and
 the start of the C reimplementation.
 
 Play it in your browser: <https://0x08.github.io/twinkingdomvalley-dasm/play/>  
-Gallery of every picture: <https://0x08.github.io/twinkingdomvalley-dasm/>
+Gallery of every picture: <https://0x08.github.io/twinkingdomvalley-dasm/>  
+Map of every location (PDF): <https://0x08.github.io/twinkingdomvalley-dasm/map/map.pdf>
 
 ## The tools
 
