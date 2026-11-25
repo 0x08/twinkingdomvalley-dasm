@@ -87,4 +87,5 @@ picture code's flood fill goes.
 - `docs/` – the picture gallery; `docs/make_gallery.py` rebuilds it.
 - `docs/map/` – a map of every location as one PDF (`map.pdf`), drawn from
   the game data: `tkvdata.py` reads it, `make_map.py` draws it after
-  `layout.py`, and the notes on it compare it with the Electron User maps.
+  `layout.py`, and the notes on it compare it with the Electron User maps
+  of 1985, kept for reference in `docs/map/electron-user/`.
